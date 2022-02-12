@@ -1,0 +1,30 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ReservationSystem.DataAccess.Entities;
+
+namespace ReservationSystem.DataAccess.TypeConfigurations
+{
+    public class DormitoryTypeConfiguration : EntityBaseTypeConfiguration<Dormitory>
+    {
+        public override void Configure(EntityTypeBuilder<Dormitory> builder)
+        {
+            base.Configure(builder);
+
+            builder.Property(x => x.Address)
+                .IsRequired()
+                .HasMaxLength(100);
+            
+            builder.Property(x => x.City)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.HasMany(x => x.Users)
+                .WithOne(x => x.Dormitory);
+
+            builder.HasMany(x => x.Services)
+                .WithOne(x => x.Dormitory);
+
+            builder.HasMany(x => x.Rooms)
+                .WithOne(x => x.Dormitory);
+        }
+    }
+}
