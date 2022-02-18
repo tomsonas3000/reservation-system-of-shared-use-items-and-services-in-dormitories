@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ReservationSystem.DataAccess;
 using ReservationSystem.DataAccess.Entities;
+using ReservationSystem.DataAccess.Repositories;
+using ReservationSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -27,7 +32,15 @@ var services = builder.Services;
     });
     
     services.AddDbContext<ReservationDbContext>(options => options.UseSqlServer("name=ConnectionStrings:Database"));
-    services.AddIdentity<User, IdentityRole>()
+    services.AddIdentity<User, IdentityRole>(options => 
+            options.Password = new PasswordOptions
+            {
+                RequireDigit = true,
+                RequiredLength = 8,
+                RequireLowercase = false,
+                RequireUppercase = false,
+                RequireNonAlphanumeric = false,
+            })
         .AddEntityFrameworkStores<ReservationDbContext>()
         .AddDefaultTokenProviders();
     
@@ -51,6 +64,9 @@ var services = builder.Services;
     });
     
     services.AddControllers();
+
+    services.AddScoped<UsersRepository>();
+    services.AddScoped<AuthService>();
 }
 
 var app = builder.Build();

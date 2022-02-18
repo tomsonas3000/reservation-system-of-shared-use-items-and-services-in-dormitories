@@ -1,28 +1,47 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using ReservationSystem.DataAccess.Enums;
+using ReservationSystem.Shared.Utilities;
+using ReservationSystem.Shared.ValueObjects;
 
 namespace ReservationSystem.DataAccess.Entities
 {
     public sealed class User : IdentityUser
     {
-        private readonly List<Reservation> _reservationsList = new();
+        private readonly List<Reservation> reservationsList = new();
 
-        private User(string name, string surname, Dormitory? dormitory, string email, string phoneNumber)
+        private User()
         {
-            Name = name;
-            Surname = surname;
-            Dormitory = dormitory;
-            Email = email;
-            PhoneNumber = phoneNumber;
         }
 
-        public ICollection<Reservation> Reservations => _reservationsList.AsReadOnly();
+        public static Result<User> Create(string? name, string? surname, string? email, string? phoneNumber)
+        {
+            var result = new Result<User>();
+            var nameResult = RequiredString.Create(result, name, nameof(Name), 200);
+            var surnameResult = RequiredString.Create(result, surname, nameof(Surname), 200);
+            var emailResult = RequiredEmail.Create(result, email, nameof(Email));
+            var phoneNumberResult = RequiredPhoneNumber.Create(result, phoneNumber, nameof(PhoneNumber));
 
-        public string Name { get; }
+            if (!result.IsSuccess)
+            {
+                return result;
+            }
+
+            return new Result<User>(new User
+            {
+                Name = nameResult.Value.Value,
+                Surname = surnameResult.Value.Value,
+                Email = emailResult.Value.Value,
+                PhoneNumber = phoneNumberResult.Value.Value,
+                UserName = emailResult.Value.Value,
+            });
+        }
+
+        public ICollection<Reservation> Reservations => reservationsList.AsReadOnly();
+
+        public string? Name { get; private set; }
         
-        public string Surname { get; set; }
+        public string? Surname { get; private set; }
 
-        public Dormitory? Dormitory { get; }
+        public Dormitory? Dormitory { get; private set; }
     }
 }

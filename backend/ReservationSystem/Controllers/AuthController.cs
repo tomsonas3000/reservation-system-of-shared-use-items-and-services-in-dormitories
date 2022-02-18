@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ReservationSystem.DataAccess.Entities;
-using ReservationSystem.DataAccess.Enums;
+using ReservationSystem.Services;
 using ReservationSystem.Shared.Contracts.Dtos;
+using ReservationSystem.Shared.Utilities;
 
 namespace ReservationSystem.Controllers
 {
@@ -11,13 +11,11 @@ namespace ReservationSystem.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<User> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly AuthService authService;
 
-        public AuthController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthController(AuthService authService)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            this.authService = authService;
         }
 
         [HttpPost]
@@ -29,8 +27,9 @@ namespace ReservationSystem.Controllers
         
         [HttpPost]
         [Route("create")]
-        public async Task CreateUser([FromBody] CreateUserDto createUserDto)
+        public Task<ObjectResult> CreateUser([FromBody] CreateUserDto createUserDto)
         {
+            return authService.CreateUser(createUserDto);
         }
     }
 }
