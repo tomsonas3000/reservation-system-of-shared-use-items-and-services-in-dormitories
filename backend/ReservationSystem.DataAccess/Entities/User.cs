@@ -10,9 +10,9 @@ namespace ReservationSystem.DataAccess.Entities
 
         public ICollection<Reservation> Reservations => _reservationsList.AsReadOnly();
 
-        public string Name { get; }
+        public string Name { get; set; }
         
-        public string Surname { get; }
+        public string Surname { get; set; }
 
         public Dormitory? Dormitory { get; }
     }
