@@ -12,8 +12,8 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Reservations);
 
-            builder.HasOne(x => x.Service).
-                WithMany(x => x.Reservations);
+            builder.HasOne(x => x.Service)
+                .WithMany(x => x.Reservations);
 
             builder.Property(x => x.BeginTime)
                 .IsRequired();

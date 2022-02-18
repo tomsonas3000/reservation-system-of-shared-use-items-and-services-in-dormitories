@@ -4,14 +4,10 @@ namespace ReservationSystem.DataAccess.Entities
 {
     public class Reservation : EntityBase
     {
-        private Reservation(DateTime beginTime, DateTime endTime, Service service, bool isFinished, User user)
+        private Reservation()
         {
-            BeginTime = beginTime;
-            EndTime = endTime;
-            Service = service;
-            IsFinished = isFinished;
-            User = user;
         }
+        
         public DateTime BeginTime { get; }
         
         public DateTime EndTime { get; }
@@ -19,7 +15,7 @@ namespace ReservationSystem.DataAccess.Entities
         public Service Service { get; }
         
         public bool IsFinished { get; }
-        
+
         public User User { get; }
     }
 }

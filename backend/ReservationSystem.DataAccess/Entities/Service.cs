@@ -6,15 +6,10 @@ namespace ReservationSystem.DataAccess.Entities
 {
     public class Service : EntityBase
     {
-        private readonly List<Reservation> _reservations = new();
+        private readonly List<Reservation> reservations = new();
 
-        private Service(ServiceType type, Room room, Dormitory dormitory, TimeSpan? maxTimeOfUse, int maxAmountUsers)
+        private Service()
         {
-            Type = type;
-            Room = room;
-            Dormitory = dormitory;
-            MaxTimeOfUse = maxTimeOfUse;
-            MaxAmountUsers = maxAmountUsers;
         }
 
         public ServiceType Type { get; }
@@ -22,11 +17,11 @@ namespace ReservationSystem.DataAccess.Entities
         public TimeSpan? MaxTimeOfUse { get; }
 
         public int MaxAmountUsers { get; }
-        
+
         public Room Room { get; }
         
         public Dormitory Dormitory { get; }
 
-        public ICollection<Reservation> Reservations => _reservations.AsReadOnly();
+        public ICollection<Reservation> Reservations => reservations.AsReadOnly();
     }
 }
