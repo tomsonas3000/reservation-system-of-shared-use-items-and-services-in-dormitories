@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 using ReservationSystem.DataAccess.Enums;
 
 namespace ReservationSystem.DataAccess.Entities
 {
-    public class User : EntityBase
+    public class User : IdentityUser
     {
         private readonly List<Reservation> _reservationsList = new();
 
@@ -12,13 +13,7 @@ namespace ReservationSystem.DataAccess.Entities
         public string Name { get; }
         
         public string Surname { get; }
-        
-        public string EmailAddress { get; }
-        
-        public string TelephoneNumber { get; }
-        
-        public UserRole Role { get; }
-        
+
         public Dormitory? Dormitory { get; }
     }
 }
