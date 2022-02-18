@@ -7,7 +7,13 @@ namespace ReservationSystem.DataAccess.Entities
         private readonly List<User> _usersList = new();
         private readonly List<Service> _servicesList = new();
         private readonly List<Room> _roomsList = new();
-        
+
+        private Dormitory(string address, string city)
+        {
+            Address = address;
+            City = city;
+        }
+
         public string Address { get; }
         
         public string City { get; }

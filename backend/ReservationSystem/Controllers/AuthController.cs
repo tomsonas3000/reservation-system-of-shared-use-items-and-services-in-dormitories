@@ -31,17 +31,6 @@ namespace ReservationSystem.Controllers
         [Route("create")]
         public async Task CreateUser([FromBody] CreateUserDto createUserDto)
         {
-            User user = new User
-            {
-                Email = createUserDto.Email,
-                PhoneNumber = createUserDto.PhoneNumber,
-                Name = createUserDto.Name,
-                Surname = createUserDto.Surname,
-            };
-
-            await userManager.CreateAsync(user, createUserDto.Password);
-
-            await userManager.AddToRoleAsync(user, UserRole.Admin.ToString());
         }
     }
 }
