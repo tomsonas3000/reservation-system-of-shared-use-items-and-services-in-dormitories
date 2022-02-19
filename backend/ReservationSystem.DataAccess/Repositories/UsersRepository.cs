@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +23,9 @@ namespace ReservationSystem.DataAccess.Repositories
             if (!result.Succeeded)
             {
                 return new ObjectResult(new Dictionary<string, string>
-                    { { "password", "The provided password is invalid" } })
+                    { { "Password", "The provided password is invalid" } })
                 {
-                    StatusCode = 400
+                    StatusCode = (int?)HttpStatusCode.BadRequest
                 };
             }
 
@@ -32,7 +33,7 @@ namespace ReservationSystem.DataAccess.Repositories
             
             return new ObjectResult(user.Id)
             {
-                StatusCode = 200
+                StatusCode = (int?)HttpStatusCode.OK
             };
         }
     }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
 using ReservationSystem.Shared.Contracts.Dtos;
-using ReservationSystem.Shared.Utilities;
 
 namespace ReservationSystem.Controllers
 {
@@ -20,9 +18,9 @@ namespace ReservationSystem.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task Login([FromBody] LoginDto loginDto)
+        public Task<ObjectResult> Login([FromBody] LoginDto loginDto)
         {
-            
+            return authService.Login(loginDto);
         }
         
         [HttpPost]

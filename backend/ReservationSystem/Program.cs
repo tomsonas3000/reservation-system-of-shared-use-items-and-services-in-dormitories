@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -53,20 +51,36 @@ var services = builder.Services;
     {
         options.SaveToken = true;
         options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters()
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
             ValidateAudience = true,
             ValidAudience = configuration["JWT:ValidAudience"],
+            ValidateIssuer = true,
             ValidIssuer = configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero
         };
+    });
+    
+    services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAllHeaders",
+            policyBuilder =>
+            {
+                policyBuilder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithExposedHeaders("authorization");
+            });
     });
     
     services.AddControllers();
 
     services.AddScoped<UsersRepository>();
     services.AddScoped<AuthService>();
+    services.AddScoped<JwtService>();
 }
 
 var app = builder.Build();
@@ -81,10 +95,13 @@ if (app.Environment.IsDevelopment())
 }
 
 {
-    app.UseHttpsRedirection();
-    app.UseAuthorization();
     app.UseAuthentication();
-    app.MapControllers();
+    app.UseRouting();
+    app.UseAuthorization();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
 }
 
 app.Run();
