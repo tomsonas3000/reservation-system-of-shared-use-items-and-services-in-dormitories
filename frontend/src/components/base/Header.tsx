@@ -7,7 +7,7 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -45,7 +45,7 @@ const Header = () => {
 
   return (
     <header>
-      <AppBar color="inherit">
+      <AppBar color="inherit" position="sticky">
         {mobileView ? <MobileHeader /> : <DesktopHeader />}
       </AppBar>
     </header>
