@@ -7,12 +7,16 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { TableModel, HeaderModel } from './models/BaseTableModel';
 
 const BaseTable = (props: { tableData: TableModel }): JSX.Element => {
+  const selector = useSelector((state) => state);
+
   {
     return (
       <TableContainer sx={{ justifyContent: 'center', display: 'flex' }}>
+        {console.log(selector)}
         <Table component={Paper} sx={{ margin: '4rem' }}>
           <TableHead>
             <TableRow>

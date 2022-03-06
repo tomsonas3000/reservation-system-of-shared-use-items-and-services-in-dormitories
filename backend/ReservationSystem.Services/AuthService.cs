@@ -24,9 +24,9 @@ namespace ReservationSystem.Services
         private readonly JwtService jwtService;
 
         public AuthService(
-            UserManager<User> userManager, 
+            UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
-            UsersRepository usersRepository, 
+            UsersRepository usersRepository,
             JwtService jwtService)
         {
             this.userManager = userManager;
@@ -42,9 +42,9 @@ namespace ReservationSystem.Services
             if (user is not null)
             {
                 return new ObjectResult(new Dictionary<string, string>
-                    { { "Email", "The user with this email already exists." } })
+                    {{"Email", "The user with this email already exists."}})
                 {
-                    StatusCode = (int?)HttpStatusCode.BadRequest
+                    StatusCode = (int?) HttpStatusCode.BadRequest
                 };
             }
 
@@ -55,7 +55,7 @@ namespace ReservationSystem.Services
             {
                 return new ObjectResult(createResult.Errors)
                 {
-                    StatusCode = (int?)HttpStatusCode.BadRequest
+                    StatusCode = (int?) HttpStatusCode.BadRequest
                 };
             }
 
@@ -65,7 +65,7 @@ namespace ReservationSystem.Services
             {
                 return new ObjectResult(roleResult.Errors)
                 {
-                    StatusCode = (int?)HttpStatusCode.BadRequest
+                    StatusCode = (int?) HttpStatusCode.BadRequest
                 };
             }
 
@@ -75,7 +75,7 @@ namespace ReservationSystem.Services
             {
                 return new ObjectResult(null)
                 {
-                    StatusCode = (int?)HttpStatusCode.NotFound
+                    StatusCode = (int?) HttpStatusCode.NotFound
                 };
             }
 
@@ -91,7 +91,7 @@ namespace ReservationSystem.Services
             {
                 return new ObjectResult(null)
                 {
-                    StatusCode = (int?)HttpStatusCode.Unauthorized
+                    StatusCode = (int?) HttpStatusCode.Unauthorized
                 };
             }
 
@@ -108,15 +108,16 @@ namespace ReservationSystem.Services
 
                 var token = jwtService.GetToken(authClaims);
 
-                return new ObjectResult(new JwtSecurityTokenHandler().WriteToken(token))
+                return new ObjectResult(new LoginResponseDto
+                    {Token = new JwtSecurityTokenHandler().WriteToken(token), Role = userRoles.First()})
                 {
-                    StatusCode = (int?)HttpStatusCode.OK
+                    StatusCode = (int?) HttpStatusCode.OK
                 };
             }
-            
+
             return new ObjectResult(null)
             {
-                StatusCode = (int?)HttpStatusCode.Unauthorized
+                StatusCode = (int?) HttpStatusCode.Unauthorized
             };
         }
     }

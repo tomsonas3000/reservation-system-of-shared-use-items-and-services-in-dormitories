@@ -2,32 +2,49 @@ import { Avatar, Box, Button, TextField, Typography } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { AuthService } from '../../../services/authService';
+import { useDispatch } from 'react-redux';
+import { logIn } from '../../../redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = yup.object().shape({
   email: yup
     .string()
     .email('Enter a valid email address.')
     .required('Email address is required.'),
-  password: yup
-    .string()
-    .required('Passowrd is required')
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      'Password must be at least 8 characters long, have at least one letter, and one number.'
-    ),
+  password: yup.string().required('Passowrd is required'),
 });
 
 const SignIn = () => {
+  const disptach = useDispatch();
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: () => {
+      handleLogin();
     },
   });
+
+  const handleLogin = () => {
+    AuthService.login({
+      email: formik.values.email,
+      password: formik.values.password,
+    })
+      .then((res) => {
+        disptach(logIn({ role: res.data.role, token: res.data.token }));
+        navigate('/dormitories');
+      })
+      .catch(() => {
+        formik.setErrors({
+          password: 'The username or password was invalid.',
+        });
+      });
+  };
 
   return (
     <Box
@@ -43,7 +60,10 @@ const SignIn = () => {
       <Typography component="h1" variant="h5">
         Sign In
       </Typography>
-      <Box component="form" onSubmit={formik.handleSubmit} sx={{ m: 1 }}>
+      <Box
+        component="form"
+        onSubmit={formik.handleSubmit}
+        sx={{ m: 1, maxWidth: '30rem' }}>
         <TextField
           id="email"
           name="email"

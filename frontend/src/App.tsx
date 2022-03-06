@@ -5,6 +5,8 @@ import SignIn from './components/auth/signIn/SignIn';
 import Header from './components/base/Header';
 import BaseTable from './components/base/BaseTable';
 import { TableModel } from './components/base/models/BaseTableModel';
+import ProtectedRoute from './routes/ProtectedRoute';
+import role from './utils/enums/role';
 
 const theme = createTheme();
 
@@ -34,14 +36,23 @@ const App = () => {
       },
     ],
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Header />
         <Routes>
-          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="sign-in" element={<SignIn />} />
+          <Route
+            path="dormitories"
+            element={
+              <ProtectedRoute
+                outlet={<BaseTable tableData={x} />}
+                role={role.Admin}
+              />
+            }
+          />
         </Routes>
-        <BaseTable tableData={x} />
       </Router>
     </ThemeProvider>
   );

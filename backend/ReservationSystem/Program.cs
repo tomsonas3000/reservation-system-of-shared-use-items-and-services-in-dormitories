@@ -72,7 +72,7 @@ var services = builder.Services;
                 policyBuilder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
-                    .WithExposedHeaders("authorization");
+                    .WithExposedHeaders("Authorization");
             });
     });
     
@@ -95,6 +95,8 @@ if (app.Environment.IsDevelopment())
 }
 
 {
+    app.UseCors("AllowAllHeaders");
+
     app.UseAuthentication();
     app.UseRouting();
     app.UseAuthorization();
