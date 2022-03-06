@@ -1,9 +1,9 @@
-export interface TableModel {
-  headers: HeaderModel[];
+export interface TableType {
+  headers: HeaderType[];
   rows: unknown[];
 }
 
-export interface HeaderModel {
+export interface HeaderType {
   columnName: string;
   friendlyName: string;
 }

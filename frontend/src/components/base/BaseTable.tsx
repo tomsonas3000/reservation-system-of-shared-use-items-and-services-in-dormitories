@@ -7,21 +7,18 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { TableModel, HeaderModel } from './models/BaseTableModel';
+import { TableType, HeaderType } from './models/BaseTableModel';
 
-const BaseTable = (props: { tableData: TableModel }): JSX.Element => {
-  const selector = useSelector((state) => state);
-
+const BaseTable = (props: { tableData: TableType }): JSX.Element => {
   {
     return (
-      <TableContainer sx={{ justifyContent: 'center', display: 'flex' }}>
-        {console.log(selector)}
+      <TableContainer
+        sx={{ justifyContent: 'center', display: 'flex', minWidth: 800 }}>
         <Table component={Paper} sx={{ margin: '4rem' }}>
           <TableHead>
             <TableRow>
               {props.tableData.headers.map(
-                (header: HeaderModel, index: number) => {
+                (header: HeaderType, index: number) => {
                   return (
                     <TableCell key={index}>{header.friendlyName}</TableCell>
                   );

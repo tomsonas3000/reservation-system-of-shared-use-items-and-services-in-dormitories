@@ -30,7 +30,7 @@ var services = builder.Services;
     });
     
     services.AddDbContext<ReservationDbContext>(options => options.UseSqlServer("name=ConnectionStrings:Database"));
-    services.AddIdentity<User, IdentityRole>(options => 
+    services.AddIdentity<User, IdentityRole<Guid>>(options => 
             options.Password = new PasswordOptions
             {
                 RequireDigit = true,
@@ -81,6 +81,7 @@ var services = builder.Services;
     services.AddScoped<UsersRepository>();
     services.AddScoped<AuthService>();
     services.AddScoped<JwtService>();
+    services.AddScoped<DormitoriesService>();
 }
 
 var app = builder.Build();

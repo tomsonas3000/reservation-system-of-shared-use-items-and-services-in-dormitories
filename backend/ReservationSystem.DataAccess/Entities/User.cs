@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using ReservationSystem.Shared.Utilities;
 using ReservationSystem.Shared.ValueObjects;
 
 namespace ReservationSystem.DataAccess.Entities
 {
-    public sealed class User : IdentityUser
+    public sealed class User : IdentityUser<Guid>
     {
         private readonly List<Reservation> reservationsList = new();
 
@@ -35,6 +36,8 @@ namespace ReservationSystem.DataAccess.Entities
                 UserName = emailResult.Value.Value,
             });
         }
+        
+        public override Guid Id { get; set; }
 
         public ICollection<Reservation> Reservations => reservationsList.AsReadOnly();
 

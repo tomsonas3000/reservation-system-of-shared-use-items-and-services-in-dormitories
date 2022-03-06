@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.DataAccess.Entities;
@@ -6,7 +7,7 @@ using ReservationSystem.DataAccess.Enums;
 
 namespace ReservationSystem.DataAccess
 {
-    public class ReservationDbContext : IdentityDbContext<User>
+    public class ReservationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public ReservationDbContext(DbContextOptions<ReservationDbContext> options) : base(options)
         {

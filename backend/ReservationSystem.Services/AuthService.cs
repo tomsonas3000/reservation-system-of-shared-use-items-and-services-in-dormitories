@@ -19,13 +19,13 @@ namespace ReservationSystem.Services
     public class AuthService
     {
         private readonly UserManager<User> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<IdentityRole<Guid>> roleManager;
         private readonly UsersRepository usersRepository;
         private readonly JwtService jwtService;
 
         public AuthService(
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<IdentityRole<Guid>> roleManager,
             UsersRepository usersRepository,
             JwtService jwtService)
         {
