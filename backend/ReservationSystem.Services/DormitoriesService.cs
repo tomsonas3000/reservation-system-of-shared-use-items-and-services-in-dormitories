@@ -41,38 +41,7 @@ namespace ReservationSystem.Services
                 ManagerPhoneNumber = x.Manager.PhoneNumber,
             }).ToList();
 
-            return new ObjectResult(new DormitoriesDto
-            {
-                Headers = new List<TableHeaderDto>
-                {
-                    new()
-                    {
-                        ColumnName = "id",
-                        FriendlyName = "Id"
-                    },
-                    new()
-                    {
-                        ColumnName = "address",
-                        FriendlyName = "Address"
-                    },
-                    new()
-                    {
-                        ColumnName = "city",
-                        FriendlyName = "City",
-                    },
-                    new()
-                    {
-                       ColumnName = "managerEmail",
-                       FriendlyName = "Manager's email"
-                    }, 
-                    new()
-                    {
-                       ColumnName = "managerPhoneNumber",
-                       FriendlyName = "Manager's phone number"
-                    }
-                },
-                Rows = dormitoriesDto,
-            })
+            return new ObjectResult(dormitoriesDto)
             {
                 StatusCode = (int?) HttpStatusCode.OK
             };
