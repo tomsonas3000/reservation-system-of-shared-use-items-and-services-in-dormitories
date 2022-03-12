@@ -9,6 +9,7 @@ import Dormitories from './components/dormitories/Dormitories';
 import DormitoryForm from './components/dormitories/DormitoryForm';
 import Users from './components/users/Users';
 import Services from './components/services/Services';
+import Reservations from './components/reservations/Reservations';
 
 const theme = createTheme();
 
@@ -38,6 +39,12 @@ const App = () => {
           <Route
             path="services"
             element={<ProtectedRoute outlet={<Services />} role={role.Admin} />}
+          />
+          <Route
+            path="reservations"
+            element={
+              <ProtectedRoute outlet={<Reservations />} role={role.Admin} />
+            }
           />
         </Routes>
       </Router>

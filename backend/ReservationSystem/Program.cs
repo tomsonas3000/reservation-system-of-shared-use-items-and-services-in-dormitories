@@ -84,6 +84,7 @@ var services = builder.Services;
     services.AddScoped<DormitoriesService>();
     services.AddScoped<UsersService>();
     services.AddScoped<ServicesService>();
+    services.AddScoped<ReservationsService>();
 }
 
 var app = builder.Build();
