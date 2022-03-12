@@ -22,5 +22,13 @@ namespace ReservationSystem.Controllers
         {
             return dormitoriesService.GetDormitories();
         }
+
+        [HttpGet]
+        [Route("/dormitories-lookup")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> GetDormitoriesLookupList()
+        {
+            return dormitoriesService.GetDormitoriesLookupList();
+        }
     }
 }

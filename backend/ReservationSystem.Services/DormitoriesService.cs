@@ -20,7 +20,6 @@ namespace ReservationSystem.Services
         public async Task<ObjectResult> GetDormitories()
         {
             var dormitories = await reservationDbContext.Dormitories
-                .Include(x => x.Manager)
                 .Select(x => new DormitoryDto
                 {
                     Id = x.Id,
@@ -35,6 +34,21 @@ namespace ReservationSystem.Services
             return new ObjectResult(dormitories)
             {
                 StatusCode = (int?) HttpStatusCode.OK
+            };
+        }
+
+        public async Task<ObjectResult> GetDormitoriesLookupList()
+        {
+            var dormitoriesLookupList = await reservationDbContext.Dormitories
+                .Select(x => new LookupDto
+                {
+                    Name = x.Name,
+                    Value = x.Id.ToString(),
+                }).ToListAsync();
+
+            return new ObjectResult(dormitoriesLookupList)
+            {
+                StatusCode = (int) HttpStatusCode.OK,
             };
         }
     }

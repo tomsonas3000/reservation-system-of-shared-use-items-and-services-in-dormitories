@@ -29,7 +29,6 @@ const ReservationsTable = (props: { data: ReservationType[] }): JSX.Element => {
               {props.data.map((reservation: ReservationType, index: number) => {
                 return (
                   <TableRow key={index}>
-                    {console.log(reservation.isFinished)}
                     <TableCell>{reservation.beginTime}</TableCell>
                     <TableCell>{reservation.endTime}</TableCell>
                     <TableCell>{reservation.serviceType}</TableCell>

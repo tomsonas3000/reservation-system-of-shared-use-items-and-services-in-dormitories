@@ -93,7 +93,6 @@ const SignIn = () => {
           Submit
         </Button>
       </Box>
-      <pre>{JSON.stringify(formik.values, null, 2)}</pre>
     </Box>
   );
 };

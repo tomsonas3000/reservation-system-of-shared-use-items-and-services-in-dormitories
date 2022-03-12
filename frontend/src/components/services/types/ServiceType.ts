@@ -1,5 +1,5 @@
 export interface ServiceType {
-  id: string;
+  id?: string;
   type: string;
   maxTimeOfUse: number;
   maxAmountOfUsers: number;

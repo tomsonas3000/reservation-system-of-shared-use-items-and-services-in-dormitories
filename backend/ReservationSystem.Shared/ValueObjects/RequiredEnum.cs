@@ -12,6 +12,24 @@ namespace ReservationSystem.Shared.ValueObjects
             Value = value;
         }
 
+        public static Result<RequiredEnum<T>> Create(Result result, string? enumValue, string propertyName)
+        {
+            if (string.IsNullOrWhiteSpace(enumValue))
+            {
+                return new Result<RequiredEnum<T>>();
+            }
+
+            var parsedEnum = Enum.TryParse(enumValue, true, out T parsedValue);
+
+            if (!parsedEnum || !Enum.IsDefined(typeof(T), parsedValue))
+            {
+                result.AddError(propertyName, "The enum value is invalid");
+                return (Result<RequiredEnum<T>>)result;
+            }
+
+            return new Result<RequiredEnum<T>>(new RequiredEnum<T>(parsedValue));
+        }
+
         public static Result<RequiredEnum<T>> Create(string? enumValue, string propertyName)
         {
             if (string.IsNullOrWhiteSpace(enumValue))

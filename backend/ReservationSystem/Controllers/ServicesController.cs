@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
+using ReservationSystem.Shared.Contracts.Dtos;
 
 namespace ReservationSystem.Controllers
 {
@@ -21,6 +22,21 @@ namespace ReservationSystem.Controllers
         public async Task<ObjectResult> GetServices()
         {
             return await servicesService.GetServices();
+        }
+
+        [HttpGet]
+        [Route("/service-types")]
+        [Authorize(Roles = "Admin")]
+        public ObjectResult GetServiceTypes()
+        {
+            return servicesService.GetServiceTypes();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> CreateService([FromBody] CreateServiceDto request)
+        {
+            return servicesService.CreateService(request);
         }
     }
 }

@@ -10,6 +10,7 @@ import DormitoryForm from './components/dormitories/DormitoryForm';
 import Users from './components/users/Users';
 import Services from './components/services/Services';
 import Reservations from './components/reservations/Reservations';
+import ServiceForm from './components/services/ServiceForm';
 
 const theme = createTheme();
 
@@ -39,6 +40,12 @@ const App = () => {
           <Route
             path="services"
             element={<ProtectedRoute outlet={<Services />} role={role.Admin} />}
+          />
+          <Route
+            path="create-service"
+            element={
+              <ProtectedRoute outlet={<ServiceForm />} role={role.Admin} />
+            }
           />
           <Route
             path="reservations"

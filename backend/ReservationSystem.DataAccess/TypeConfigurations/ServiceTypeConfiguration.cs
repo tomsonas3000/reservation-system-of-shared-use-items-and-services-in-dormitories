@@ -11,7 +11,12 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
             base.Configure(builder);
 
             builder.HasOne(x => x.Room)
-                .WithMany(x => x.Services);
+                .WithMany(x => x.Services)
+                .HasForeignKey(x => x.RoomId);
+
+            builder.HasOne(x => x.Dormitory)
+                .WithMany(x => x.Services)
+                .HasForeignKey(x => x.DormitoryId);
 
             builder.Property(x => x.MaxAmountUsers)
                 .IsRequired();
@@ -20,7 +25,7 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
 
             builder.Property(x => x.Type);
 
-            builder.HasMany(x => x.Reservations)
+            builder.HasMany(x => x.ReservationsList)
                 .WithOne(x => x.Service)
                 .OnDelete(DeleteBehavior.NoAction);
         }

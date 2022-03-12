@@ -15,6 +15,6 @@ namespace ReservationSystem.DataAccess.Entities
 
         public Dormitory Dormitory { get; }
 
-        public ICollection<Service> Services => servicesList.AsReadOnly();
+        public ICollection<Service> Services => servicesList;
     }
 }

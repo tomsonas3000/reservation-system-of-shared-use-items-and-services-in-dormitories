@@ -24,10 +24,10 @@ namespace ReservationSystem.DataAccess.Entities
         
         public Guid ManagerId { get; set; }
 
-        public ICollection<User> Residents => residentsList.AsReadOnly();
+        public ICollection<User> Residents => residentsList;
         
-        public ICollection<Service> Services => servicesList.AsReadOnly();
+        public ICollection<Service> Services => servicesList;
 
-        public ICollection<Room> Rooms => roomsList.AsReadOnly();
+        public ICollection<Room> Rooms => roomsList;
     }
 }
