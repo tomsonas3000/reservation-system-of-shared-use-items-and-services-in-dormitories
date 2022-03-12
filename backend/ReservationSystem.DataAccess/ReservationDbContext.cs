@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.DataAccess.Entities;
-using ReservationSystem.DataAccess.Enums;
 
 namespace ReservationSystem.DataAccess
 {
@@ -22,6 +21,10 @@ namespace ReservationSystem.DataAccess
         public override DbSet<User> Users { get; set; } = null!;
 
         public DbSet<Room> Rooms { get; set; } = null!;
+
+        public override DbSet<IdentityRole<Guid>> Roles { get; set; } = null!;
+
+        public override DbSet<IdentityUserRole<Guid>> UserRoles { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

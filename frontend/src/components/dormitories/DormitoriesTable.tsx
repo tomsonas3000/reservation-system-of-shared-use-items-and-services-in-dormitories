@@ -17,6 +17,7 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
+              <TableCell>Name</TableCell>
               <TableCell>Address</TableCell>
               <TableCell>City</TableCell>
               <TableCell>Manager email</TableCell>
@@ -25,14 +26,15 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
           </TableHead>
           {
             <TableBody>
-              {props.data.map((row: DormitoryType, index: number) => {
+              {props.data.map((dormitory: DormitoryType, index: number) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.address}</TableCell>
-                    <TableCell>{row.city}</TableCell>
-                    <TableCell>{row.managerEmail}</TableCell>
-                    <TableCell>{row.managerPhoneNumber}</TableCell>
+                    <TableCell>{dormitory.id}</TableCell>
+                    <TableCell>{dormitory.name}</TableCell>
+                    <TableCell>{dormitory.address}</TableCell>
+                    <TableCell>{dormitory.city}</TableCell>
+                    <TableCell>{dormitory.managerEmail}</TableCell>
+                    <TableCell>{dormitory.managerPhoneNumber}</TableCell>
                   </TableRow>
                 );
               })}

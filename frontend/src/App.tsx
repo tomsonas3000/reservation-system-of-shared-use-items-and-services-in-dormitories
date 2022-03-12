@@ -6,6 +6,8 @@ import Header from './components/base/Header';
 import ProtectedRoute from './routes/ProtectedRoute';
 import role from './utils/enums/role';
 import Dormitories from './components/dormitories/Dormitories';
+import DormitoryForm from './components/dormitories/DormitoryForm';
+import Users from './components/users/Users';
 
 const theme = createTheme();
 
@@ -21,6 +23,16 @@ const App = () => {
             element={
               <ProtectedRoute outlet={<Dormitories />} role={role.Admin} />
             }
+          />
+          <Route
+            path="create-dormitory"
+            element={
+              <ProtectedRoute outlet={<DormitoryForm />} role={role.Admin} />
+            }
+          />
+          <Route
+            path="users"
+            element={<ProtectedRoute outlet={<Users />} role={role.Admin} />}
           />
         </Routes>
       </Router>

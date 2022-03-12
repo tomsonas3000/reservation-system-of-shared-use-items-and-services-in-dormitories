@@ -13,6 +13,8 @@ namespace ReservationSystem.DataAccess.Entities
         {
             
         }
+        
+        public string Name { get; }
 
         public string Address { get; }
         

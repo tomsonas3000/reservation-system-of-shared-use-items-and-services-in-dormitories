@@ -17,6 +17,10 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
             builder.HasMany(x => x.Residents)
                 .WithOne(x => x.Dormitory);
 
