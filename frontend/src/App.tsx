@@ -8,6 +8,7 @@ import role from './utils/enums/role';
 import Dormitories from './components/dormitories/Dormitories';
 import DormitoryForm from './components/dormitories/DormitoryForm';
 import Users from './components/users/Users';
+import Services from './components/services/Services';
 
 const theme = createTheme();
 
@@ -33,6 +34,10 @@ const App = () => {
           <Route
             path="users"
             element={<ProtectedRoute outlet={<Users />} role={role.Admin} />}
+          />
+          <Route
+            path="services"
+            element={<ProtectedRoute outlet={<Services />} role={role.Admin} />}
           />
         </Routes>
       </Router>

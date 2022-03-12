@@ -14,7 +14,7 @@ namespace ReservationSystem.DataAccess.Entities
 
         public ServiceType Type { get; }
 
-        public TimeSpan? MaxTimeOfUse { get; }
+        public TimeSpan MaxTimeOfUse { get; }
 
         public int MaxAmountUsers { get; }
 

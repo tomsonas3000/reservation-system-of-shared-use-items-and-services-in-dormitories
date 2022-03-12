@@ -83,6 +83,7 @@ var services = builder.Services;
     services.AddScoped<JwtService>();
     services.AddScoped<DormitoriesService>();
     services.AddScoped<UsersService>();
+    services.AddScoped<ServicesService>();
 }
 
 var app = builder.Build();
