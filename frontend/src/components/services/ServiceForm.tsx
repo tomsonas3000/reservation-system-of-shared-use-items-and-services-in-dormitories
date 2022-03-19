@@ -1,19 +1,30 @@
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { DormitoriesService } from '../../services/dormitoriesService';
 import { RoomsService } from '../../services/roomsService';
 import { ServicesService } from '../../services/servicesService';
 import { LookupType } from '../base/types/LookupType';
 import { RoomType } from '../rooms/types/RoomType';
+import { ServiceDetailsType } from './types/ServiceDetailsType';
 
 const ServiceForm = () => {
   const [serviceTypes, setServiceTypes] = useState<LookupType[]>([]);
   const [dormitories, setDormitories] = useState<LookupType[]>([]);
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [availableRooms, setAvailableRooms] = useState<RoomType[]>([]);
+  const [service, setService] = useState<ServiceDetailsType>({
+    id: '',
+    type: '',
+    maxTimeOfUse: 0,
+    maxAmountOfUsers: 0,
+    dormitoryId: '',
+    roomId: '',
+  });
+
+  const { serviceId } = useParams();
 
   const navigate = useNavigate();
 
@@ -43,28 +54,48 @@ const ServiceForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: () => {
-      ServicesService.createService({
-        type: formik.values.type,
-        maxTimeOfUse: formik.values.maxTimeOfUse,
-        maxAmountOfUsers: formik.values.maxAmountOfUsers,
-        room: formik.values.room,
-        dormitory: formik.values.dormitory,
-      })
-        .then(() => {
-          navigate('/services');
+      if (serviceId === '') {
+        ServicesService.createService({
+          type: formik.values.type,
+          maxTimeOfUse: formik.values.maxTimeOfUse,
+          maxAmountOfUsers: formik.values.maxAmountOfUsers,
+          room: formik.values.room,
+          dormitory: formik.values.dormitory,
         })
-        .catch((err) => {
-          const errors = {} as { [key: string]: string };
-          const responseErrors = err.response.data;
-
-          Object.keys(responseErrors).map((item: string) => {
-            errors[item] = responseErrors[item];
+          .then(() => {
+            navigate('/services');
+          })
+          .catch((err) => {
+            handleErrors(err);
           });
-
-          formik.setErrors(responseErrors);
-        });
+      } else {
+        ServicesService.updateService(serviceId, {
+          type: formik.values.type,
+          maxTimeOfUse: formik.values.maxTimeOfUse,
+          maxAmountOfUsers: formik.values.maxAmountOfUsers,
+          room: formik.values.room,
+          dormitory: formik.values.dormitory,
+        })
+          .then(() => {
+            navigate('/services');
+          })
+          .catch((err) => {
+            handleErrors(err);
+          });
+      }
     },
   });
+
+  const handleErrors = (err: any) => {
+    const errors = {} as { [key: string]: string };
+    const responseErrors = err.response.data;
+
+    Object.keys(responseErrors).map((item: string) => {
+      errors[item] = responseErrors[item];
+    });
+
+    formik.setErrors(responseErrors);
+  };
 
   useEffect(() => {
     ServicesService.getServiceTypes().then((res) => {
@@ -78,7 +109,32 @@ const ServiceForm = () => {
     RoomsService.getRooms().then((res) => {
       setRooms(res.data);
     });
+
+    if (serviceId !== '') {
+      ServicesService.getService(serviceId as string)
+        .then((res) => {
+          setService(res.data);
+        })
+        .catch(() => {
+          navigate('/services');
+        });
+    }
   }, []);
+
+  useEffect(() => {
+    setAvailableRooms(
+      rooms.filter(
+        (x) => x.dormitoryId.toUpperCase() === service.dormitoryId.toUpperCase()
+      )
+    );
+    formik.setValues({
+      type: service.type,
+      maxAmountOfUsers: service.maxAmountOfUsers,
+      maxTimeOfUse: service.maxTimeOfUse,
+      dormitory: service.dormitoryId.toUpperCase(),
+      room: service.roomId,
+    });
+  }, [service]);
 
   return (
     <Box
@@ -89,7 +145,7 @@ const ServiceForm = () => {
         display: 'flex',
       }}>
       <Typography component="h1" variant="h5">
-        Create service
+        {serviceId !== '' ? 'Update service' : 'Create service'}
       </Typography>
       <Box
         component="form"

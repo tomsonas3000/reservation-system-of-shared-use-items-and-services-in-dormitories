@@ -6,9 +6,11 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { ServiceType } from './types/ServiceType';
 
 const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
+  const navigate = useNavigate();
   {
     return (
       <TableContainer
@@ -16,7 +18,6 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
         <Table sx={{ margin: '4rem' }}>
           <TableHead>
             <TableRow>
-              <TableCell>Id</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Maximum time of use</TableCell>
               <TableCell>Maximum amount of users</TableCell>
@@ -28,8 +29,10 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
             <TableBody>
               {props.data.map((dormitory: ServiceType, index: number) => {
                 return (
-                  <TableRow key={index}>
-                    <TableCell>{dormitory.id}</TableCell>
+                  <TableRow
+                    key={index}
+                    onClick={() => navigate(`/services/${dormitory.id}`)}
+                    hover>
                     <TableCell>{dormitory.type}</TableCell>
                     <TableCell>{dormitory.maxTimeOfUse}</TableCell>
                     <TableCell>{dormitory.maxAmountOfUsers}</TableCell>

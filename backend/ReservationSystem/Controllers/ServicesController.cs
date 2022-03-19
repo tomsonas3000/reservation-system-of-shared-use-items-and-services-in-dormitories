@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
@@ -25,6 +26,14 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpGet]
+        [Route("{serviceId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ObjectResult> GetService([FromRoute] Guid serviceId)
+        {
+            return await servicesService.GetService(serviceId);
+        }
+
+        [HttpGet]
         [Route("/service-types")]
         [Authorize(Roles = "Admin")]
         public ObjectResult GetServiceTypes()
@@ -34,9 +43,17 @@ namespace ReservationSystem.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public Task<ObjectResult> CreateService([FromBody] CreateServiceDto request)
+        public Task<ObjectResult> CreateService([FromBody] CreateUpdateServiceDto request)
         {
             return servicesService.CreateService(request);
+        }
+
+        [HttpPut]
+        [Route("{serviceId}")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> UpdateService([FromBody] CreateUpdateServiceDto request, [FromRoute] Guid serviceId)
+        {
+            return servicesService.UpdateService(serviceId, request);
         }
     }
 }

@@ -48,11 +48,18 @@ const App = () => {
             }
           />
           <Route
+            path="services/:serviceId"
+            element={
+              <ProtectedRoute outlet={<ServiceForm />} role={role.Admin} />
+            }
+          />
+          <Route
             path="reservations"
             element={
               <ProtectedRoute outlet={<Reservations />} role={role.Admin} />
             }
           />
+          <Route element={<h1 style={{ marginTop: '5rem' }}>Not Found</h1>} />
         </Routes>
       </Router>
     </ThemeProvider>
