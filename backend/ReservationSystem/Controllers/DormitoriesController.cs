@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
+using ReservationSystem.Shared.Contracts.Dtos;
 
 namespace ReservationSystem.Controllers
 {
@@ -29,6 +30,13 @@ namespace ReservationSystem.Controllers
         public Task<ObjectResult> GetDormitoriesLookupList()
         {
             return dormitoriesService.GetDormitoriesLookupList();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> CreateDormitory([FromBody] CreateDormitoryDto request)
+        {
+            return dormitoriesService.CreateDormitory(request);
         }
     }
 }

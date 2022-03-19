@@ -71,17 +71,17 @@ namespace ReservationSystem.Services
                 };
             }
 
-            // var room = await reservationDbContext.Rooms.FirstOrDefaultAsync(x =>
-            //     x.Id == request.Room && x.Dormitory.Id == dormitory.Id);
-            //
-            // if (room is null)
-            // {
-            //     return new ObjectResult(new Dictionary<string, string>
-            //         {{"Room", "The provided room does not exist or belongs to a different dormitory."}})
-            //     {
-            //         StatusCode = (int) HttpStatusCode.BadRequest
-            //     };
-            // }
+            var room = await reservationDbContext.Rooms.FirstOrDefaultAsync(x =>
+                x.Id == request.Room && x.Dormitory.Id == dormitory.Id);
+            
+            if (room is null)
+            {
+                return new ObjectResult(new Dictionary<string, string>
+                    {{"Room", "The provided room does not exist or belongs to a different dormitory."}})
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest
+                };
+            }
 
             var createResult = Service.Create(request.Type, request.MaxTimeOfUse, request.MaxAmountOfUsers, request.Room, dormitory.Id);
 

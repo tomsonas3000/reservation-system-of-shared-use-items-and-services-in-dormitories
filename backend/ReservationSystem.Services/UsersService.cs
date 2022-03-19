@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.DataAccess;
+using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.Shared.Contracts.Dtos;
 
 namespace ReservationSystem.Services
@@ -37,6 +38,24 @@ namespace ReservationSystem.Services
             return new ObjectResult(users)
             {
                 StatusCode = (int?) HttpStatusCode.OK
+            };
+        }
+
+        public async Task<ObjectResult> GetManagersLookupList()
+        {
+            var managersLookupList = await (from user in reservationDbContext.Users
+                join userRole in reservationDbContext.UserRoles on user.Id equals userRole.UserId
+                join role in reservationDbContext.Roles on userRole.RoleId equals role.Id
+                where role.Name == UserRole.Manager.ToString()
+                select new LookupDto
+                {
+                    Name = user.Name,
+                    Value = user.Id.ToString(),
+                }).ToListAsync();
+
+            return new ObjectResult(managersLookupList)
+            {
+                StatusCode = (int)HttpStatusCode.OK,
             };
         }
     }

@@ -22,5 +22,13 @@ namespace ReservationSystem.Controllers
         {
             return usersService.GetUsers();
         }
+
+        [HttpGet]
+        [Route("/managers-lookup")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> GetManagersLookup()
+        {
+            return usersService.GetManagersLookupList();
+        }
     }
 }
