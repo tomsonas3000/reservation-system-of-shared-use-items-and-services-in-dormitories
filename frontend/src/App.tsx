@@ -28,6 +28,12 @@ const App = () => {
             }
           />
           <Route
+            path="dormitories/:dormitoryId"
+            element={
+              <ProtectedRoute outlet={<DormitoryForm />} role={role.Admin} />
+            }
+          />
+          <Route
             path="create-dormitory"
             element={
               <ProtectedRoute outlet={<DormitoryForm />} role={role.Admin} />

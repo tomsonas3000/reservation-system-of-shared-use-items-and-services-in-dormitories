@@ -9,6 +9,7 @@ import { ServicesService } from '../../services/servicesService';
 import { LookupType } from '../base/types/LookupType';
 import { RoomType } from '../rooms/types/RoomType';
 import { ServiceDetailsType } from './types/ServiceDetailsType';
+import { handleErrors } from '../../utils/functions';
 
 const ServiceForm = () => {
   const [serviceTypes, setServiceTypes] = useState<LookupType[]>([]);
@@ -25,7 +26,6 @@ const ServiceForm = () => {
   });
 
   const { serviceId } = useParams();
-
   const navigate = useNavigate();
 
   const validationSchema = yup.object().shape({
@@ -66,7 +66,7 @@ const ServiceForm = () => {
             navigate('/services');
           })
           .catch((err) => {
-            handleErrors(err);
+            handleErrors(formik, err);
           });
       } else {
         ServicesService.updateService(serviceId, {
@@ -80,22 +80,11 @@ const ServiceForm = () => {
             navigate('/services');
           })
           .catch((err) => {
-            handleErrors(err);
+            handleErrors(formik, err);
           });
       }
     },
   });
-
-  const handleErrors = (err: any) => {
-    const errors = {} as { [key: string]: string };
-    const responseErrors = err.response.data;
-
-    Object.keys(responseErrors).map((item: string) => {
-      errors[item] = responseErrors[item];
-    });
-
-    formik.setErrors(responseErrors);
-  };
 
   useEffect(() => {
     ServicesService.getServiceTypes().then((res) => {

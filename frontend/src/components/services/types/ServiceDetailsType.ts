@@ -1,5 +1,3 @@
-import { LookupType } from '../../base/types/LookupType';
-
 export interface ServiceDetailsType {
   id: string;
   type: string;

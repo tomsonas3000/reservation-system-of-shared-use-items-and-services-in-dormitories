@@ -12,12 +12,12 @@ namespace ReservationSystem.DataAccess.Entities
         private readonly List<Service> servicesList = new();
         private readonly List<Room> roomsList = new();
 
-        public static Result<Dormitory> Create(string name, string city, string address, User manager)
+        public static Result<Dormitory> Create(string name, string city, string address, Guid managerId)
         {
             var result = new Result<Dormitory>();
             var nameResult = RequiredString.Create(result, name, nameof(Name), 100);
-            var cityResult = RequiredString.Create(result, name, nameof(Name), 100);
-            var addressResult = RequiredString.Create(result, name, nameof(Name), 100);
+            var cityResult = RequiredString.Create(result, city, nameof(City), 100);
+            var addressResult = RequiredString.Create(result, address, nameof(Address), 100);
 
             if (!result.IsSuccess)
             {
@@ -29,14 +29,35 @@ namespace ReservationSystem.DataAccess.Entities
                 Name = nameResult.Value.Value,
                 Address = addressResult.Value.Value,
                 City = cityResult.Value.Value,
-                ManagerId = manager.Id,
+                ManagerId = managerId,
             });
+        }
+
+
+        public Result<Dormitory> Update(string name, string city, string address, Guid managerId)
+        {
+            var result = new Result<Dormitory>();
+            var nameResult = RequiredString.Create(result, name, nameof(Name), 100);
+            var cityResult = RequiredString.Create(result, city, nameof(City), 100);
+            var addressResult = RequiredString.Create(result, address, nameof(Address), 100);
+
+            if (!result.IsSuccess)
+            {
+                return result;
+            }
+
+            Name = nameResult.Value.Value;
+            Address = addressResult.Value.Value;
+            City = cityResult.Value.Value;
+            ManagerId = managerId;
+
+            return result;
         }
 
         public Result<Dormitory> AddRooms(List<string> rooms)
         {
             var result = new Result<Dormitory>();
-            foreach(var room in rooms)
+            foreach (var room in rooms)
             {
                 var createRoomResult = Room.Create(result, room);
                 if (createRoomResult is not null && !createRoomResult.IsSuccess)
@@ -49,24 +70,52 @@ namespace ReservationSystem.DataAccess.Entities
                     result.AddError("rooms", "Rooms must be unique.");
                     return result;
                 }
+
                 roomsList.Add(createRoomResult.Value);
             }
 
             return result;
         }
-        
+
+        public Result<Dormitory> UpdateRooms(List<string> rooms)
+        {
+            var result = new Result<Dormitory>();
+
+            if (!roomsList.All(existingRoom => rooms.Contains(existingRoom.RoomName)))
+            {
+                result.AddError("rooms", "Rooms can't be deleted");
+                return result;
+            }
+
+            foreach (var room in rooms)
+            {
+                if (!roomsList.Select(x => x.RoomName).Contains(room))
+                {
+                    var createRoomResult = Room.Create(result, room);
+                    if (createRoomResult is not null && !createRoomResult.IsSuccess)
+                    {
+                        return result;
+                    }
+
+                    roomsList.Add(createRoomResult.Value);
+                }
+            }
+
+            return result;
+        }
+
         public string Name { get; protected set; }
 
         public string Address { get; protected set; }
-        
+
         public string City { get; protected set; }
-        
+
         public User Manager { get; protected set; }
-        
+
         public Guid ManagerId { get; protected set; }
 
         public ICollection<User> Residents => residentsList;
-        
+
         public ICollection<Service> Services => servicesList;
 
         public ICollection<Room> Rooms => roomsList;

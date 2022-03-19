@@ -18,6 +18,8 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
 
             builder.HasOne(x => x.Dormitory)
                 .WithMany(x => x.Rooms);
+
+            builder.Property(x => x.Id).ValueGeneratedNever();
         }
     }
 }

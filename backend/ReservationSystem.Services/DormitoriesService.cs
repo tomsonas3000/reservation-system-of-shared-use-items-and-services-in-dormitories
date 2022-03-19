@@ -11,6 +11,7 @@ using ReservationSystem.DataAccess.Entities;
 using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.DataAccess.Repositories;
 using ReservationSystem.Shared.Contracts.Dtos;
+using ReservationSystem.Shared.Utilities;
 
 namespace ReservationSystem.Services
 {
@@ -47,6 +48,34 @@ namespace ReservationSystem.Services
             };
         }
 
+        public async Task<ObjectResult> GetDormitory(Guid dormitoryId)
+        {
+            var dormitory = await reservationDbContext.Dormitories.Where(x => x.Id == dormitoryId)
+                .Select(x => new DormitoryDetailsDto
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    City = x.City,
+                    ManagerId = x.ManagerId,
+                    Name = x.Name,
+                    Rooms = x.Rooms.Select(room => room.RoomName).ToList(),
+                })
+                .FirstOrDefaultAsync();
+
+            if (dormitory is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int)HttpStatusCode.NotFound
+                };
+            }
+
+            return new ObjectResult(dormitory)
+            {
+                StatusCode = (int)HttpStatusCode.OK
+            };
+        }
+
         public async Task<ObjectResult> GetDormitoriesLookupList()
         {
             var dormitoriesLookupList = await reservationDbContext.Dormitories
@@ -62,31 +91,15 @@ namespace ReservationSystem.Services
             };
         }
 
-        public async Task<ObjectResult> CreateDormitory(CreateDormitoryDto request)
+        public async Task<ObjectResult> CreateDormitory(CreateUpdateDormitoryDto request)
         {
-            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(request.Manager));
+            var validateManagerResult = await ValidateManager(request.Manager);
 
-            if (manager is null)
+            if (validateManagerResult is not null)
             {
-                return new ObjectResult(
-                    new Dictionary<string, string> { { "Manager", "The provided manager does not exist." } })
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest
-                };
+                return validateManagerResult;
             }
-            
-            var isManager = await userManager.IsInRoleAsync(manager, UserRole.Manager.ToString());
-
-            if (!isManager)
-            {
-                return new ObjectResult(
-                    new Dictionary<string, string> { { "Manager", "The provided manager is not a manager." } })
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest
-                };
-            }
-
-            var createResult = Dormitory.Create(request.Name, request.City, request.Address, manager);
+            var createResult = Dormitory.Create(request.Name, request.City, request.Address, Guid.Parse(request.Manager));
 
             if (!createResult.IsSuccess)
             {
@@ -115,6 +128,82 @@ namespace ReservationSystem.Services
             {
                 StatusCode = (int)HttpStatusCode.OK
             };
+        }
+        public async Task<ObjectResult> UpdateDormitory(Guid dormitoryId, CreateUpdateDormitoryDto request)
+        {
+            var validateManagerResult = await ValidateManager(request.Manager);
+
+            if (validateManagerResult is not null)
+            {
+                return validateManagerResult;
+            }
+            
+            var dormitory = await reservationDbContext.Dormitories
+                .Include(x => x.Rooms)
+                .FirstOrDefaultAsync(x => x.Id == dormitoryId);
+
+            if (dormitory is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int)HttpStatusCode.OK
+                };
+            }
+            
+            var updateResult = dormitory.Update(request.Name, request.City, request.Address, Guid.Parse(request.Manager));
+
+            if (!updateResult.IsSuccess)
+            {
+                return new ObjectResult(updateResult.Errors)
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
+            }
+
+            var roomsUpdateResult = dormitory.UpdateRooms(request.Rooms);
+
+            if (!roomsUpdateResult.IsSuccess)
+            {
+                return new ObjectResult(roomsUpdateResult.Errors)
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
+            }
+            
+            dormitoriesRepository.UpdateDormitory(dormitory);
+            await dormitoriesRepository.SaveChanges();
+
+            return new ObjectResult(null)
+            {
+                StatusCode = (int)HttpStatusCode.OK
+            };
+        }
+        
+        private async Task<ObjectResult?> ValidateManager(string managerId)
+        {
+            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(managerId));
+
+            if (manager is null)
+            {
+                return new ObjectResult(
+                    new Dictionary<string, string> { { "Manager", "The provided manager does not exist." } })
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
+            }
+            
+            var isManager = await userManager.IsInRoleAsync(manager, UserRole.Manager.ToString());
+
+            if (!isManager)
+            {
+                return new ObjectResult(
+                    new Dictionary<string, string> { { "Manager", "The provided manager is not a manager." } })
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
+            }
+
+            return null;
         }
     }
 }

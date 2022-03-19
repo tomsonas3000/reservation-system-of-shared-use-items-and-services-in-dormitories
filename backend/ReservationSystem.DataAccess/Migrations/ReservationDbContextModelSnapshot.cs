@@ -247,7 +247,6 @@ namespace ReservationSystem.DataAccess.Migrations
             modelBuilder.Entity("ReservationSystem.DataAccess.Entities.Room", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DormitoryId")
@@ -445,7 +444,7 @@ namespace ReservationSystem.DataAccess.Migrations
             modelBuilder.Entity("ReservationSystem.DataAccess.Entities.Reservation", b =>
                 {
                     b.HasOne("ReservationSystem.DataAccess.Entities.Service", "Service")
-                        .WithMany("Reservations")
+                        .WithMany("ReservationsList")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -516,7 +515,7 @@ namespace ReservationSystem.DataAccess.Migrations
 
             modelBuilder.Entity("ReservationSystem.DataAccess.Entities.Service", b =>
                 {
-                    b.Navigation("Reservations");
+                    b.Navigation("ReservationsList");
                 });
 
             modelBuilder.Entity("ReservationSystem.DataAccess.Entities.User", b =>

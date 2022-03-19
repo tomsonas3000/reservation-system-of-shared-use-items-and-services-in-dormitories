@@ -27,17 +27,17 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
           </TableHead>
           {
             <TableBody>
-              {props.data.map((dormitory: ServiceType, index: number) => {
+              {props.data.map((service: ServiceType, index: number) => {
                 return (
                   <TableRow
                     key={index}
-                    onClick={() => navigate(`/services/${dormitory.id}`)}
+                    onClick={() => navigate(`/services/${service.id}`)}
                     hover>
-                    <TableCell>{dormitory.type}</TableCell>
-                    <TableCell>{dormitory.maxTimeOfUse}</TableCell>
-                    <TableCell>{dormitory.maxAmountOfUsers}</TableCell>
-                    <TableCell>{dormitory.dormitory}</TableCell>
-                    <TableCell>{dormitory.room}</TableCell>
+                    <TableCell>{service.type}</TableCell>
+                    <TableCell>{service.maxTimeOfUse}</TableCell>
+                    <TableCell>{service.maxAmountOfUsers}</TableCell>
+                    <TableCell>{service.dormitory}</TableCell>
+                    <TableCell>{service.room}</TableCell>
                   </TableRow>
                 );
               })}

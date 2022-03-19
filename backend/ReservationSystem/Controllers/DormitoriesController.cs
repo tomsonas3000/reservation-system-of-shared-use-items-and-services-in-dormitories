@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
@@ -25,6 +26,14 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpGet]
+        [Route("{dormitoryId}")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> GetDormitory([FromRoute] Guid dormitoryId)
+        {
+            return dormitoriesService.GetDormitory(dormitoryId);
+        }
+
+        [HttpGet]
         [Route("/dormitories-lookup")]
         [Authorize(Roles = "Admin")]
         public Task<ObjectResult> GetDormitoriesLookupList()
@@ -34,9 +43,17 @@ namespace ReservationSystem.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public Task<ObjectResult> CreateDormitory([FromBody] CreateDormitoryDto request)
+        public Task<ObjectResult> CreateDormitory([FromBody] CreateUpdateDormitoryDto request)
         {
             return dormitoriesService.CreateDormitory(request);
+        }
+
+        [HttpPut]
+        [Route("{dormitoryId}")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> UpdateDormitory([FromRoute] Guid dormitoryId, [FromBody] CreateUpdateDormitoryDto request)
+        {
+            return dormitoriesService.UpdateDormitory(dormitoryId, request);
         }
     }
 }

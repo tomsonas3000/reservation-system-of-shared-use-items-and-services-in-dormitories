@@ -2,7 +2,7 @@
 
 namespace ReservationSystem.Shared.Contracts.Dtos
 {
-    public class CreateDormitoryDto
+    public class CreateUpdateDormitoryDto
     {
         public string Name { get; set; }
         

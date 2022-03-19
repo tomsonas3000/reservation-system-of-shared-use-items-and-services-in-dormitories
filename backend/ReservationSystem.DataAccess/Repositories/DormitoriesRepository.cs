@@ -17,6 +17,11 @@ namespace ReservationSystem.DataAccess.Repositories
             reservationDbContext.Dormitories.Add(dormitory);
         }
 
+        public void UpdateDormitory(Dormitory dormitory)
+        {
+            reservationDbContext.Dormitories.Update(dormitory);
+        }
+
         public async Task SaveChanges()
         {
             await reservationDbContext.SaveChangesAsync();

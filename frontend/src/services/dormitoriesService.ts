@@ -6,11 +6,22 @@ export class DormitoriesService {
     return await DOTNET_API().get('/dormitories');
   }
 
+  static async getDormitory(dormitoryId: string) {
+    return await DOTNET_API().get(`/dormitories/${dormitoryId}`);
+  }
+
   static async getDormitoriesLookupList() {
     return await DOTNET_API().get('/dormitories-lookup');
   }
 
   static async createDormitory(request: CreateDormitoryType) {
     return await DOTNET_API().post('/dormitories', request);
+  }
+
+  static async updateDormitory(
+    dormitoryId: string | undefined,
+    request: CreateDormitoryType
+  ) {
+    return await DOTNET_API().put(`/dormitories/${dormitoryId}`, request);
   }
 }

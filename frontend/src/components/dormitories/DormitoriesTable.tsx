@@ -6,9 +6,11 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { DormitoryType } from './types/DormitoryType';
 
 const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
+  const navigate = useNavigate();
   {
     return (
       <TableContainer
@@ -16,7 +18,6 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
         <Table sx={{ margin: '4rem' }}>
           <TableHead>
             <TableRow>
-              <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Address</TableCell>
               <TableCell>City</TableCell>
@@ -28,8 +29,10 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
             <TableBody>
               {props.data.map((dormitory: DormitoryType, index: number) => {
                 return (
-                  <TableRow key={index}>
-                    <TableCell>{dormitory.id}</TableCell>
+                  <TableRow
+                    key={index}
+                    hover
+                    onClick={() => navigate(`/dormitories/${dormitory.id}`)}>
                     <TableCell>{dormitory.name}</TableCell>
                     <TableCell>{dormitory.address}</TableCell>
                     <TableCell>{dormitory.city}</TableCell>

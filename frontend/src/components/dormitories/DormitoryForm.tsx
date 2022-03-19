@@ -5,11 +5,22 @@ import { FieldArray, useFormik } from 'formik';
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { UsersService } from '../../services/usersService';
 import { DormitoriesService } from '../../services/dormitoriesService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { DormitoryDetailsType } from './types/DormitoryDetailsType';
+import { handleErrors } from '../../utils/functions';
 
 const DormitoryForm = () => {
   const [managers, setManagers] = useState<LookupType[]>([]);
+  const [dormitory, setDormitory] = useState<DormitoryDetailsType>({
+    id: '',
+    name: '',
+    address: '',
+    city: '',
+    managerId: '',
+    rooms: [],
+  });
 
+  const { dormitoryId } = useParams();
   const navigate = useNavigate();
 
   const validationSchema = yup.object().shape({
@@ -29,24 +40,31 @@ const DormitoryForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: () => {
-      DormitoriesService.createDormitory({
-        name: formik.values.name,
-        address: formik.values.address,
-        city: formik.values.city,
-        manager: formik.values.manager,
-        rooms: formik.values.rooms,
-      })
-        .then(() => navigate('/dormitories'))
-        .catch((err) => {
-          const errors = {} as { [key: string]: string };
-          const responseErrors = err.response.data;
-
-          Object.keys(responseErrors).map((item: string) => {
-            errors[item] = responseErrors[item];
+      if (dormitoryId === '') {
+        DormitoriesService.createDormitory({
+          name: formik.values.name,
+          address: formik.values.address,
+          city: formik.values.city,
+          manager: formik.values.manager,
+          rooms: formik.values.rooms,
+        })
+          .then(() => navigate('/dormitories'))
+          .catch((err) => {
+            handleErrors(formik, err);
           });
-
-          formik.setErrors(responseErrors);
-        });
+      } else {
+        DormitoriesService.updateDormitory(dormitoryId, {
+          name: formik.values.name,
+          address: formik.values.address,
+          city: formik.values.city,
+          manager: formik.values.manager,
+          rooms: formik.values.rooms,
+        })
+          .then(() => navigate('/dormitories'))
+          .catch((err) => {
+            handleErrors(formik, err);
+          });
+      }
     },
   });
 
@@ -54,7 +72,27 @@ const DormitoryForm = () => {
     UsersService.getManagersLookupList().then((res) => {
       setManagers(res.data);
     });
+
+    if (dormitoryId !== '') {
+      DormitoriesService.getDormitory(dormitoryId as string)
+        .then((res) => {
+          setDormitory(res.data);
+        })
+        .catch(() => {
+          navigate('/dormitories');
+        });
+    }
   }, []);
+
+  useEffect(() => {
+    formik.setValues({
+      name: dormitory.name,
+      address: dormitory.address,
+      city: dormitory.city,
+      manager: dormitory.managerId.toUpperCase(),
+      rooms: dormitory.rooms,
+    });
+  }, [dormitory]);
 
   return (
     <Box
@@ -65,7 +103,7 @@ const DormitoryForm = () => {
         display: 'flex',
       }}>
       <Typography component="h1" variant="h5">
-        Create dormitory
+        {dormitoryId !== '' ? 'Update dormitory' : 'Create dormitory'}
       </Typography>
       <Box
         component="form"
