@@ -2,7 +2,7 @@
 
 namespace ReservationSystem.Shared.Contracts.Dtos
 {
-    public class UserDto
+    public class StudentDto
     {
         public Guid Id { get; set; }
         
@@ -10,10 +10,10 @@ namespace ReservationSystem.Shared.Contracts.Dtos
         
         public string Surname { get; set; }
         
-        public string TelehponeNumber { get; set; }
+        public string TelephoneNumber { get; set; }
         
         public string EmailAddress { get; set; }
-        
-        public string Role { get; set; }
+
+        public Guid? DormitoryId { get; set; }
     }
 }

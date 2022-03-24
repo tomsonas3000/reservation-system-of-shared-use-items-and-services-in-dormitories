@@ -1,4 +1,5 @@
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -23,21 +24,44 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
               <TableCell>City</TableCell>
               <TableCell>Manager email</TableCell>
               <TableCell>Manager phone number</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           {
             <TableBody>
               {props.data.map((dormitory: DormitoryType, index: number) => {
                 return (
-                  <TableRow
-                    key={index}
-                    hover
-                    onClick={() => navigate(`/dormitories/${dormitory.id}`)}>
-                    <TableCell>{dormitory.name}</TableCell>
-                    <TableCell>{dormitory.address}</TableCell>
-                    <TableCell>{dormitory.city}</TableCell>
-                    <TableCell>{dormitory.managerEmail}</TableCell>
-                    <TableCell>{dormitory.managerPhoneNumber}</TableCell>
+                  <TableRow key={index} hover>
+                    <TableCell
+                      onClick={() => navigate(`/dormitories/${dormitory.id}`)}>
+                      {dormitory.name}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/dormitories/${dormitory.id}`)}>
+                      {dormitory.address}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/dormitories/${dormitory.id}`)}>
+                      {dormitory.city}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/dormitories/${dormitory.id}`)}>
+                      {dormitory.managerEmail}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/dormitories/${dormitory.id}`)}>
+                      {dormitory.managerPhoneNumber}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() =>
+                          navigate(
+                            `/dormitories/${dormitory.id}/manage-students`
+                          )
+                        }>
+                        Manage students
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}

@@ -31,8 +31,7 @@ namespace ReservationSystem.Services
                     Surname = user.Surname,
                     TelehponeNumber = user.PhoneNumber,
                     EmailAddress = user.Email,
-                    Role = role.Name,
-                    Dormitory = user.Dormitory.Name ?? "-",
+                    Role = role.Name
                 }).ToListAsync();
             
             return new ObjectResult(users)

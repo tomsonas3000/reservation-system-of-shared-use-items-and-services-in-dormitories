@@ -54,7 +54,7 @@ const ServiceForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: () => {
-      if (serviceId === '') {
+      if (!serviceId) {
         ServicesService.createService({
           type: formik.values.type,
           maxTimeOfUse: formik.values.maxTimeOfUse,
@@ -99,7 +99,7 @@ const ServiceForm = () => {
       setRooms(res.data);
     });
 
-    if (serviceId !== '') {
+    if (serviceId) {
       ServicesService.getService(serviceId as string)
         .then((res) => {
           setService(res.data);
@@ -134,7 +134,7 @@ const ServiceForm = () => {
         display: 'flex',
       }}>
       <Typography component="h1" variant="h5">
-        {serviceId !== '' ? 'Update service' : 'Create service'}
+        {serviceId ? 'Update service' : 'Create service'}
       </Typography>
       <Box
         component="form"

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,22 @@ namespace ReservationSystem.Controllers
         public Task<ObjectResult> UpdateDormitory([FromRoute] Guid dormitoryId, [FromBody] CreateUpdateDormitoryDto request)
         {
             return dormitoriesService.UpdateDormitory(dormitoryId, request);
+        }
+
+        [HttpPost]
+        [Route("{dormitoryId}/update-students")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> AddStudentsToDormitory([FromRoute] Guid dormitoryId, [FromBody] List<Guid> studentsIds)
+        {
+            return dormitoriesService.UpdateDormitoryStudents(dormitoryId, studentsIds);
+        }
+
+        [HttpGet]
+        [Route("{dormitoryId}/students")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> GetStudents([FromRoute] Guid dormitoryId)
+        {
+            return dormitoriesService.GetDormitoryStudents(dormitoryId);
         }
     }
 }

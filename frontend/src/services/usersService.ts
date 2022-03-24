@@ -8,4 +8,8 @@ export class UsersService {
   static async getManagersLookupList() {
     return await DOTNET_API().get('/managers-lookup');
   }
+
+  static async getStudents(dormitoryId: string | undefined) {
+    return await DOTNET_API().get(`/dormitories/${dormitoryId}/students`);
+  }
 }

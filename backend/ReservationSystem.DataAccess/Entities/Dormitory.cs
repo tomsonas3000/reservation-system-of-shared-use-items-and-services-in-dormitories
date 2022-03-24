@@ -8,7 +8,7 @@ namespace ReservationSystem.DataAccess.Entities
 {
     public class Dormitory : EntityBase
     {
-        private readonly List<User> residentsList = new();
+        private List<User> residentsList = new();
         private readonly List<Service> servicesList = new();
         private readonly List<Room> roomsList = new();
 
@@ -32,8 +32,7 @@ namespace ReservationSystem.DataAccess.Entities
                 ManagerId = managerId,
             });
         }
-
-
+        
         public Result<Dormitory> Update(string name, string city, string address, Guid managerId)
         {
             var result = new Result<Dormitory>();
@@ -100,6 +99,15 @@ namespace ReservationSystem.DataAccess.Entities
                     roomsList.Add(createRoomResult.Value);
                 }
             }
+
+            return result;
+        }
+
+        public Result<Dormitory> UpdateResidents(List<User> students)
+        {
+            var result = new Result<Dormitory>();
+
+            residentsList = students;
 
             return result;
         }

@@ -11,7 +11,6 @@ using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.DataAccess.Repositories;
 using ReservationSystem.Services.Helpers;
 using ReservationSystem.Shared.Contracts.Dtos;
-using ReservationSystem.Shared.Utilities;
 
 namespace ReservationSystem.Services
 {

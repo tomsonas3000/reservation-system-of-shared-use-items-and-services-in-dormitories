@@ -179,6 +179,62 @@ namespace ReservationSystem.Services
             };
         }
         
+        public async Task<ObjectResult> GetDormitoryStudents(Guid dormitoryId)
+        {
+            var students = await
+                (from user in reservationDbContext.Users
+                    join userRole in reservationDbContext.UserRoles on user.Id equals userRole.UserId
+                    join role in reservationDbContext.Roles on userRole.RoleId equals role.Id
+                    where role.Name == UserRole.Student.ToString() && (user.DormitoryId == null || user.DormitoryId == dormitoryId)
+                    select new StudentDto
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        Surname = user.Surname,
+                        TelephoneNumber = user.PhoneNumber,
+                        EmailAddress = user.Email,
+                        DormitoryId = user.DormitoryId,
+                    }).ToListAsync();
+
+            return new ObjectResult(students)
+            {
+                StatusCode = (int?) HttpStatusCode.OK
+            };
+        }
+
+        public async Task<ObjectResult> UpdateDormitoryStudents(Guid dormitoryId, List<Guid> studentsIds)
+        {
+            var dormitory = await reservationDbContext.Dormitories.Include(x => x.Residents).FirstOrDefaultAsync(x => x.Id == dormitoryId);
+
+            if (dormitory is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest
+                };
+            }
+
+            var students = await reservationDbContext.Users.Where(x => studentsIds.Contains(x.Id)).ToListAsync();
+
+            var addResidentsResult = dormitory.UpdateResidents(students);
+
+            if (!addResidentsResult.IsSuccess)
+            {
+                return new ObjectResult(addResidentsResult.Errors)
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest
+                };
+            }
+
+            dormitoriesRepository.UpdateDormitory(dormitory);
+            await dormitoriesRepository.SaveChanges();
+
+            return new ObjectResult(null)
+            {
+                StatusCode = (int) HttpStatusCode.OK
+            };
+        }
+        
         private async Task<ObjectResult?> ValidateManager(string managerId)
         {
             var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(managerId));

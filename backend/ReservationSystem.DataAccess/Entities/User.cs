@@ -44,6 +44,8 @@ namespace ReservationSystem.DataAccess.Entities
         public string? Name { get; private set; }
         
         public string? Surname { get; private set; }
+        
+        public Guid? DormitoryId { get; private set; }
 
         public Dormitory? Dormitory { get; private set; }
     }

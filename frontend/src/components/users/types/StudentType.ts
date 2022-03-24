@@ -1,9 +1,8 @@
-export interface UserType {
+export interface StudentType {
   id: string;
   name: string;
   surname: string;
   telephoneNumber: string;
   emailAddress: string;
-  role: string;
   dormitoryId: string;
 }

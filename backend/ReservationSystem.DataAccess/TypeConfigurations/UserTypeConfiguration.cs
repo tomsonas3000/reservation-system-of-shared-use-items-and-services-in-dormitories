@@ -36,6 +36,8 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
 
             builder.HasMany(x => x.Reservations)
                 .WithOne(x => x.User);
+
+            builder.HasOne(x => x.Dormitory);
         }
     }
 }

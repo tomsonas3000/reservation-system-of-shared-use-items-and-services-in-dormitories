@@ -24,4 +24,14 @@ export class DormitoriesService {
   ) {
     return await DOTNET_API().put(`/dormitories/${dormitoryId}`, request);
   }
+
+  static async updateDormitoryStudents(
+    students: string[],
+    dormitoryId: string | undefined
+  ) {
+    return await DOTNET_API().post(
+      `/dormitories/${dormitoryId}/update-students`,
+      students
+    );
+  }
 }

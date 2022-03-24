@@ -40,7 +40,7 @@ const DormitoryForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: () => {
-      if (dormitoryId === '') {
+      if (!dormitoryId) {
         DormitoriesService.createDormitory({
           name: formik.values.name,
           address: formik.values.address,
@@ -73,7 +73,7 @@ const DormitoryForm = () => {
       setManagers(res.data);
     });
 
-    if (dormitoryId !== '') {
+    if (dormitoryId) {
       DormitoriesService.getDormitory(dormitoryId as string)
         .then((res) => {
           setDormitory(res.data);
@@ -103,7 +103,7 @@ const DormitoryForm = () => {
         display: 'flex',
       }}>
       <Typography component="h1" variant="h5">
-        {dormitoryId !== '' ? 'Update dormitory' : 'Create dormitory'}
+        {dormitoryId ? 'Update dormitory' : 'Create dormitory'}
       </Typography>
       <Box
         component="form"

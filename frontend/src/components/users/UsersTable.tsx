@@ -22,7 +22,6 @@ const UsersTable = (props: { data: UserType[] }): JSX.Element => {
               <TableCell>Telephone number</TableCell>
               <TableCell>Email address</TableCell>
               <TableCell>Role</TableCell>
-              <TableCell>Dormitory</TableCell>
             </TableRow>
           </TableHead>
           {
@@ -36,7 +35,6 @@ const UsersTable = (props: { data: UserType[] }): JSX.Element => {
                     <TableCell>{user.telephoneNumber}</TableCell>
                     <TableCell>{user.emailAddress}</TableCell>
                     <TableCell>{user.role}</TableCell>
-                    <TableCell>{user.dormitory}</TableCell>
                   </TableRow>
                 );
               })}
