@@ -29,7 +29,7 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
           </TableHead>
           {
             <TableBody>
-              {props.data.map((dormitory: DormitoryType, index: number) => {
+              {props.data?.map((dormitory: DormitoryType, index: number) => {
                 return (
                   <TableRow key={index} hover>
                     <TableCell
