@@ -103,13 +103,17 @@ namespace ReservationSystem.Services
                 {
                     new(ClaimTypes.Email, user.Email),
                     new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new(ClaimTypes.Role, userRoles.FirstOrDefault() ?? string.Empty)
+                    new(ClaimTypes.Role, userRoles.FirstOrDefault() ?? string.Empty),
                 };
 
                 var token = jwtService.GetToken(authClaims);
 
                 return new ObjectResult(new LoginResponseDto
-                    {Token = new JwtSecurityTokenHandler().WriteToken(token), Role = userRoles.First()})
+                {
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    Role = userRoles.First(),
+                    DormitoryId = user.DormitoryId
+                })
                 {
                     StatusCode = (int?) HttpStatusCode.OK
                 };

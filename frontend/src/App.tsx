@@ -21,6 +21,7 @@ const App = () => {
       <Router>
         <Header />
         <Routes>
+          <Route path="" element={<SignIn />} />
           <Route path="sign-in" element={<SignIn />} />
           <Route
             path="dormitories"
@@ -67,9 +68,15 @@ const App = () => {
             }
           />
           <Route
-            path="reservations"
+            path="reservations-admin"
             element={
               <ProtectedRoute outlet={<Reservations />} role={role.Admin} />
+            }
+          />
+          <Route
+            path="reservations"
+            element={
+              <ProtectedRoute outlet={<h1>Test</h1>} role={role.Student} />
             }
           />
           <Route element={<h1 style={{ marginTop: '5rem' }}>Not Found</h1>} />

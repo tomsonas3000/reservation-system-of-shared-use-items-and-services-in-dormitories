@@ -13,6 +13,9 @@ export class AuthService {
     cookies.set('role', res?.data?.role, {
       maxAge: 3600,
     });
+    cookies.set('dormitoryId', res?.data?.dormitoryId, {
+      maxAge: 3600,
+    });
     return res;
   }
 }

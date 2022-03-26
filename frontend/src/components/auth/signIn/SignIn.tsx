@@ -3,9 +3,12 @@ import { LockOutlined } from '@mui/icons-material';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { AuthService } from '../../../services/authService';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logIn } from '../../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { RootState } from '../../../redux/store';
+import { useEffect } from 'react';
+import Role from '../../../utils/enums/role';
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -16,6 +19,8 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const authState = useSelector((state: RootState) => state.auth);
+
   const disptach = useDispatch();
   const navigate = useNavigate();
 
@@ -36,8 +41,13 @@ const SignIn = () => {
       password: formik.values.password,
     })
       .then((res) => {
-        disptach(logIn({ role: res.data.role, token: res.data.token }));
-        navigate('/dormitories');
+        disptach(
+          logIn({
+            role: res.data.role,
+            token: res.data.token,
+            dormitoryId: res.data?.dormitoryId,
+          })
+        );
       })
       .catch(() => {
         formik.setErrors({
@@ -45,6 +55,13 @@ const SignIn = () => {
         });
       });
   };
+
+  useEffect(() => {
+    if (authState.isLoggedIn) {
+      if (authState.role === Role.Admin) navigate('/dormitories');
+      if (authState.role === Role.Student) navigate('/reservations');
+    }
+  }, []);
 
   return (
     <Box
