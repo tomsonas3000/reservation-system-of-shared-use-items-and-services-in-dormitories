@@ -24,6 +24,8 @@ namespace ReservationSystem.Services.Helpers
                     return "Vacuum cleaner";
                 case ServiceType.WashingMachine:
                     return "Washing machine";
+                case ServiceType.BoardGame:
+                    return "Board game";
                 default:
                     return string.Empty;
             }

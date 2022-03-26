@@ -10,5 +10,6 @@
         Football = 6,
         Volleyball = 7,
         Shower = 8,
+        BoardGame = 9,
     }
 }

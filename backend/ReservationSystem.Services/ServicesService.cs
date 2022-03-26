@@ -31,6 +31,7 @@ namespace ReservationSystem.Services
                 .Select(x => new ServiceDto
                 {
                     Id = x.Id,
+                    Name = x.Name,
                     MaxAmountOfUsers = x.MaxAmountUsers,
                     MaxTimeOfUse = x.MaxTimeOfUse.TotalMinutes,
                     Dormitory = x.Dormitory.Name,
@@ -51,6 +52,7 @@ namespace ReservationSystem.Services
                 .Select(x => new ServiceDetailsDto
                 {
                     Id = x.Id,
+                    Name = x.Name,
                     MaxAmountOfUsers = x.MaxAmountUsers,
                     MaxTimeOfUse = x.MaxTimeOfUse.TotalMinutes,
                     DormitoryId = x.DormitoryId,
@@ -96,7 +98,7 @@ namespace ReservationSystem.Services
                 return basicValidation;
             }
 
-            var createResult = Service.Create(request.Type, request.MaxTimeOfUse, request.MaxAmountOfUsers, request.Room, request.Dormitory);
+            var createResult = Service.Create(request.Name, request.Type, request.MaxTimeOfUse, request.MaxAmountOfUsers, request.Room, request.Dormitory);
 
             if (!createResult.IsSuccess)
             {
@@ -134,7 +136,7 @@ namespace ReservationSystem.Services
                 };
             }
 
-            var updateResult = service.Update(request.Type, request.MaxTimeOfUse, request.MaxAmountOfUsers, request.Room, request.Dormitory);
+            var updateResult = service.Update(request.Name, request.Type, request.MaxTimeOfUse, request.MaxAmountOfUsers, request.Room, request.Dormitory);
 
             if (!updateResult.IsSuccess)
             {

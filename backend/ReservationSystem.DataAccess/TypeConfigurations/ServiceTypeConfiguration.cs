@@ -25,6 +25,8 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
 
             builder.Property(x => x.Type);
 
+            builder.Property(x => x.Name).HasMaxLength(200);
+
             builder.HasMany(x => x.ReservationsList)
                 .WithOne(x => x.Service)
                 .OnDelete(DeleteBehavior.NoAction);

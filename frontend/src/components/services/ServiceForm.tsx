@@ -18,6 +18,7 @@ const ServiceForm = () => {
   const [availableRooms, setAvailableRooms] = useState<RoomType[]>([]);
   const [service, setService] = useState<ServiceDetailsType>({
     id: '',
+    name: '',
     type: '',
     maxTimeOfUse: 0,
     maxAmountOfUsers: 0,
@@ -29,6 +30,7 @@ const ServiceForm = () => {
   const navigate = useNavigate();
 
   const validationSchema = yup.object().shape({
+    name: yup.string().required('Service name is required.').max(200),
     type: yup.string().required('Service type is required.'),
     maxTimeOfUse: yup
       .number()
@@ -46,6 +48,7 @@ const ServiceForm = () => {
 
   const formik = useFormik({
     initialValues: {
+      name: '',
       type: '',
       maxTimeOfUse: 0,
       maxAmountOfUsers: 0,
@@ -56,6 +59,7 @@ const ServiceForm = () => {
     onSubmit: () => {
       if (!serviceId) {
         ServicesService.createService({
+          name: formik.values.name,
           type: formik.values.type,
           maxTimeOfUse: formik.values.maxTimeOfUse,
           maxAmountOfUsers: formik.values.maxAmountOfUsers,
@@ -70,6 +74,7 @@ const ServiceForm = () => {
           });
       } else {
         ServicesService.updateService(serviceId, {
+          name: formik.values.name,
           type: formik.values.type,
           maxTimeOfUse: formik.values.maxTimeOfUse,
           maxAmountOfUsers: formik.values.maxAmountOfUsers,
@@ -117,6 +122,7 @@ const ServiceForm = () => {
       )
     );
     formik.setValues({
+      name: service.name,
       type: service.type,
       maxAmountOfUsers: service.maxAmountOfUsers,
       maxTimeOfUse: service.maxTimeOfUse,
@@ -146,6 +152,17 @@ const ServiceForm = () => {
           display: 'flex',
           minWidth: 600,
         }}>
+        <TextField
+          id="name"
+          label="Name of the service"
+          fullWidth
+          margin="normal"
+          type="string"
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          error={formik.touched.name && !!formik.errors.name}
+          helperText={formik.touched.name && formik.errors.name}
+        />
         <TextField
           id="type"
           label="Service type"

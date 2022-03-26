@@ -10,6 +10,8 @@ namespace ReservationSystem.DataAccess.Entities
     {
         private readonly List<Reservation> reservationsList = new();
         
+        public string Name { get; protected set; }
+        
         public ServiceType Type { get; protected set; }
 
         public TimeSpan MaxTimeOfUse { get; protected set; }
@@ -28,9 +30,10 @@ namespace ReservationSystem.DataAccess.Entities
         
         
 
-        public static Result<Service> Create(string? type, int maxTimeOfUse, int maxAmountOfUsers, Guid roomId, Guid dormitoryId)
+        public static Result<Service> Create(string name, string? type, int maxTimeOfUse, int maxAmountOfUsers, Guid roomId, Guid dormitoryId)
         {
             var result = new Result<Service>();
+            var nameResult = RequiredString.Create(result, name, "name", 200);
             var typeResult = RequiredEnum<ServiceType>.Create(result, type, "type");
             var maxTimeOfUseResult = FixedNumber.Create(result, maxTimeOfUse, "maxTimeOfUse", 10, 400);
             var maxAmountOfUsersResult = FixedNumber.Create(result, maxAmountOfUsers, "maxAmountOfUsers", 1, 20);
@@ -42,6 +45,7 @@ namespace ReservationSystem.DataAccess.Entities
 
             return new Result<Service>(new Service
             {
+                Name = nameResult.Value.Value,
                 Type = typeResult.Value.Value,
                 MaxAmountUsers = maxAmountOfUsersResult.Value.Value,
                 MaxTimeOfUse = TimeSpan.FromMinutes(maxTimeOfUseResult.Value.Value),
@@ -50,10 +54,11 @@ namespace ReservationSystem.DataAccess.Entities
             });
         }
 
-        public Result<Service> Update(string? type, int maxTimeOfUse, int maxAmountOfUsers, Guid roomId,
+        public Result<Service> Update(string name, string? type, int maxTimeOfUse, int maxAmountOfUsers, Guid roomId,
             Guid dormitoryId)
         {
             var result = new Result<Service>();
+            var nameResult = RequiredString.Create(result, name, "name", 200);
             var typeResult = RequiredEnum<ServiceType>.Create(result, type, "type");
             var maxTimeOfUseResult = FixedNumber.Create(result, maxTimeOfUse, "maxTimeOfUse", 10, 400);
             var maxAmountOfUsersResult = FixedNumber.Create(result, maxAmountOfUsers, "maxAmountOfUsers", 1, 20);
@@ -63,6 +68,7 @@ namespace ReservationSystem.DataAccess.Entities
                 return result;
             }
 
+            Name = nameResult.Value.Value;
             Type = typeResult.Value.Value;
             MaxAmountUsers = maxAmountOfUsersResult.Value.Value;
             MaxTimeOfUse = TimeSpan.FromMinutes(maxTimeOfUseResult.Value.Value);
