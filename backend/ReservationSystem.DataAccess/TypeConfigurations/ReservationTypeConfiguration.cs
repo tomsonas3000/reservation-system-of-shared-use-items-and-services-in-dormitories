@@ -13,7 +13,8 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
                 .WithMany(x => x.Reservations);
 
             builder.HasOne(x => x.Service)
-                .WithMany(x => x.ReservationsList);
+                .WithMany(x => x.ReservationsList)
+                .HasForeignKey(x => x.ServiceId);
 
             builder.Property(x => x.BeginTime)
                 .IsRequired();

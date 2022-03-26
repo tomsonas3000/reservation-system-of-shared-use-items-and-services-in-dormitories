@@ -104,6 +104,7 @@ namespace ReservationSystem.Services
                     new(ClaimTypes.Email, user.Email),
                     new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new(ClaimTypes.Role, userRoles.FirstOrDefault() ?? string.Empty),
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString())
                 };
 
                 var token = jwtService.GetToken(authClaims);

@@ -22,5 +22,13 @@ namespace ReservationSystem.Controllers
         {
             return reservationsService.GetReservations();
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Student")]
+        [Route("calendar")]
+        public Task<ObjectResult> GetReservationsForCalendar()
+        {
+            return reservationsService.GetReservationsDataForCalendar();
+        }
     }
 }

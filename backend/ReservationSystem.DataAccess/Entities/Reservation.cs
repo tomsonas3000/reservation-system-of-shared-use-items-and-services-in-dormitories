@@ -8,11 +8,13 @@ namespace ReservationSystem.DataAccess.Entities
         {
         }
         
-        public DateTime BeginTime { get; }
+        public DateTime BeginTime { get; protected set; }
         
-        public DateTime EndTime { get; }
+        public DateTime EndTime { get; protected set; }
 
-        public Service Service { get; }
+        public Guid ServiceId { get; protected set; }
+        
+        public Service Service { get; protected set; }
         
         public bool IsFinished { get; }
 
