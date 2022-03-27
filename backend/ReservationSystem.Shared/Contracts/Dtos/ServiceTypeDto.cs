@@ -4,7 +4,7 @@ namespace ReservationSystem.Shared.Contracts.Dtos
 {
     public class ServiceTypeDto
     {
-        public string Type { get; set; }
+        public LookupDto Type { get; set; }
         
         public List<ServiceListDto> ServiceList { get; set; }
     }

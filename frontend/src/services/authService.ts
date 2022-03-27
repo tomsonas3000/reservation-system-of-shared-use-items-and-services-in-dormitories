@@ -8,13 +8,13 @@ export class AuthService {
 
     const res = await DOTNET_API().post('/auth/login', request);
     cookies.set('jwt', res?.data?.token, {
-      maxAge: 3600,
+      maxAge: 3600000,
     });
     cookies.set('role', res?.data?.role, {
-      maxAge: 3600,
+      maxAge: 3600000,
     });
     cookies.set('dormitoryId', res?.data?.dormitoryId, {
-      maxAge: 3600,
+      maxAge: 3600000,
     });
     return res;
   }

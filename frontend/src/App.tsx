@@ -12,6 +12,7 @@ import Services from './components/services/Services';
 import Reservations from './components/reservations/Reservations';
 import ServiceForm from './components/services/ServiceForm';
 import ManageStudents from './components/dormitories/ManageStudents';
+import ReservationsCalendar from './components/reservations/ReservationsCalendar';
 
 const theme = createTheme();
 
@@ -76,7 +77,10 @@ const App = () => {
           <Route
             path="reservations"
             element={
-              <ProtectedRoute outlet={<h1>Test</h1>} role={role.Student} />
+              <ProtectedRoute
+                outlet={<ReservationsCalendar />}
+                role={role.Student}
+              />
             }
           />
           <Route element={<h1 style={{ marginTop: '5rem' }}>Not Found</h1>} />

@@ -9,5 +9,7 @@ namespace ReservationSystem.Shared.Contracts.Dtos
         public string Room { get; set; }
         
         public List<ReservationsListDto> ReservationsList { get; set; }
+        
+        public string Name { get; set; }
     }
 }

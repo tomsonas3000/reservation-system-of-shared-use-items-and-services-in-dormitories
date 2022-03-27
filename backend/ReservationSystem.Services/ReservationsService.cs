@@ -59,17 +59,23 @@ namespace ReservationSystem.Services
             var reservationsData = services.GroupBy(x => x.Type)
                 .Select(x => new ServiceTypeDto
                 {
-                    Type = x.Key.ToString(),
+                    Type = new LookupDto
+                    {
+                        Name = x.Key.GetUserFriendlyServiceType(),
+                        Value = x.Key.ToString(),
+                    },
                     ServiceList = x.Select(service => new ServiceListDto
                     {
                         MaximumTimeOfUse = service.MaxTimeOfUse.Minutes,
                         Room = service.Room.RoomName,
+                        Name = service.Name,
                         ReservationsList = service.ReservationsList.Select(reservation => new ReservationsListDto
                         {
                             Event_id = reservation.Id,
-                            Start = reservation.BeginTime,
-                            End = reservation.EndTime,
+                            StartDate = reservation.BeginTime,
+                            EndDate = reservation.EndTime,
                             IsBooked = reservation.IsFinished,
+                            Title = service.Room.RoomName,
                         }).ToList()
                     }).ToList()
                 }).ToList();

@@ -24,7 +24,7 @@ namespace ReservationSystem.Services
             var token = new JwtSecurityToken(
                 configuration["JWT:ValidIssuer"],
                 configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddMinutes(60),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
