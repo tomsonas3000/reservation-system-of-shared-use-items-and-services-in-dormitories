@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.Shared.Utilities;
 using ReservationSystem.Shared.ValueObjects;
@@ -8,7 +9,7 @@ namespace ReservationSystem.DataAccess.Entities
 {
     public class Service : EntityBase
     {
-        private readonly List<Reservation> reservationsList = new();
+        private List<Reservation> reservationsList = new();
         
         public string Name { get; protected set; }
         
@@ -26,8 +27,6 @@ namespace ReservationSystem.DataAccess.Entities
 
         public ICollection<Reservation> ReservationsList => reservationsList;
         
-        
-
         public static Result<Service> Create(string name, string? type, int maxTimeOfUse, Guid roomId, Guid dormitoryId)
         {
             var result = new Result<Service>();
@@ -70,6 +69,19 @@ namespace ReservationSystem.DataAccess.Entities
             RoomId = roomId;
 
             return result;
+        }
+
+        public Result<Service> AddReservation(Reservation reservation)
+        {
+            var result = new Result<Service>();
+
+            if (reservationsList.OrderBy(x => x.BeginTime).Any(x => x.BeginTime < reservation.EndTime && x.EndTime > reservation.BeginTime))
+            {
+                result.AddError(nameof(reservationsList), "The time is already taken.");
+                return result;
+            }
+
+            return new Result<Service>(this);
         }
     }
 }

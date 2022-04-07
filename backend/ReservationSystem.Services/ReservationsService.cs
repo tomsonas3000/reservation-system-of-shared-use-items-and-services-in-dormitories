@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.DataAccess;
 using ReservationSystem.DataAccess.Entities;
+using ReservationSystem.DataAccess.Repositories;
 using ReservationSystem.Services.Helpers;
 using ReservationSystem.Shared.Contracts.Dtos;
 
@@ -18,12 +19,19 @@ namespace ReservationSystem.Services
         private readonly ReservationDbContext reservationDbContext;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly UserManager<User> userManager;
+        private readonly ServicesRepository servicesRepository;
+        private readonly UsersService usersService;
+        private readonly UsersRepository usersRepository;
 
-        public ReservationsService(ReservationDbContext reservationDbContext, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
+        public ReservationsService(ReservationDbContext reservationDbContext, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, 
+        ServicesRepository servicesRepository, UsersService usersService, UsersRepository usersRepository)
         {
             this.reservationDbContext = reservationDbContext;
             this.httpContextAccessor = httpContextAccessor;
             this.userManager = userManager;
+            this.servicesRepository = servicesRepository;
+            this.usersService = usersService;
+            this.usersRepository = usersRepository;
         }
 
         public async Task<ObjectResult> GetReservations()
@@ -66,6 +74,7 @@ namespace ReservationSystem.Services
                     },
                     ServiceList = x.Select(service => new ServiceListDto
                     {
+                        Id = service.Id,
                         MaximumTimeOfUse = service.MaxTimeOfUse.Minutes,
                         Room = service.Room.RoomName,
                         Name = service.Name,
@@ -81,6 +90,42 @@ namespace ReservationSystem.Services
                 }).ToList();
 
             return new ObjectResult(reservationsData)
+            {
+                StatusCode = (int) HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ObjectResult> CreateReservation(CreateReservationDto request)
+        {
+            var service = await reservationDbContext.Services.Include(x => x.ReservationsList).FirstOrDefaultAsync(x => x.Id == request.ServiceId);
+            var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
+            var userEntity = await usersService.GetUserById(user.Id);
+            
+
+            if (service is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.NotFound,
+                };
+            }
+
+            var reservationCreateResult = Reservation.Create(request.ServiceId, user, request.StartDate, request.EndDate);
+            
+            var addToServiceResult = service.AddReservation(reservationCreateResult.Value);
+
+            if (!addToServiceResult.IsSuccess)
+            {
+                return new ObjectResult(addToServiceResult.Errors)
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest,
+                };
+            }
+            userEntity.AddReservation(reservationCreateResult.Value);
+            
+            await servicesRepository.SaveChanges();
+
+            return new ObjectResult(null)
             {
                 StatusCode = (int) HttpStatusCode.OK,
             };

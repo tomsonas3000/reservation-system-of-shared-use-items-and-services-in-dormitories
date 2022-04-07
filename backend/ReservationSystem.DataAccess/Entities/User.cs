@@ -8,7 +8,7 @@ namespace ReservationSystem.DataAccess.Entities
 {
     public sealed class User : IdentityUser<Guid>
     {
-        private readonly List<Reservation> reservationsList = new();
+        private List<Reservation> reservationsList = new();
 
         private User()
         {
@@ -36,10 +36,15 @@ namespace ReservationSystem.DataAccess.Entities
                 UserName = emailResult.Value.Value,
             });
         }
+
+        public void AddReservation(Reservation reservation)
+        {
+            reservationsList.Add(reservation);
+        }
         
         public override Guid Id { get; set; }
 
-        public ICollection<Reservation> Reservations => reservationsList.AsReadOnly();
+        public ICollection<Reservation> Reservations => reservationsList;
 
         public string? Name { get; private set; }
         

@@ -6,6 +6,7 @@ export interface ServiceType {
 }
 
 export interface ServiceList {
+  id: string;
   maximumTimeOfUse: number;
   room: string;
   reservationsList: ReservationsList[];

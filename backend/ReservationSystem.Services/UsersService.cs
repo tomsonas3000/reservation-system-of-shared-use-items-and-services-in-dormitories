@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.DataAccess;
+using ReservationSystem.DataAccess.Entities;
 using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.Shared.Contracts.Dtos;
 
@@ -38,6 +40,11 @@ namespace ReservationSystem.Services
             {
                 StatusCode = (int?) HttpStatusCode.OK
             };
+        }
+
+        public async Task<User> GetUserById(Guid userId)
+        {
+            return await reservationDbContext.Users.Include(x => x.Reservations).FirstOrDefaultAsync();
         }
 
         public async Task<ObjectResult> GetManagersLookupList()

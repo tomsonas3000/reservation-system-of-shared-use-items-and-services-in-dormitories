@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
+using ReservationSystem.Shared.Contracts.Dtos;
 
 namespace ReservationSystem.Controllers
 {
@@ -29,6 +30,13 @@ namespace ReservationSystem.Controllers
         public Task<ObjectResult> GetReservationsForCalendar()
         {
             return reservationsService.GetReservationsDataForCalendar();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Student")]
+        public Task<ObjectResult> CreateReservation([FromBody] CreateReservationDto request)
+        {
+            return reservationsService.CreateReservation(request);
         }
     }
 }

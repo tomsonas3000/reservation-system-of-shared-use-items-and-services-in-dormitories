@@ -24,6 +24,8 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
 
             builder.Property(x => x.IsFinished)
                 .IsRequired();
+
+            builder.Property(x => x.Id).ValueGeneratedNever();
         }
     }
 }

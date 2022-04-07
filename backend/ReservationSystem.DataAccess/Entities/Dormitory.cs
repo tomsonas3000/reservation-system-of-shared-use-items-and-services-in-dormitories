@@ -8,7 +8,7 @@ namespace ReservationSystem.DataAccess.Entities
 {
     public class Dormitory : EntityBase
     {
-        private List<User> residentsList = new();
+        private List<User?> residentsList = new();
         private readonly List<Service> servicesList = new();
         private readonly List<Room> roomsList = new();
 
@@ -103,7 +103,7 @@ namespace ReservationSystem.DataAccess.Entities
             return result;
         }
 
-        public Result<Dormitory> UpdateResidents(List<User> students)
+        public Result<Dormitory> UpdateResidents(List<User?> students)
         {
             var result = new Result<Dormitory>();
 
@@ -122,7 +122,7 @@ namespace ReservationSystem.DataAccess.Entities
 
         public Guid ManagerId { get; protected set; }
 
-        public ICollection<User> Residents => residentsList;
+        public ICollection<User?> Residents => residentsList;
 
         public ICollection<Service> Services => servicesList;
 

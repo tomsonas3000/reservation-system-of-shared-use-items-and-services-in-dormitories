@@ -29,7 +29,7 @@ export const DOTNET_API = () => {
           window.location.replace('http://localhost:3000/sign-in');
         }
       }
-      return err;
+      return Promise.reject(err);
     }
   );
 

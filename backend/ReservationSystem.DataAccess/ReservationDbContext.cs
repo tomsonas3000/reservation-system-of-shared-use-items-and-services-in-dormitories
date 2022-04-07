@@ -18,7 +18,7 @@ namespace ReservationSystem.DataAccess
 
         public DbSet<Service> Services { get; set; } = null!;
 
-        public override DbSet<User> Users { get; set; } = null!;
+        public override DbSet<User?> Users { get; set; } = null!;
 
         public DbSet<Room> Rooms { get; set; } = null!;
 
