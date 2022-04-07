@@ -64,5 +64,19 @@ namespace ReservationSystem.Services
                 StatusCode = (int)HttpStatusCode.OK,
             };
         }
+
+        public ObjectResult GetRolesLookupList()
+        {
+            var rolesLookupList = Enum.GetValues<UserRole>().Where(x => x != UserRole.Admin).Select(x => new LookupDto
+            {
+                Name = x.ToString(),
+                Value = x.ToString(),
+            }).ToList();
+
+            return new ObjectResult(rolesLookupList)
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+            };
+        }
     }
 }

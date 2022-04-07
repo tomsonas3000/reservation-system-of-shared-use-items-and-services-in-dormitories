@@ -30,5 +30,13 @@ namespace ReservationSystem.Controllers
         {
             return usersService.GetManagersLookupList();
         }
+
+        [HttpGet]
+        [Route("/roles-lookup")]
+        [Authorize(Roles = "Admin")]
+        public ObjectResult GetRolesLookup()
+        {
+            return usersService.GetRolesLookupList();
+        }
     }
 }

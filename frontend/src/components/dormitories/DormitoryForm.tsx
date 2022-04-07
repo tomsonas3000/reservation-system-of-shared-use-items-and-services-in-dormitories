@@ -27,7 +27,7 @@ const DormitoryForm = () => {
     name: yup.string().required('Name is required.').max(100),
     address: yup.string().required('Address is required.').max(100),
     city: yup.string().required('City is required.').max(100),
-    manager: yup.string().required('City is required'),
+    manager: yup.string().required('Manager is required'),
   });
 
   const formik = useFormik({

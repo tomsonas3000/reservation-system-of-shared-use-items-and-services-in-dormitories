@@ -19,8 +19,8 @@ namespace ReservationSystem.DataAccess.Entities
             var result = new Result<User>();
             var nameResult = RequiredString.Create(result, name, nameof(Name), 200);
             var surnameResult = RequiredString.Create(result, surname, nameof(Surname), 200);
-            var emailResult = RequiredEmail.Create(result, email, nameof(Email));
-            var phoneNumberResult = RequiredPhoneNumber.Create(result, phoneNumber, nameof(PhoneNumber));
+            var emailResult = RequiredEmail.Create(result, email, "emailAddress");
+            var phoneNumberResult = RequiredPhoneNumber.Create(result, phoneNumber, "telephoneNumber");
 
             if (!result.IsSuccess)
             {

@@ -24,9 +24,6 @@ const Reservations = () => {
   return (
     <Grid container m={4}>
       <Grid item>
-        <Button size="large" variant="contained">
-          Add new reservation
-        </Button>
         <ReservationsTable
           data={reservations}
           onReservationDelete={handleReservationDelete}

@@ -13,6 +13,7 @@ import Reservations from './components/reservations/Reservations';
 import ServiceForm from './components/services/ServiceForm';
 import ManageStudents from './components/dormitories/ManageStudents';
 import ReservationsCalendar from './components/reservations/ReservationsCalendar';
+import UserForm from './components/users/UserForm';
 
 const theme = createTheme();
 
@@ -53,6 +54,10 @@ const App = () => {
             element={<ProtectedRoute outlet={<Users />} role={role.Admin} />}
           />
           <Route
+            path="create-user"
+            element={<ProtectedRoute outlet={<UserForm />} role={role.Admin} />}
+          />
+          <Route
             path="services"
             element={<ProtectedRoute outlet={<Services />} role={role.Admin} />}
           />
@@ -75,7 +80,7 @@ const App = () => {
             }
           />
           <Route
-            path="reservations"
+            path="reservations-calendar"
             element={
               <ProtectedRoute
                 outlet={<ReservationsCalendar />}

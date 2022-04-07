@@ -83,12 +83,16 @@ const ManageStudents = () => {
                           size="large"
                           variant="contained"
                           color={
-                            selectedStudents.includes(student.id)
+                            selectedStudents.includes(student.id as string)
                               ? 'error'
                               : 'success'
                           }
-                          onClick={() => addRemoveStudent(student.id)}>
-                          {selectedStudents.includes(student.id) ? '-' : '+'}
+                          onClick={() =>
+                            addRemoveStudent(student.id as string)
+                          }>
+                          {selectedStudents.includes(student.id as string)
+                            ? '-'
+                            : '+'}
                         </Button>
                       </TableCell>
                     </TableRow>
