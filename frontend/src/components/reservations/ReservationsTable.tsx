@@ -1,4 +1,5 @@
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -7,8 +8,12 @@ import {
   TableRow,
 } from '@mui/material';
 import { ReservationType } from './types/ReservationType';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const ReservationsTable = (props: { data: ReservationType[] }): JSX.Element => {
+const ReservationsTable = (props: {
+  data: ReservationType[];
+  onReservationDelete: (reservationId: string) => void;
+}): JSX.Element => {
   {
     return (
       <TableContainer
@@ -22,6 +27,7 @@ const ReservationsTable = (props: { data: ReservationType[] }): JSX.Element => {
               <TableCell>Is the reservation finished</TableCell>
               <TableCell>{`User's name`}</TableCell>
               <TableCell>Dormitory name</TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           {
@@ -35,6 +41,17 @@ const ReservationsTable = (props: { data: ReservationType[] }): JSX.Element => {
                     <TableCell>{String(reservation.isFinished)}</TableCell>
                     <TableCell>{reservation.userName}</TableCell>
                     <TableCell>{reservation.dormitory}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="large"
+                        variant="contained"
+                        color="error"
+                        onClick={() =>
+                          props.onReservationDelete(reservation.id)
+                        }>
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}

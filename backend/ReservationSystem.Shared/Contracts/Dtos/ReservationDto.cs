@@ -1,7 +1,11 @@
-﻿namespace ReservationSystem.Shared.Contracts.Dtos
+﻿using System;
+
+namespace ReservationSystem.Shared.Contracts.Dtos
 {
     public class ReservationDto
     {
+        public Guid Id { get; set; }
+        
         public string BeginTime { get; set; }
         
         public string EndTime { get; set; }

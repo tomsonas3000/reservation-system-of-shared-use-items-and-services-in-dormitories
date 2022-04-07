@@ -18,7 +18,8 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
       state.dormitoryId = action.payload?.dormitoryId;
       if (state.role === Role.Admin) window.location.replace('/dormitories');
-      if (state.role === Role.Student) window.location.replace('/reservations');
+      if (state.role === Role.Student)
+        window.location.replace('/reservations-calendar');
     },
     logout: (state) => {
       state.role = '';

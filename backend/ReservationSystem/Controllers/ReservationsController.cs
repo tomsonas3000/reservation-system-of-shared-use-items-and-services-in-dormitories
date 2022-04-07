@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
@@ -37,6 +38,14 @@ namespace ReservationSystem.Controllers
         public Task<ObjectResult> CreateReservation([FromBody] CreateReservationDto request)
         {
             return reservationsService.CreateReservation(request);
+        }
+
+        [HttpDelete]
+        [Route("{reservationId}")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> DeleteReservation([FromRoute] Guid reservationId)
+        {
+            return reservationsService.DeleteReservation(reservationId);
         }
     }
 }

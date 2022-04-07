@@ -21,24 +21,26 @@ namespace ReservationSystem.Services
         private readonly UserManager<User> userManager;
         private readonly ServicesRepository servicesRepository;
         private readonly UsersService usersService;
-        private readonly UsersRepository usersRepository;
+        private readonly ReservationsRepository reservationsRepository;
 
         public ReservationsService(ReservationDbContext reservationDbContext, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, 
-        ServicesRepository servicesRepository, UsersService usersService, UsersRepository usersRepository)
+        ServicesRepository servicesRepository, UsersService usersService, UsersRepository usersRepository, ReservationsRepository reservationsRepository)
         {
             this.reservationDbContext = reservationDbContext;
             this.httpContextAccessor = httpContextAccessor;
             this.userManager = userManager;
             this.servicesRepository = servicesRepository;
             this.usersService = usersService;
-            this.usersRepository = usersRepository;
+            this.reservationsRepository = reservationsRepository;
         }
 
         public async Task<ObjectResult> GetReservations()
         {
             var reservations = await reservationDbContext.ReservationDates
+                .OrderBy(x => x.BeginTime)
                 .Select(x => new ReservationDto
                 {
+                    Id = x.Id,
                     BeginTime = x.BeginTime.GetUserFriendlyDateTime(),
                     EndTime = x.EndTime.GetUserFriendlyDateTime(),
                     IsFinished = x.IsFinished,
@@ -124,6 +126,27 @@ namespace ReservationSystem.Services
             userEntity.AddReservation(reservationCreateResult.Value);
             
             await servicesRepository.SaveChanges();
+
+            return new ObjectResult(null)
+            {
+                StatusCode = (int) HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ObjectResult> DeleteReservation(Guid reservationId)
+        {
+            var reservation = await reservationDbContext.ReservationDates.FindAsync(reservationId);
+
+            if (reservation is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.NotFound,
+                };
+            }
+            
+            reservationsRepository.DeleteReservation(reservation);
+            await reservationsRepository.SaveChanges();
 
             return new ObjectResult(null)
             {

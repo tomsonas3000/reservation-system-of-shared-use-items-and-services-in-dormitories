@@ -38,7 +38,7 @@ const adminMenuItems = [
 const studentMenuItems = [
   {
     label: 'Reservations',
-    href: '/reservations',
+    href: '/reservations-calendar',
   },
 ];
 

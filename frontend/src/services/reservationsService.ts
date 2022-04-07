@@ -13,4 +13,8 @@ export class ReservationsService {
   static async createReservation(request: CreateReservation) {
     return await DOTNET_API().post('reservations', request);
   }
+
+  static async deleteReservation(reservationId: string) {
+    return await DOTNET_API().delete(`reservations/${reservationId}`);
+  }
 }

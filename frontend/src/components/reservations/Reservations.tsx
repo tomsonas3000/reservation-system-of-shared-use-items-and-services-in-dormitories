@@ -13,13 +13,24 @@ const Reservations = () => {
     });
   }, []);
 
+  const handleReservationDelete = (reservationId: string) => {
+    ReservationsService.deleteReservation(reservationId).then(() => {
+      ReservationsService.getReservations().then((res) => {
+        setReservations(res.data);
+      });
+    });
+  };
+
   return (
     <Grid container m={4}>
       <Grid item>
         <Button size="large" variant="contained">
           Add new reservation
         </Button>
-        <ReservationsTable data={reservations} />
+        <ReservationsTable
+          data={reservations}
+          onReservationDelete={handleReservationDelete}
+        />
       </Grid>
     </Grid>
   );
