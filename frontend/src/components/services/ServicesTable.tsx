@@ -37,7 +37,6 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
                     <TableCell>{service.name}</TableCell>
                     <TableCell>{service.type}</TableCell>
                     <TableCell>{service.maxTimeOfUse}</TableCell>
-                    <TableCell>{service.maxAmountOfUsers}</TableCell>
                     <TableCell>{service.dormitory}</TableCell>
                     <TableCell>{service.room}</TableCell>
                   </TableRow>

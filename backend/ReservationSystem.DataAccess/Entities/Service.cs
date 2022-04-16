@@ -16,7 +16,7 @@ namespace ReservationSystem.DataAccess.Entities
         public ServiceType Type { get; protected set; }
 
         public TimeSpan MaxTimeOfUse { get; protected set; }
-        
+
         public Guid RoomId { get; protected set; }
 
         public Room Room { get; protected set; }
@@ -80,6 +80,8 @@ namespace ReservationSystem.DataAccess.Entities
                 result.AddError(nameof(reservationsList), "The time is already taken.");
                 return result;
             }
+            
+            reservationsList.Add(reservation);
 
             return new Result<Service>(this);
         }

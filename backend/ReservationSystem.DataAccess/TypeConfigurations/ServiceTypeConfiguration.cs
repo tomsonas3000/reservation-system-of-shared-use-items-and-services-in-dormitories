@@ -17,10 +17,6 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
             builder.HasOne(x => x.Dormitory)
                 .WithMany(x => x.Services)
                 .HasForeignKey(x => x.DormitoryId);
-            
-            builder.Property(x => x.MaxTimeOfUse);
-
-            builder.Property(x => x.Type);
 
             builder.Property(x => x.Name).HasMaxLength(200);
 

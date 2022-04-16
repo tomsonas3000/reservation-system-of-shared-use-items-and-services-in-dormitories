@@ -1,11 +1,12 @@
 import {
-  Button,
+  Alert,
   IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
   Paper,
+  Snackbar,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -50,6 +51,9 @@ const ReservationsCalendar = () => {
   const [activeView, setActiveView] = useState<View>(View.serviceTypes);
   const [isEditingAvailable, setIsEditingAvailable] = useState<boolean>(false);
   const [addedAppointment, setAddedAppointment] = useState({});
+  const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+  const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
+  const [errorSnackbarMessage, setErrorSnackbarMessage] = useState('');
 
   useEffect(() => {
     ReservationsService.getReservationsCalendar().then((res) => {
@@ -94,6 +98,7 @@ const ReservationsCalendar = () => {
         ReservationsService.createReservation(request)
           .then(() => {
             ReservationsService.getReservationsCalendar().then((res) => {
+              setOpenSuccessSnackbar(true);
               res.data.forEach((type: ServiceType) => {
                 type.serviceList.forEach((service) => {
                   if (service.id === activeService?.id) {
@@ -104,7 +109,10 @@ const ReservationsCalendar = () => {
             });
           })
           .catch((err) => {
-            alert(err.response.data['reservationsList']);
+            setErrorSnackbarMessage(
+              err.response.data[Object.keys(err.response.data)[0]]
+            );
+            setOpenErrorSnackbar(true);
           });
       }
     },
@@ -139,6 +147,20 @@ const ReservationsCalendar = () => {
 
   return (
     <Box margin={4}>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openSuccessSnackbar}
+        onClose={() => setOpenSuccessSnackbar(false)}
+        autoHideDuration={6000}>
+        <Alert severity="success">Reservation was added successfully!</Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openErrorSnackbar}
+        onClose={() => setOpenErrorSnackbar(false)}
+        autoHideDuration={6000}>
+        <Alert severity="error">{errorSnackbarMessage}</Alert>
+      </Snackbar>
       {activeView === View.serviceTypes && (
         <List>
           {serviceTypes?.map((type, idx) => {

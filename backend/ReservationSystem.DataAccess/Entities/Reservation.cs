@@ -10,11 +10,24 @@ namespace ReservationSystem.DataAccess.Entities
         {
         }
         
-        public static Result<Reservation> Create(Guid serviceId, User user, string beginTime, string endTime)
+        public static Result<Reservation> Create(Service service, User user, string beginTime, string endTime)
         {
             var result = new Result<Reservation>();
             var beginTimeResult = RequiredDate.Create(result, beginTime);
             var endTimeResult = RequiredDate.Create(result, endTime);
+
+            if (beginTimeResult.IsSuccess && endTimeResult.IsSuccess)
+            {
+                if (endTimeResult.Value.Value.Subtract(beginTimeResult.Value.Value) > service.MaxTimeOfUse)
+                {
+                    result.AddError("MaxTimeOfUse", "The selected time span is too big for this service.");
+                }
+
+                if (endTimeResult.Value.Value < DateTime.Now)
+                {
+                    result.AddError(nameof(EndTime), "Reservation can not be made for a past time.");
+                }
+            }
 
             if (!result.IsSuccess)
             {
@@ -23,7 +36,7 @@ namespace ReservationSystem.DataAccess.Entities
             
             return new Result<Reservation>(new Reservation
             {
-                ServiceId = serviceId,
+                Service = service,
                 BeginTime = beginTimeResult.Value.Value,
                 EndTime = endTimeResult.Value.Value,
                 User = user,

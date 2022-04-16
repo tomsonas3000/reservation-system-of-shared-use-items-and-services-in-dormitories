@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace ReservationSystem.Services
         private readonly ReservationsRepository reservationsRepository;
 
         public ReservationsService(ReservationDbContext reservationDbContext, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, 
-        ServicesRepository servicesRepository, UsersService usersService, UsersRepository usersRepository, ReservationsRepository reservationsRepository)
+        ServicesRepository servicesRepository, UsersService usersService, ReservationsRepository reservationsRepository)
         {
             this.reservationDbContext = reservationDbContext;
             this.httpContextAccessor = httpContextAccessor;
@@ -102,7 +103,6 @@ namespace ReservationSystem.Services
             var service = await reservationDbContext.Services.Include(x => x.ReservationsList).FirstOrDefaultAsync(x => x.Id == request.ServiceId);
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
             var userEntity = await usersService.GetUserById(user.Id);
-            
 
             if (service is null)
             {
@@ -112,7 +112,15 @@ namespace ReservationSystem.Services
                 };
             }
 
-            var reservationCreateResult = Reservation.Create(request.ServiceId, user, request.StartDate, request.EndDate);
+            var reservationCreateResult = Reservation.Create(service, user, request.StartDate, request.EndDate);
+            
+            if (!reservationCreateResult.IsSuccess)
+            {
+                return new ObjectResult(reservationCreateResult.Errors)
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest,
+                };
+            }
             
             var addToServiceResult = service.AddReservation(reservationCreateResult.Value);
 
@@ -124,6 +132,15 @@ namespace ReservationSystem.Services
                 };
             }
             userEntity.AddReservation(reservationCreateResult.Value);
+
+            if (userEntity.Reservations.Count(x => x.ServiceId == service.Id && x.EndTime > DateTime.Now) >= 3)
+            {
+                return new ObjectResult(new Dictionary<string, string>
+                    { { "Reservations", "Maximum of 3 active or incoming reservations can be created." } })
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                };
+            }
             
             await servicesRepository.SaveChanges();
 

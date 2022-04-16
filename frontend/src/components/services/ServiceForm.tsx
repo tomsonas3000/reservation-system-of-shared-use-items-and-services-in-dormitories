@@ -21,7 +21,6 @@ const ServiceForm = () => {
     name: '',
     type: '',
     maxTimeOfUse: 0,
-    maxAmountOfUsers: 0,
     dormitoryId: '',
     roomId: '',
   });
@@ -37,11 +36,6 @@ const ServiceForm = () => {
       .required('Maximum time of use is required.')
       .min(10)
       .max(400),
-    maxAmountOfUsers: yup
-      .number()
-      .required('Maximum amount of users is required.')
-      .min(1)
-      .max(10),
     dormitory: yup.string().required('Dormitory is required.'),
     room: yup.string().required('Room is required.'),
   });
@@ -51,7 +45,6 @@ const ServiceForm = () => {
       name: '',
       type: '',
       maxTimeOfUse: 0,
-      maxAmountOfUsers: 0,
       dormitory: '',
       room: '',
     },
@@ -62,7 +55,6 @@ const ServiceForm = () => {
           name: formik.values.name,
           type: formik.values.type,
           maxTimeOfUse: formik.values.maxTimeOfUse,
-          maxAmountOfUsers: formik.values.maxAmountOfUsers,
           room: formik.values.room,
           dormitory: formik.values.dormitory,
         })
@@ -77,7 +69,6 @@ const ServiceForm = () => {
           name: formik.values.name,
           type: formik.values.type,
           maxTimeOfUse: formik.values.maxTimeOfUse,
-          maxAmountOfUsers: formik.values.maxAmountOfUsers,
           room: formik.values.room,
           dormitory: formik.values.dormitory,
         })
@@ -124,7 +115,6 @@ const ServiceForm = () => {
     formik.setValues({
       name: service.name,
       type: service.type,
-      maxAmountOfUsers: service.maxAmountOfUsers,
       maxTimeOfUse: service.maxTimeOfUse,
       dormitory: service.dormitoryId.toUpperCase(),
       room: service.roomId,
@@ -191,21 +181,6 @@ const ServiceForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.maxTimeOfUse && !!formik.errors.maxTimeOfUse}
           helperText={formik.touched.maxTimeOfUse && formik.errors.maxTimeOfUse}
-        />
-        <TextField
-          id="maxAmountOfUsers"
-          label="Maximum amount of users that can use the service at one moment"
-          fullWidth
-          margin="normal"
-          type="number"
-          value={formik.values.maxAmountOfUsers}
-          onChange={formik.handleChange}
-          error={
-            formik.touched.maxAmountOfUsers && !!formik.errors.maxAmountOfUsers
-          }
-          helperText={
-            formik.touched.maxAmountOfUsers && formik.errors.maxAmountOfUsers
-          }
         />
         <TextField
           id="dormitory"

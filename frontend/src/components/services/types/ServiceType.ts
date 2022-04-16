@@ -3,7 +3,6 @@ export interface ServiceType {
   name: string;
   type: string;
   maxTimeOfUse: number;
-  maxAmountOfUsers: number;
   room: string;
   dormitory: string;
 }
