@@ -10,7 +10,8 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
             base.Configure(builder);
 
             builder.HasOne(x => x.User)
-                .WithMany(x => x.Reservations);
+                .WithMany(x => x.Reservations)
+                .HasForeignKey(x => x.UserId);
 
             builder.HasOne(x => x.Service)
                 .WithMany(x => x.ReservationsList)
@@ -22,9 +23,8 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
             builder.Property(x => x.EndTime)
                 .IsRequired();
 
-            builder.Property(x => x.IsFinished)
-                .IsRequired();
-
+            builder.Property(x => x.IsEmailSentOn);
+            
             builder.Property(x => x.Id).ValueGeneratedNever();
         }
     }

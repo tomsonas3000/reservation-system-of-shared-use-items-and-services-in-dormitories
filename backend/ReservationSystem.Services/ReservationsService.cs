@@ -44,7 +44,6 @@ namespace ReservationSystem.Services
                     Id = x.Id,
                     BeginTime = x.BeginTime.GetUserFriendlyDateTime(),
                     EndTime = x.EndTime.GetUserFriendlyDateTime(),
-                    IsFinished = x.IsFinished,
                     ServiceType = x.Service.Type.GetUserFriendlyServiceType(),
                     UserName = $"{x.User.Name} {x.User.Surname}",
                     Dormitory = x.Service.Dormitory.Name,
@@ -86,7 +85,6 @@ namespace ReservationSystem.Services
                             Event_id = reservation.Id,
                             StartDate = reservation.BeginTime,
                             EndDate = reservation.EndTime,
-                            IsBooked = reservation.IsFinished,
                             Title = service.Room.RoomName,
                         }).ToList()
                     }).ToList()

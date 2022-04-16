@@ -39,7 +39,7 @@ namespace ReservationSystem.DataAccess.Entities
                 Service = service,
                 BeginTime = beginTimeResult.Value.Value,
                 EndTime = endTimeResult.Value.Value,
-                User = user,
+                UserId = user.Id,
             });
         }
         
@@ -51,7 +51,9 @@ namespace ReservationSystem.DataAccess.Entities
         
         public Service Service { get; protected set; }
         
-        public bool IsFinished { get; }
+        public bool IsEmailSentOn { get; }
+        
+        public Guid UserId { get; protected set; }
 
         public User User { get; protected set; }
     }

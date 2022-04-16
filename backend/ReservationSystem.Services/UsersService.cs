@@ -44,7 +44,7 @@ namespace ReservationSystem.Services
 
         public async Task<User> GetUserById(Guid userId)
         {
-            return await reservationDbContext.Users.Include(x => x.Reservations).FirstOrDefaultAsync();
+            return await reservationDbContext.Users.Include(x => x.Reservations).FirstOrDefaultAsync(x => x.Id == userId);
         }
 
         public async Task<ObjectResult> GetManagersLookupList()

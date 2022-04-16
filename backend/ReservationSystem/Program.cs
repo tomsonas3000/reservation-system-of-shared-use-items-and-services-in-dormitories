@@ -77,7 +77,7 @@ var services = builder.Services;
     });
     
     services.AddControllers();
-
+    
     services.AddScoped<UsersRepository>();
     services.AddScoped<AuthService>();
     services.AddScoped<JwtService>();
