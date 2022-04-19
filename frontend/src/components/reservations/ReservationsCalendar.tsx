@@ -1,15 +1,21 @@
 import {
   Alert,
+  Button,
+  Fab,
+  Grid,
   IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
+  Modal,
   Paper,
   Snackbar,
+  Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useCallback, useEffect, useState } from 'react';
 import { ReservationsService } from '../../services/reservationsService';
 import { LookupType } from '../base/types/LookupType';
@@ -54,6 +60,7 @@ const ReservationsCalendar = () => {
   const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
   const [errorSnackbarMessage, setErrorSnackbarMessage] = useState('');
+  const [helpModalOpen, setHelpModalOpen] = useState(false);
 
   useEffect(() => {
     ReservationsService.getReservationsCalendar().then((res) => {
@@ -145,6 +152,16 @@ const ReservationsCalendar = () => {
     return <AppointmentForm.Label {...props} text="" />;
   }, []);
 
+  const modalContentStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    backgroundColor: 'white',
+    p: 3,
+  };
+
   return (
     <Box margin={4}>
       <Snackbar
@@ -161,30 +178,69 @@ const ReservationsCalendar = () => {
         autoHideDuration={6000}>
         <Alert severity="error">{errorSnackbarMessage}</Alert>
       </Snackbar>
+      <Modal open={helpModalOpen} onClose={() => setHelpModalOpen(false)}>
+        <Box sx={modalContentStyle}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Clicking available cell will open a view where reservation start and
+            end dates can be selected.
+          </Typography>
+          <Typography variant="body2">
+            At most, 3 active or upcoming reservations for a service can be
+            selected.
+          </Typography>
+          <Typography variant="body2">
+            At most, 5 active or upcoming reservations can be selected in total
+          </Typography>
+          <Typography variant="body2">
+            Maximum reservation time for {activeService?.name} {` is `}
+            {activeService?.maximumTimeOfUse} minutes.
+          </Typography>
+          <Box sx={{ justifyContent: 'flex-end', display: 'flex' }}>
+            <Button
+              sx={{ mx: 1, mt: 2, mb: 1 }}
+              variant="contained"
+              onClick={() => setHelpModalOpen(false)}>
+              Close
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
       {activeView === View.serviceTypes && (
-        <List>
-          {serviceTypes?.map((type, idx) => {
-            return (
-              <ListItem key={idx}>
-                <ListItemButton onClick={() => onServiceTypeClick(type)}>
-                  <ListItemText primary={type.name}></ListItemText>
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
+        <>
+          <Typography sx={{ m: 1, fontSize: 24 }} variant="h6">
+            Service types
+          </Typography>
+          <List>
+            {serviceTypes?.map((type, idx) => {
+              return (
+                <ListItem key={idx}>
+                  <ListItemButton onClick={() => onServiceTypeClick(type)}>
+                    <ListItemText primary={type.name}></ListItemText>
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+        </>
       )}
       {activeView === View.services && (
         <>
-          <IconButton onClick={onBackButtonClick}>
-            <ArrowBackIcon />
-          </IconButton>
+          <Box sx={{ display: 'flex' }}>
+            <IconButton onClick={onBackButtonClick}>
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography sx={{ m: 1, fontSize: 24 }} variant="h6">
+              Services
+            </Typography>
+          </Box>
           <List>
             {services?.map((service, idx) => {
               return (
                 <ListItem key={idx}>
                   <ListItemButton onClick={() => onServiceClick(service)}>
-                    <ListItemText primary={service.name}></ListItemText>
+                    <ListItemText
+                      primary={service.name}
+                      secondary={service.room}></ListItemText>
                   </ListItemButton>
                 </ListItem>
               );
@@ -194,9 +250,27 @@ const ReservationsCalendar = () => {
       )}
       {activeView === View.reservations && (
         <>
-          <IconButton onClick={onBackButtonClick}>
-            <ArrowBackIcon />
-          </IconButton>
+          <Grid container sx={{ display: 'flex' }}>
+            <Grid item xs={10}>
+              <IconButton onClick={onBackButtonClick}>
+                <ArrowBackIcon />
+              </IconButton>
+              <Typography sx={{ m: 1, fontSize: 24 }} variant="h6">
+                {activeService?.name} reservations calendar
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Fab
+                color="primary"
+                aria-label="add"
+                onClick={() => setHelpModalOpen(true)}>
+                <QuestionMarkIcon />
+              </Fab>
+            </Grid>
+          </Grid>
           <Paper>
             <Scheduler data={reservations}>
               <ViewState />
