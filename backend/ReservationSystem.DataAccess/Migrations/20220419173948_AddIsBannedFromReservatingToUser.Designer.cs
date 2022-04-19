@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservationSystem.DataAccess;
 
@@ -11,9 +12,10 @@ using ReservationSystem.DataAccess;
 namespace ReservationSystem.DataAccess.Migrations
 {
     [DbContext(typeof(ReservationDbContext))]
-    partial class ReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220419173948_AddIsBannedFromReservatingToUser")]
+    partial class AddIsBannedFromReservatingToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,7 +321,7 @@ namespace ReservationSystem.DataAccess.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsBannedFromReserving")
+                    b.Property<bool>("IsBannedFromReservating")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")

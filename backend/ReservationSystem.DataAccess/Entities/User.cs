@@ -13,6 +13,19 @@ namespace ReservationSystem.DataAccess.Entities
         private User()
         {
         }
+        public override Guid Id { get; set; }
+
+        public ICollection<Reservation> Reservations => reservationsList;
+
+        public string? Name { get; private set; }
+        
+        public string? Surname { get; private set; }
+        
+        public Guid? DormitoryId { get; private set; }
+
+        public Dormitory? Dormitory { get; private set; }
+        
+        public bool IsBannedFromReserving { get; private set; }
 
         public static Result<User> Create(string? name, string? surname, string? email, string? phoneNumber)
         {
@@ -37,21 +50,15 @@ namespace ReservationSystem.DataAccess.Entities
             });
         }
 
+        public void SetIsBannedFromReserving(bool value)
+        {
+            IsBannedFromReserving = value;
+        }
+
         public void AddReservation(Reservation reservation)
         {
             reservationsList.Add(reservation);
         }
-        
-        public override Guid Id { get; set; }
 
-        public ICollection<Reservation> Reservations => reservationsList;
-
-        public string? Name { get; private set; }
-        
-        public string? Surname { get; private set; }
-        
-        public Guid? DormitoryId { get; private set; }
-
-        public Dormitory? Dormitory { get; private set; }
     }
 }

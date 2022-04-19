@@ -7,4 +7,6 @@ export interface UserType {
   role: string;
   dormitoryId?: string;
   password?: string;
+  isBannedFromReserving?: boolean;
+  hasMoreThanTenReservations?: boolean;
 }

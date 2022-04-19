@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
@@ -37,6 +38,20 @@ namespace ReservationSystem.Controllers
         public ObjectResult GetRolesLookup()
         {
             return usersService.GetRolesLookupList();
+        }
+
+        [HttpPost]
+        [Route("{userId}/ban")]
+        public Task<ObjectResult> BanUserFromReserving([FromRoute] Guid userId)
+        {
+            return usersService.BanFromReserving(userId);
+        }
+
+        [HttpPost]
+        [Route("{userId}/remove-ban")]
+        public Task<ObjectResult> RemoveReservationBan([FromRoute] Guid userId)
+        {
+            return usersService.RemoveReservationBan(userId);
         }
     }
 }

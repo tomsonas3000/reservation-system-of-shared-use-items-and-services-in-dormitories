@@ -29,6 +29,11 @@ namespace ReservationSystem.DataAccess.Entities
                 }
             }
 
+            if (user.IsBannedFromReserving)
+            {
+                result.AddError(nameof(user.IsBannedFromReserving), "Administrator has disabled ability to add new reservations.");
+            }
+
             if (!result.IsSuccess)
             {
                 return result;

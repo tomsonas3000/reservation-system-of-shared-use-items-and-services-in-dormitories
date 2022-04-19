@@ -25,7 +25,14 @@ const Users = () => {
           onClick={() => navigate('/create-user')}>
           Add new user
         </Button>
-        <UsersTable data={users} />
+        <UsersTable
+          data={users}
+          onBanUpdate={() => {
+            UsersService.getUsers().then((res) => {
+              setUsers(res.data);
+            });
+          }}
+        />
       </Grid>
     </Grid>
   );

@@ -29,4 +29,12 @@ export class UsersService {
   static async updateUser(userId: string | undefined, request: UserType) {
     return await DOTNET_API().put(`/users/${userId}`, request);
   }
+
+  static async banUserFromReserving(userId: string | undefined) {
+    return await DOTNET_API().post(`/users/${userId}/ban`);
+  }
+
+  static async removeReservationBan(userId: string | undefined) {
+    return await DOTNET_API().post(`/users/${userId}/remove-ban`);
+  }
 }

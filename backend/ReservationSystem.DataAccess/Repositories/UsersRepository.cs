@@ -10,10 +10,12 @@ namespace ReservationSystem.DataAccess.Repositories
     public class UsersRepository
     {
         private readonly UserManager<User> userManager;
+        private readonly ReservationDbContext reservationDbContext;
 
-        public UsersRepository(UserManager<User> userManager)
+        public UsersRepository(UserManager<User> userManager, ReservationDbContext reservationDbContext)
         {
             this.userManager = userManager;
+            this.reservationDbContext = reservationDbContext;
         }
 
         public async Task<ObjectResult> Add(User user, string? password, string? role)
@@ -35,6 +37,11 @@ namespace ReservationSystem.DataAccess.Repositories
             {
                 StatusCode = (int?)HttpStatusCode.OK
             };
+        }
+        
+        public async Task SaveChanges()
+        {
+            await reservationDbContext.SaveChangesAsync();
         }
     }
 }
