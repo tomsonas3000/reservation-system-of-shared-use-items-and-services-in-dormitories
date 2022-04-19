@@ -14,14 +14,13 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
   {
     return (
       <TableContainer
-        sx={{ justifyContent: 'center', display: 'flex', minWidth: 800 }}>
-        <Table sx={{ margin: '4rem' }}>
+        sx={{ justifyContent: 'center', display: 'flex', minWidth: 1600 }}>
+        <Table sx={{ my: 4 }}>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{ backgroundColor: '#81d4fa' }}>
               <TableCell>Name</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Maximum time of use</TableCell>
-              <TableCell>Maximum amount of users</TableCell>
               <TableCell>Dormitory</TableCell>
               <TableCell>Room</TableCell>
             </TableRow>
@@ -33,7 +32,8 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
                   <TableRow
                     key={index}
                     onClick={() => navigate(`/services/${service.id}`)}
-                    hover>
+                    hover
+                    sx={{ backgroundColor: '#e1f5fe' }}>
                     <TableCell>{service.name}</TableCell>
                     <TableCell>{service.type}</TableCell>
                     <TableCell>{service.maxTimeOfUse}</TableCell>

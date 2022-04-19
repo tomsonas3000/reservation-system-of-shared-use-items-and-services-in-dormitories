@@ -71,12 +71,10 @@ const SignIn = () => {
         alignItems: 'center',
         display: 'flex',
       }}>
-      <Avatar sx={{ m: 1 }}>
+      <Avatar sx={{ m: 1, width: 64, height: 64 }}>
         <LockOutlined />
       </Avatar>
-      <Typography component="h1" variant="h5">
-        Sign In
-      </Typography>
+      <Typography variant="h5">Dormitories Reservation System</Typography>
       <Box
         component="form"
         onSubmit={formik.handleSubmit}
@@ -107,7 +105,7 @@ const SignIn = () => {
           type="password"
         />
         <Button type="submit" fullWidth variant="contained">
-          Submit
+          Sign In
         </Button>
       </Box>
     </Box>

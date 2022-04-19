@@ -22,7 +22,7 @@ const Reservations = () => {
   };
 
   return (
-    <Grid container m={4}>
+    <Grid container m={4} sx={{ display: 'flex', justifyContent: 'center' }}>
       <Grid item>
         <ReservationsTable
           data={reservations}

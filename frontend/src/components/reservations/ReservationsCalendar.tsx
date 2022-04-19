@@ -207,7 +207,7 @@ const ReservationsCalendar = () => {
       </Modal>
       {activeView === View.serviceTypes && (
         <>
-          <Typography sx={{ m: 1, fontSize: 24 }} variant="h6">
+          <Typography sx={{ my: 1, fontSize: 24 }} variant="h6">
             Service types
           </Typography>
           <List>
@@ -226,10 +226,10 @@ const ReservationsCalendar = () => {
       {activeView === View.services && (
         <>
           <Box sx={{ display: 'flex' }}>
-            <IconButton onClick={onBackButtonClick}>
+            <IconButton sx={{ mx: 1 }} onClick={onBackButtonClick}>
               <ArrowBackIcon />
             </IconButton>
-            <Typography sx={{ m: 1, fontSize: 24 }} variant="h6">
+            <Typography sx={{ my: 1, fontSize: 24 }} variant="h6">
               Services
             </Typography>
           </Box>
@@ -250,12 +250,12 @@ const ReservationsCalendar = () => {
       )}
       {activeView === View.reservations && (
         <>
-          <Grid container sx={{ display: 'flex' }}>
-            <Grid item xs={10}>
-              <IconButton onClick={onBackButtonClick}>
+          <Grid container sx={{ display: 'flex', pb: 2 }}>
+            <Grid item xs={10} sx={{ display: 'flex' }}>
+              <IconButton sx={{ mx: 1 }} onClick={onBackButtonClick}>
                 <ArrowBackIcon />
               </IconButton>
-              <Typography sx={{ m: 1, fontSize: 24 }} variant="h6">
+              <Typography sx={{ my: 1, fontSize: 24 }} variant="h6">
                 {activeService?.name} reservations calendar
               </Typography>
             </Grid>

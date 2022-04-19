@@ -109,10 +109,10 @@ const UsersTable = (props: {
         </Box>
       </Modal>
       <TableContainer
-        sx={{ justifyContent: 'center', display: 'flex', minWidth: 800 }}>
-        <Table sx={{ margin: '4rem' }}>
+        sx={{ justifyContent: 'center', display: 'flex', minWidth: 1600 }}>
+        <Table sx={{ my: 4 }}>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{ backgroundColor: '#81d4fa' }}>
               <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Surname</TableCell>
@@ -132,8 +132,8 @@ const UsersTable = (props: {
                       backgroundColor:
                         user.hasMoreThanTenReservations &&
                         user.role === Role.Student
-                          ? '#ff9800'
-                          : 'white',
+                          ? '#fff176'
+                          : '#e1f5fe',
                     }}>
                     <TableCell>{user.id}</TableCell>
                     <TableCell>{user.name}</TableCell>
@@ -142,28 +142,32 @@ const UsersTable = (props: {
                     <TableCell>{user.emailAddress}</TableCell>
                     <TableCell>{user.role}</TableCell>
                     <TableCell>
-                      {user.role === Role.Student &&
-                        !user.isBannedFromReserving && (
-                          <Button
-                            variant="contained"
-                            color="error"
-                            onClick={() =>
-                              handleUserBanClick(user.id as string)
-                            }>
-                            Ban from reservating
-                          </Button>
-                        )}
-                      {user.role === Role.Student &&
-                        user.isBannedFromReserving && (
-                          <Button
-                            variant="contained"
-                            color="error"
-                            onClick={() =>
-                              handleRemoveUserBanClick(user.id as string)
-                            }>
-                            Remove reservation ban
-                          </Button>
-                        )}
+                      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        {user.role === Role.Student &&
+                          !user.isBannedFromReserving && (
+                            <Button
+                              variant="contained"
+                              color="error"
+                              sx={{ minWidth: 230 }}
+                              onClick={() =>
+                                handleUserBanClick(user.id as string)
+                              }>
+                              Ban from reservating
+                            </Button>
+                          )}
+                        {user.role === Role.Student &&
+                          user.isBannedFromReserving && (
+                            <Button
+                              variant="contained"
+                              color="error"
+                              sx={{ minWidth: 230 }}
+                              onClick={() =>
+                                handleRemoveUserBanClick(user.id as string)
+                              }>
+                              Remove reservation ban
+                            </Button>
+                          )}
+                      </Box>
                     </TableCell>
                   </TableRow>
                 );

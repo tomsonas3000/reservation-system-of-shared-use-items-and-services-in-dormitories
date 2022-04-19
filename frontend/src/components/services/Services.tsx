@@ -17,7 +17,7 @@ const Services = () => {
   }, []);
 
   return (
-    <Grid container m={4}>
+    <Grid container m={4} sx={{ display: 'flex', justifyContent: 'center' }}>
       <Grid item>
         <Button
           size="large"
