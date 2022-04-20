@@ -16,7 +16,7 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
   {
     return (
       <TableContainer
-        sx={{ justifyContent: 'center', display: 'flex', minWidth: 1600 }}>
+        sx={{ justifyContent: 'center', display: 'flex', minWidth: 1300 }}>
         <Table sx={{ my: 4 }}>
           <TableHead>
             <TableRow sx={{ backgroundColor: '#81d4fa' }}>
@@ -25,6 +25,7 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
               <TableCell>City</TableCell>
               <TableCell>Manager email</TableCell>
               <TableCell>Manager phone number</TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -55,6 +56,21 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
                     <TableCell
                       onClick={() => navigate(`/dormitories/${dormitory.id}`)}>
                       {dormitory.managerPhoneNumber}
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                        }}>
+                        <Button
+                          variant="contained"
+                          onClick={() =>
+                            navigate(`/dormitory-reservations/${dormitory.id}`)
+                          }>
+                          Reservations
+                        </Button>
+                      </Box>
                     </TableCell>
                     <TableCell>
                       <Box

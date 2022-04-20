@@ -45,6 +45,7 @@ namespace ReservationSystem.Services
                     BeginTime = x.BeginTime.GetUserFriendlyDateTime(),
                     EndTime = x.EndTime.GetUserFriendlyDateTime(),
                     ServiceType = x.Service.Type.GetUserFriendlyServiceType(),
+                    ServiceName = x.Service.Name,
                     UserName = $"{x.User.Name} {x.User.Surname}",
                     Dormitory = x.Service.Dormitory.Name,
                 })
@@ -59,7 +60,8 @@ namespace ReservationSystem.Services
         public async Task<ObjectResult> GetReservationsDataForCalendar()
         {
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
-            var dormitoryId = user.DormitoryId;
+            var dormitoryId = user.DormitoryId ?? (await reservationDbContext.Dormitories.FirstOrDefaultAsync(x => x.ManagerId == user.Id))!.Id;
+            
             var services = await reservationDbContext.Services
                 .Include(x => x.ReservationsList)
                 .Include(x => x.Room)
@@ -166,6 +168,75 @@ namespace ReservationSystem.Services
             return new ObjectResult(null)
             {
                 StatusCode = (int) HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ObjectResult> GetDormitoryReservations(Guid dormitoryId)
+        {
+            var reservations = await reservationDbContext.ReservationDates
+                .Where(x => x.Service.DormitoryId == dormitoryId)
+                .OrderBy(x => x.BeginTime)
+                .Select(x => new ReservationDto
+                {
+                    Id = x.Id,
+                    BeginTime = x.BeginTime.GetUserFriendlyDateTime(),
+                    EndTime = x.EndTime.GetUserFriendlyDateTime(),
+                    ServiceType = x.Service.Type.GetUserFriendlyServiceType(),
+                    ServiceName = x.Service.Name,
+                    UserName = $"{x.User.Name} {x.User.Surname}",
+                    Dormitory = x.Service.Dormitory.Name,
+                })
+                .ToListAsync();
+
+            return new ObjectResult(reservations)
+            {
+                StatusCode = (int?) HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ObjectResult> GetUserReservations(Guid userId)
+        {
+            var reservations = await reservationDbContext.ReservationDates
+                .Where(x => x.UserId == userId)
+                .OrderBy(x => x.BeginTime)
+                .Select(x => new ReservationDto
+                {
+                    Id = x.Id,
+                    BeginTime = x.BeginTime.GetUserFriendlyDateTime(),
+                    EndTime = x.EndTime.GetUserFriendlyDateTime(),
+                    ServiceType = x.Service.Type.GetUserFriendlyServiceType(),
+                    ServiceName = x.Service.Name,
+                    UserName = $"{x.User.Name} {x.User.Surname}",
+                    Dormitory = x.Service.Dormitory.Name,
+                })
+                .ToListAsync();
+
+            return new ObjectResult(reservations)
+            {
+                StatusCode = (int?) HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ObjectResult> GetServiceReservations(Guid serviceId)
+        {
+            var reservations = await reservationDbContext.ReservationDates
+                .Where(x => x.ServiceId == serviceId)
+                .OrderBy(x => x.BeginTime)
+                .Select(x => new ReservationDto
+                {
+                    Id = x.Id,
+                    BeginTime = x.BeginTime.GetUserFriendlyDateTime(),
+                    EndTime = x.EndTime.GetUserFriendlyDateTime(),
+                    ServiceType = x.Service.Type.GetUserFriendlyServiceType(),
+                    ServiceName = x.Service.Name,
+                    UserName = $"{x.User.Name} {x.User.Surname}",
+                    Dormitory = x.Service.Dormitory.Name,
+                })
+                .ToListAsync();
+
+            return new ObjectResult(reservations)
+            {
+                StatusCode = (int?) HttpStatusCode.OK,
             };
         }
     }

@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UsersService } from '../../services/usersService';
 import Role from '../../utils/enums/role';
 import { UserType } from './types/UserType';
@@ -28,6 +29,8 @@ const UsersTable = (props: {
     bgcolor: 'background.paper',
     p: 2,
   };
+
+  const navigate = useNavigate();
 
   const [banModalOpen, setBanModalOpen] = useState(false);
   const [removeBanModalOpen, setRemoveBanModalOpen] = useState(false);
@@ -109,16 +112,16 @@ const UsersTable = (props: {
         </Box>
       </Modal>
       <TableContainer
-        sx={{ justifyContent: 'center', display: 'flex', minWidth: 1600 }}>
+        sx={{ justifyContent: 'center', display: 'flex', minWidth: 1300 }}>
         <Table sx={{ my: 4 }}>
           <TableHead>
             <TableRow sx={{ backgroundColor: '#81d4fa' }}>
-              <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Surname</TableCell>
               <TableCell>Telephone number</TableCell>
               <TableCell>Email address</TableCell>
               <TableCell>Role</TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -135,12 +138,29 @@ const UsersTable = (props: {
                           ? '#fff176'
                           : '#e1f5fe',
                     }}>
-                    <TableCell>{user.id}</TableCell>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.surname}</TableCell>
                     <TableCell>{user.telephoneNumber}</TableCell>
                     <TableCell>{user.emailAddress}</TableCell>
                     <TableCell>{user.role}</TableCell>
+                    <TableCell>
+                      {user.role === Role.Student && (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            maxWidth: 150,
+                          }}>
+                          <Button
+                            variant="contained"
+                            onClick={() =>
+                              navigate(`/user-reservations/${user.id}`)
+                            }>
+                            Reservations
+                          </Button>
+                        </Box>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                         {user.role === Role.Student &&

@@ -3,6 +3,7 @@ export interface ReservationType {
   beginTime: string;
   endTime: string;
   serviceType: string;
+  serviceName: string;
   isFinished: boolean;
   userName: string;
   dormitory: string;

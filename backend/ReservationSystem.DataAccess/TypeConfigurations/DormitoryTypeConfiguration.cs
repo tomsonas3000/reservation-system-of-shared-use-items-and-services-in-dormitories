@@ -32,7 +32,7 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
 
             builder.HasOne(x => x.Manager)
                 .WithMany()
-                .HasForeignKey(x =>x.ManagerId);
+                .HasForeignKey(x => x.ManagerId);
         }
     }
 }

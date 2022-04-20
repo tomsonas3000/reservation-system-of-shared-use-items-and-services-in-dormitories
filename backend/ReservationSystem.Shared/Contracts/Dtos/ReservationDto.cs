@@ -12,6 +12,8 @@ namespace ReservationSystem.Shared.Contracts.Dtos
         
         public string ServiceType { get; set; }
         
+        public string ServiceName { get; set; }
+        
         public bool IsFinished { get; set; }
         
         public string UserName { get; set; }

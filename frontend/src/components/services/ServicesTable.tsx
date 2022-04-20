@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -14,7 +16,7 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
   {
     return (
       <TableContainer
-        sx={{ justifyContent: 'center', display: 'flex', minWidth: 1600 }}>
+        sx={{ justifyContent: 'center', display: 'flex', minWidth: 1300 }}>
         <Table sx={{ my: 4 }}>
           <TableHead>
             <TableRow sx={{ backgroundColor: '#81d4fa' }}>
@@ -23,6 +25,7 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
               <TableCell>Maximum time of use</TableCell>
               <TableCell>Dormitory</TableCell>
               <TableCell>Room</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           {
@@ -31,14 +34,46 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
                 return (
                   <TableRow
                     key={index}
-                    onClick={() => navigate(`/services/${service.id}`)}
                     hover
                     sx={{ backgroundColor: '#e1f5fe' }}>
-                    <TableCell>{service.name}</TableCell>
-                    <TableCell>{service.type}</TableCell>
-                    <TableCell>{service.maxTimeOfUse}</TableCell>
-                    <TableCell>{service.dormitory}</TableCell>
-                    <TableCell>{service.room}</TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/services/${service.id}`)}>
+                      {service.name}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/services/${service.id}`)}>
+                      {service.type}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/services/${service.id}`)}>
+                      {service.maxTimeOfUse}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/services/${service.id}`)}>
+                      {service.dormitory}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => navigate(`/services/${service.id}`)}>
+                      {service.room}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        maxWidth: 150,
+                      }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                        }}>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            navigate(`/service-reservations/${service.id}`);
+                          }}>
+                          Reservations
+                        </Button>
+                      </Box>
+                    </TableCell>
                   </TableRow>
                 );
               })}

@@ -26,7 +26,7 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Student, Manager, Guard")]
         [Route("calendar")]
         public Task<ObjectResult> GetReservationsForCalendar()
         {
@@ -46,6 +46,30 @@ namespace ReservationSystem.Controllers
         public Task<ObjectResult> DeleteReservation([FromRoute] Guid reservationId)
         {
             return reservationsService.DeleteReservation(reservationId);
+        }
+
+        [HttpGet]
+        [Route("/dormitory-reservations/{dormitoryId}")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> GetDormitoryReservations([FromRoute] Guid dormitoryId)
+        {
+            return reservationsService.GetDormitoryReservations(dormitoryId);
+        }
+
+        [HttpGet]
+        [Route("/user-reservations/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> GetUserReservations([FromRoute] Guid userId)
+        {
+            return reservationsService.GetUserReservations(userId);
+        }
+
+        [HttpGet]
+        [Route("/service-reservations/{serviceId}")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> GetServiceReservations([FromRoute] Guid serviceId)
+        {
+            return reservationsService.GetServiceReservations(serviceId);
         }
     }
 }

@@ -68,20 +68,21 @@ const ReservationsTable = (props: {
             </Box>
           </Box>
         </Modal>
-        <TableContainer
-          sx={{ justifyContent: 'center', display: 'flex', minWidth: 1600 }}>
-          <Table sx={{ my: 4 }}>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: '#81d4fa' }}>
-                <TableCell>Reservation start</TableCell>
-                <TableCell>Reservation end</TableCell>
-                <TableCell>Service type</TableCell>
-                <TableCell>{`Student's name`}</TableCell>
-                <TableCell>Dormitory name</TableCell>
-                <TableCell />
-              </TableRow>
-            </TableHead>
-            {
+        {props.data.length > 0 ? (
+          <TableContainer
+            sx={{ justifyContent: 'center', display: 'flex', minWidth: 1300 }}>
+            <Table sx={{ my: 4 }}>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: '#81d4fa' }}>
+                  <TableCell>Reservation start</TableCell>
+                  <TableCell>Reservation end</TableCell>
+                  <TableCell>Service type</TableCell>
+                  <TableCell>Service name</TableCell>
+                  <TableCell>{`Student's name`}</TableCell>
+                  <TableCell>Dormitory name</TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableHead>
               <TableBody>
                 {props.data.map(
                   (reservation: ReservationType, index: number) => {
@@ -90,6 +91,7 @@ const ReservationsTable = (props: {
                         <TableCell>{reservation.beginTime}</TableCell>
                         <TableCell>{reservation.endTime}</TableCell>
                         <TableCell>{reservation.serviceType}</TableCell>
+                        <TableCell>{reservation.serviceName}</TableCell>
                         <TableCell>{reservation.userName}</TableCell>
                         <TableCell>{reservation.dormitory}</TableCell>
                         <TableCell>
@@ -114,9 +116,13 @@ const ReservationsTable = (props: {
                   }
                 )}
               </TableBody>
-            }
-          </Table>
-        </TableContainer>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Typography variant="h4">No data available to display</Typography>
+          </Box>
+        )}
       </>
     );
   }

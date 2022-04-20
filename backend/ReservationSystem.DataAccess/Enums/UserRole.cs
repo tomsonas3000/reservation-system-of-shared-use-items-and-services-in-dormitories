@@ -4,7 +4,6 @@
     {
         Student = 1,
         Manager = 2,
-        Guard = 3,
         Admin = 4,
     }
 }

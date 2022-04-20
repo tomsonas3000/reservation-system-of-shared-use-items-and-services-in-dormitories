@@ -14,6 +14,9 @@ import ServiceForm from './components/services/ServiceForm';
 import ManageStudents from './components/dormitories/ManageStudents';
 import ReservationsCalendar from './components/reservations/ReservationsCalendar';
 import UserForm from './components/users/UserForm';
+import DormitoryReservations from './components/reservations/DormitoryReservations';
+import ServiceReservations from './components/reservations/ServiceReservations';
+import UserReservations from './components/reservations/UserReservations';
 
 const theme = createTheme();
 
@@ -28,55 +31,89 @@ const App = () => {
           <Route
             path="dormitories"
             element={
-              <ProtectedRoute outlet={<Dormitories />} role={role.Admin} />
+              <ProtectedRoute outlet={<Dormitories />} roles={[role.Admin]} />
             }
           />
           <Route
             path="dormitories/:dormitoryId"
             element={
-              <ProtectedRoute outlet={<DormitoryForm />} role={role.Admin} />
+              <ProtectedRoute outlet={<DormitoryForm />} roles={[role.Admin]} />
             }
           />
           <Route
             path="create-dormitory"
             element={
-              <ProtectedRoute outlet={<DormitoryForm />} role={role.Admin} />
+              <ProtectedRoute outlet={<DormitoryForm />} roles={[role.Admin]} />
             }
           />
           <Route
             path="dormitories/:dormitoryId/manage-students"
             element={
-              <ProtectedRoute outlet={<ManageStudents />} role={role.Admin} />
+              <ProtectedRoute
+                outlet={<ManageStudents />}
+                roles={[role.Admin]}
+              />
             }
           />
           <Route
             path="users"
-            element={<ProtectedRoute outlet={<Users />} role={role.Admin} />}
+            element={<ProtectedRoute outlet={<Users />} roles={[role.Admin]} />}
           />
           <Route
             path="create-user"
-            element={<ProtectedRoute outlet={<UserForm />} role={role.Admin} />}
+            element={
+              <ProtectedRoute outlet={<UserForm />} roles={[role.Admin]} />
+            }
           />
           <Route
             path="services"
-            element={<ProtectedRoute outlet={<Services />} role={role.Admin} />}
+            element={
+              <ProtectedRoute outlet={<Services />} roles={[role.Admin]} />
+            }
           />
           <Route
             path="create-service"
             element={
-              <ProtectedRoute outlet={<ServiceForm />} role={role.Admin} />
+              <ProtectedRoute outlet={<ServiceForm />} roles={[role.Admin]} />
             }
           />
           <Route
             path="services/:serviceId"
             element={
-              <ProtectedRoute outlet={<ServiceForm />} role={role.Admin} />
+              <ProtectedRoute outlet={<ServiceForm />} roles={[role.Admin]} />
             }
           />
           <Route
             path="reservations-admin"
             element={
-              <ProtectedRoute outlet={<Reservations />} role={role.Admin} />
+              <ProtectedRoute outlet={<Reservations />} roles={[role.Admin]} />
+            }
+          />
+          <Route
+            path="dormitory-reservations/:dormitoryId"
+            element={
+              <ProtectedRoute
+                outlet={<DormitoryReservations />}
+                roles={[role.Admin]}
+              />
+            }
+          />
+          <Route
+            path="service-reservations/:serviceId"
+            element={
+              <ProtectedRoute
+                outlet={<ServiceReservations />}
+                roles={[role.Admin]}
+              />
+            }
+          />
+          <Route
+            path="user-reservations/:userId"
+            element={
+              <ProtectedRoute
+                outlet={<UserReservations />}
+                roles={[role.Admin]}
+              />
             }
           />
           <Route
@@ -84,7 +121,7 @@ const App = () => {
             element={
               <ProtectedRoute
                 outlet={<ReservationsCalendar />}
-                role={role.Student}
+                roles={[role.Student, role.Manager]}
               />
             }
           />

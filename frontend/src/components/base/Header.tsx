@@ -1,15 +1,4 @@
-import {
-  AppBar,
-  Button,
-  MenuItem,
-  Toolbar,
-  Drawer,
-  IconButton,
-  Typography,
-  Grid,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { useEffect, useState } from 'react';
+import { AppBar, Button, Toolbar, Grid } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -43,8 +32,6 @@ const studentMenuItems = [
 ];
 
 const Header = () => {
-  //const [mobileView, setMobileView] = useState(false);
-
   const authState = useSelector((state: RootState) => state.auth);
   const dispath = useDispatch();
   const navigate = useNavigate();
@@ -53,16 +40,6 @@ const Header = () => {
     dispath(logout());
     navigate('/sign-in');
   };
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     window.innerWidth < 600 ? setMobileView(true) : setMobileView(false);
-  //   };
-
-  //   handleResize();
-
-  //   window.addEventListener('resize', handleResize);
-  // }, []);
 
   const HeaderButtons = (): JSX.Element => {
     const ButtonsByRole = (): JSX.Element => {
@@ -83,8 +60,7 @@ const Header = () => {
             })}
           </>
         );
-      }
-      if (authState.role === Role.Student) {
+      } else {
         return (
           <>
             {studentMenuItems.map(({ label, href }) => {
@@ -132,48 +108,5 @@ const Header = () => {
     </header>
   ) : null;
 };
-
-// const MobileHeader = (): JSX.Element => {
-//   const [drawerOpen, setDrawerOpen] = useState(false);
-
-//   return (
-//     <Toolbar sx={{ justifyContent: 'right' }} color="inherit">
-//       <IconButton
-//         color="inherit"
-//         aria-label="menu"
-//         aria-haspopup="true"
-//         onClick={() => setDrawerOpen(!drawerOpen)}>
-//         <MenuIcon />
-//       </IconButton>
-//       <Drawer
-//         sx={{ padding: '2rem' }}
-//         anchor="right"
-//         open={drawerOpen}
-//         onClose={() => setDrawerOpen(!drawerOpen)}>
-//         <DrawerButtons />
-//       </Drawer>
-//     </Toolbar>
-//   );
-// };
-
-// const DrawerButtons = (): JSX.Element => {
-//   return (
-//     <>
-//       {adminMenuItems.map(({ label, href }) => {
-//         return (
-//           <Link
-//             to={href}
-//             color="black"
-//             key={label}
-//             style={{ textDecoration: 'none' }}>
-//             <MenuItem>
-//               <Typography color="black">{label}</Typography>
-//             </MenuItem>
-//           </Link>
-//         );
-//       })}
-//     </>
-//   );
-// };
 
 export default Header;

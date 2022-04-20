@@ -41,6 +41,9 @@ import {
   AppointmentForm,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { CreateReservation } from './types/CreateReservation';
+import { RootState } from '../../redux/store';
+import { useSelector } from 'react-redux';
+import Role from '../../utils/enums/role';
 
 const ReservationsCalendar = () => {
   enum View {
@@ -48,6 +51,8 @@ const ReservationsCalendar = () => {
     services = 'services',
     reservations = 'reservations',
   }
+
+  const authState = useSelector((state: RootState) => state.auth);
 
   const [data, setData] = useState<ServiceType[]>();
   const [serviceTypes, setServiceTypes] = useState<LookupType[]>([]);

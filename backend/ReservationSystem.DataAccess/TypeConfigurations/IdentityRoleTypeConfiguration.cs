@@ -18,12 +18,6 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
                 NormalizedName = UserRole.Admin.ToString().ToUpper()
             }, new IdentityRole<Guid>
             {
-                Id = Guid.Parse("32928326-7E01-47E7-9427-E7742B691F6B"),
-                Name = UserRole.Guard.ToString(),
-                ConcurrencyStamp = "2",
-                NormalizedName = UserRole.Guard.ToString().ToUpper()
-            }, new IdentityRole<Guid>
-            {
                 Id = Guid.Parse("F46A30FC-9425-4275-A245-D389387D84A8"),
                 Name = UserRole.Manager.ToString(),
                 ConcurrencyStamp = "3",
