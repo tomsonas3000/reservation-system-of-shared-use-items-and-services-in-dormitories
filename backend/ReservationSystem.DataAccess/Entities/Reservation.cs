@@ -16,7 +16,7 @@ namespace ReservationSystem.DataAccess.Entities
             var beginTimeResult = RequiredDate.Create(result, beginTime);
             var endTimeResult = RequiredDate.Create(result, endTime);
 
-            if (beginTimeResult.IsSuccess && endTimeResult.IsSuccess)
+            if (beginTimeResult!.IsSuccess && endTimeResult!.IsSuccess)
             {
                 if (endTimeResult.Value.Value.Subtract(beginTimeResult.Value.Value) > service.MaxTimeOfUse)
                 {
@@ -43,7 +43,7 @@ namespace ReservationSystem.DataAccess.Entities
             {
                 Service = service,
                 BeginTime = beginTimeResult.Value.Value,
-                EndTime = endTimeResult.Value.Value,
+                EndTime = endTimeResult!.Value.Value,
                 UserId = user.Id,
             });
         }

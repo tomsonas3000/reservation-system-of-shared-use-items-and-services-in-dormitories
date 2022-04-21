@@ -42,10 +42,10 @@ namespace ReservationSystem.DataAccess.Entities
 
             return new Result<User>(new User
             {
-                Name = nameResult.Value.Value,
-                Surname = surnameResult.Value.Value,
-                Email = emailResult.Value.Value,
-                PhoneNumber = phoneNumberResult.Value.Value,
+                Name = nameResult!.Value.Value,
+                Surname = surnameResult!.Value.Value,
+                Email = emailResult!.Value.Value,
+                PhoneNumber = phoneNumberResult!.Value.Value,
                 UserName = emailResult.Value.Value,
             });
         }

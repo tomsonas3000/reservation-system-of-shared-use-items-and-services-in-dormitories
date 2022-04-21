@@ -41,8 +41,8 @@ namespace ReservationSystem.DataAccess.Entities
 
             return new Result<Service>(new Service
             {
-                Name = nameResult.Value.Value,
-                Type = typeResult.Value.Value,
+                Name = nameResult!.Value.Value,
+                Type = typeResult!.Value.Value,
                 MaxTimeOfUse = TimeSpan.FromMinutes(maxTimeOfUseResult.Value.Value),
                 DormitoryId = dormitoryId,
                 RoomId = roomId,
@@ -57,7 +57,7 @@ namespace ReservationSystem.DataAccess.Entities
             var typeResult = RequiredEnum<ServiceType>.Create(result, type, "type");
             var maxTimeOfUseResult = FixedNumber.Create(result, maxTimeOfUse, "maxTimeOfUse", 10, 400);
             
-            if (Type != typeResult.Value.Value)
+            if (typeResult is not null && typeResult.IsSuccess && Type != typeResult.Value.Value)
             {
                 result.AddError("type", "Type can not be updated.");
             }
@@ -67,8 +67,8 @@ namespace ReservationSystem.DataAccess.Entities
                 return result;
             }
 
-            Name = nameResult.Value.Value;
-            Type = typeResult.Value.Value;
+            Name = nameResult!.Value.Value;
+            Type = typeResult!.Value.Value;
             MaxTimeOfUse = TimeSpan.FromMinutes(maxTimeOfUseResult.Value.Value);
             DormitoryId = dormitoryId;
             RoomId = roomId;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Filters;
 using ReservationSystem.Shared.Utilities;
 using ReservationSystem.Shared.ValueObjects;
 
@@ -13,14 +14,14 @@ namespace ReservationSystem.DataAccess.Entities
         {
             var nameResult = RequiredString.Create(result, name, "Rooms", 100);
 
-            if (!nameResult.IsSuccess)
+            if (nameResult is null || !nameResult.IsSuccess)
             {
                 return null;
             }
             
             return new Result<Room>(new Room
             {
-                RoomName = nameResult.Value.Value,
+                RoomName = nameResult!.Value.Value,
             });
         }
 

@@ -12,11 +12,12 @@ namespace ReservationSystem.Shared.ValueObjects
             Value = value;
         }
 
-        public static Result<RequiredEnum<T>> Create(Result result, string? enumValue, string propertyName)
+        public static Result<RequiredEnum<T>>? Create(Result result, string? enumValue, string propertyName)
         {
             if (string.IsNullOrWhiteSpace(enumValue))
             {
-                return new Result<RequiredEnum<T>>();
+                result.AddError(propertyName, "The enum value can't be empty.");
+                return result as Result<RequiredEnum<T>>;
             }
 
             var parsedEnum = Enum.TryParse(enumValue, true, out T parsedValue);
@@ -24,7 +25,7 @@ namespace ReservationSystem.Shared.ValueObjects
             if (!parsedEnum || !Enum.IsDefined(typeof(T), parsedValue))
             {
                 result.AddError(propertyName, "The enum value is invalid");
-                return (Result<RequiredEnum<T>>)result;
+                return result as Result<RequiredEnum<T>>;
             }
 
             return new Result<RequiredEnum<T>>(new RequiredEnum<T>(parsedValue));

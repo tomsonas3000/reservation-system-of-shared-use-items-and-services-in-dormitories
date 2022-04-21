@@ -170,8 +170,14 @@ namespace ReservationSystem.Tests.UnitTests
         [Fact]
         public void Should_Update_Residents()
         {
+            var user1 = CreateUser();
+            var user2 = CreateUser();
+            
+            var userList = new List<User?> { user1, user2 };
             var dormitory = CreateDormitory();
-
+            var updateResidentsResult = dormitory.UpdateResidents(userList);
+            updateResidentsResult.IsSuccess.Should().BeTrue();
+            dormitory.Residents.Should().BeEquivalentTo(userList);
         }
 
         private static Dormitory CreateDormitory()
@@ -179,6 +185,9 @@ namespace ReservationSystem.Tests.UnitTests
             return Dormitory.Create("name", "city", "address", Guid.NewGuid()).Value;
         }
         
-        
+        private static User CreateUser()
+        {
+            return User.Create("name", "surname", "test@email.com", "+37061111111").Value;
+        }
     }
 }

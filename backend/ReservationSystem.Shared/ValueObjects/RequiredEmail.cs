@@ -12,12 +12,12 @@ namespace ReservationSystem.Shared.ValueObjects
             Value = value;
         }
         
-        public static Result<RequiredEmail> Create(Result result, string? value, string propertyName)
+        public static Result<RequiredEmail>? Create(Result result, string? value, string propertyName)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
                 result.AddError(propertyName, $"The {propertyName} can not be empty.");
-                return (Result<RequiredEmail>)result;
+                return result as Result<RequiredEmail>;
             }
 
             var trimmedValue = value.Trim();
@@ -25,7 +25,7 @@ namespace ReservationSystem.Shared.ValueObjects
             if (trimmedValue.Length > 200)
             {
                 result.AddError(propertyName, $"The {propertyName} can not be longer than 200 characters.");
-                return (Result<RequiredEmail>)result;
+                return result as Result<RequiredEmail>;
             }
 
             if (!Regex.IsMatch(trimmedValue, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
