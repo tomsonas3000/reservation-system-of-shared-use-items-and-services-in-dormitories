@@ -119,7 +119,7 @@ const ServiceForm = () => {
       dormitory: service.dormitoryId.toUpperCase(),
       room: service.roomId,
     });
-  }, [service]);
+  }, [service, rooms]);
 
   return (
     <Box
@@ -162,6 +162,7 @@ const ServiceForm = () => {
           error={formik.touched.type && !!formik.errors.type}
           helperText={formik.touched.type && formik.errors.type}
           margin="normal"
+          disabled={!!serviceId}
           fullWidth>
           {serviceTypes.map((type: LookupType) => {
             return (

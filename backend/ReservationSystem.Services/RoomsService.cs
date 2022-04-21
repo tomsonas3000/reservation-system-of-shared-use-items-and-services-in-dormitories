@@ -24,7 +24,7 @@ namespace ReservationSystem.Services
                 Id = x.Id,
                 DormitoryId = x.Dormitory.Id.ToString(),
                 Name = x.RoomName,
-            }).ToListAsync();
+            }).OrderBy(x => x.Name).ToListAsync();
 
             return new ObjectResult(rooms)
             {

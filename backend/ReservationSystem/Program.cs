@@ -35,7 +35,7 @@ var services = builder.Services;
             {
                 RequireDigit = true,
                 RequiredLength = 8,
-                RequireLowercase = false,
+                RequireLowercase = true,
                 RequireUppercase = false,
                 RequireNonAlphanumeric = false,
             })

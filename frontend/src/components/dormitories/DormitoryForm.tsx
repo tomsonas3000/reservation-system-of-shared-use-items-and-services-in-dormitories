@@ -167,60 +167,85 @@ const DormitoryForm = () => {
         </TextField>
         <FieldArray name="rooms" validateOnChange={false}>
           {() =>
-            formik.values.rooms?.map((room, index) => {
-              return (
-                <Box key={index} sx={{ width: '100%', display: 'flex' }}>
-                  <TextField
-                    name={`rooms.${index}`}
-                    key={index}
-                    onChange={formik.handleChange}
-                    label="Room name"
-                    value={room}
-                    margin="normal"
-                    fullWidth
-                    error={
-                      index === formik.values.rooms.length - 1
-                        ? formik.touched.rooms && !!formik.errors.rooms
-                        : false
-                    }
-                    helperText={
-                      index === formik.values.rooms.length - 1
-                        ? formik.touched.rooms && formik.errors.rooms
-                        : false
-                    }
-                  />
-                  <Button
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    disabled={formik.values.rooms.length <= 1}
-                    onClick={() =>
-                      formik.setFieldValue(
-                        'rooms',
-                        formik.values.rooms.filter((x) => x !== room)
-                      )
-                    }
-                    sx={{ marginY: '0.9rem', marginX: '0.5rem' }}>
-                    x
-                  </Button>
-                  {index === formik.values.rooms.length - 1 ? (
+            formik.values.rooms?.length > 0 ? (
+              formik.values.rooms?.map((room, index) => {
+                return (
+                  <Box key={index} sx={{ width: '100%', display: 'flex' }}>
+                    <TextField
+                      name={`rooms.${index}`}
+                      key={index}
+                      onChange={formik.handleChange}
+                      label="Room name"
+                      value={room}
+                      margin="normal"
+                      fullWidth
+                      error={
+                        index === formik.values.rooms.length - 1
+                          ? formik.touched.rooms && !!formik.errors.rooms
+                          : false
+                      }
+                      helperText={
+                        index === formik.values.rooms.length - 1
+                          ? formik.touched.rooms && formik.errors.rooms
+                          : false
+                      }
+                    />
                     <Button
                       variant="contained"
-                      color="success"
+                      color="error"
                       size="small"
+                      disabled={formik.values.rooms.length <= 1}
                       onClick={() =>
-                        formik.setFieldValue('rooms', [
-                          ...formik.values.rooms,
-                          '',
-                        ])
+                        formik.setFieldValue(
+                          'rooms',
+                          formik.values.rooms.filter((x) => x !== room)
+                        )
                       }
                       sx={{ marginY: '0.9rem', marginX: '0.5rem' }}>
-                      +
+                      x
                     </Button>
-                  ) : null}
-                </Box>
-              );
-            })
+                    {index === formik.values.rooms.length - 1 ? (
+                      <Button
+                        variant="contained"
+                        color="success"
+                        size="small"
+                        onClick={() =>
+                          formik.setFieldValue('rooms', [
+                            ...formik.values.rooms,
+                            '',
+                          ])
+                        }
+                        sx={{ marginY: '0.9rem', marginX: '0.5rem' }}>
+                        +
+                      </Button>
+                    ) : null}
+                  </Box>
+                );
+              })
+            ) : (
+              <Box sx={{ width: '100%', display: 'flex' }}>
+                <TextField
+                  name={`rooms.0`}
+                  onChange={formik.handleChange}
+                  label="Room name"
+                  value={formik.values.rooms[0]}
+                  margin="normal"
+                  fullWidth
+                  error={formik.touched.rooms && !!formik.errors.rooms}
+                  helperText={formik.touched.rooms && formik.errors.rooms}
+                />
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={() =>
+                    formik.setFieldValue('rooms', [...formik.values.rooms, ''])
+                  }
+                  sx={{ marginY: '0.9rem', marginX: '0.5rem' }}>
+                  +
+                </Button>
+              </Box>
+            )
           }
         </FieldArray>
         <Button

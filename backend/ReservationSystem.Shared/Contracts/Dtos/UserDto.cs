@@ -12,7 +12,7 @@ namespace ReservationSystem.Shared.Contracts.Dtos
         
         public string TelephoneNumber { get; set; }
         
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
         
         public string Role { get; set; }
         

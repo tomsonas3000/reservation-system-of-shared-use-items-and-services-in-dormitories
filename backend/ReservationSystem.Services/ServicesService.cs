@@ -124,7 +124,7 @@ namespace ReservationSystem.Services
                 return basicValidation;
             }
 
-            var service = await reservationDbContext.Services.FirstOrDefaultAsync(x => x.Id == serviceId);
+            var service = await reservationDbContext.Services.Include(x => x.ReservationsList).FirstOrDefaultAsync(x => x.Id == serviceId);
 
             if (service is null)
             {

@@ -56,7 +56,12 @@ namespace ReservationSystem.DataAccess.Entities
             var nameResult = RequiredString.Create(result, name, "name", 200);
             var typeResult = RequiredEnum<ServiceType>.Create(result, type, "type");
             var maxTimeOfUseResult = FixedNumber.Create(result, maxTimeOfUse, "maxTimeOfUse", 10, 400);
-
+            
+            if (Type != typeResult.Value.Value)
+            {
+                result.AddError("type", "Type can not be updated.");
+            }
+            
             if (!result.IsSuccess)
             {
                 return result;

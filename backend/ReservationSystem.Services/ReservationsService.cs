@@ -141,6 +141,15 @@ namespace ReservationSystem.Services
                     StatusCode = (int)HttpStatusCode.BadRequest,
                 };
             }
+
+            if (userEntity.Reservations.Count(x => x.EndTime > DateTime.Now) > 5)
+            {
+                return new ObjectResult(new Dictionary<string, string>
+                    { { "reservations", "Maximum of 5 active or upcoming reservations can be selected in total." } })
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                };
+            }
             
             await servicesRepository.SaveChanges();
 

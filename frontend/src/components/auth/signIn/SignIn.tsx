@@ -59,7 +59,7 @@ const SignIn = () => {
   useEffect(() => {
     if (authState.isLoggedIn) {
       if (authState.role === Role.Admin) navigate('/dormitories');
-      else navigate('/reservations');
+      else navigate('/reservations-calendar');
     }
   }, []);
 

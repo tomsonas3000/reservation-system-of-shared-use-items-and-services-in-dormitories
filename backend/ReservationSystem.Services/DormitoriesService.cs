@@ -57,7 +57,7 @@ namespace ReservationSystem.Services
                     City = x.City,
                     ManagerId = x.ManagerId,
                     Name = x.Name,
-                    Rooms = x.Rooms.Select(room => room.RoomName).ToList(),
+                    Rooms = x.Rooms.OrderBy(x => x.RoomName).Select(room => room.RoomName).ToList(),
                 })
                 .FirstOrDefaultAsync();
 

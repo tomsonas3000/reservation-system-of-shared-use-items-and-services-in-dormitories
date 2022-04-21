@@ -25,7 +25,7 @@ namespace ReservationSystem.DataAccess.Repositories
             if (!result.Succeeded)
             {
                 return new ObjectResult(new Dictionary<string, string>
-                    { { "Password", "The provided password is invalid" } })
+                    { { "password", "The provided password is invalid" } })
                 {
                     StatusCode = (int?)HttpStatusCode.BadRequest
                 };

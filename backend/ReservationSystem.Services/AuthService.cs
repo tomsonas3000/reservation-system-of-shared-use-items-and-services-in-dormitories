@@ -42,7 +42,7 @@ namespace ReservationSystem.Services
             if (user is not null)
             {
                 return new ObjectResult(new Dictionary<string, string>
-                    {{"Email", "The user with this email already exists."}})
+                    {{"emailAddress", "The user with this email already exists."}})
                 {
                     StatusCode = (int?) HttpStatusCode.BadRequest
                 };
@@ -59,7 +59,7 @@ namespace ReservationSystem.Services
                 };
             }
 
-            var roleResult = RequiredEnum<UserRole>.Create(createUserDto.Role, "Role");
+            var roleResult = RequiredEnum<UserRole>.Create(createUserDto.Role, "role");
 
             if (!roleResult.IsSuccess)
             {
