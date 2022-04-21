@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservationSystem.Shared", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservationSystem.EmailsWorker", "ReservationSystem.EmailsWorker\ReservationSystem.EmailsWorker.csproj", "{E232BBDA-3C8A-4B63-90D8-F01DCB684CB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservationSystem.Tests", "ReservationSystem.Tests\ReservationSystem.Tests.csproj", "{43B21F4B-D646-4498-9E8A-A9A63A29773A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{E232BBDA-3C8A-4B63-90D8-F01DCB684CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E232BBDA-3C8A-4B63-90D8-F01DCB684CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E232BBDA-3C8A-4B63-90D8-F01DCB684CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43B21F4B-D646-4498-9E8A-A9A63A29773A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43B21F4B-D646-4498-9E8A-A9A63A29773A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43B21F4B-D646-4498-9E8A-A9A63A29773A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43B21F4B-D646-4498-9E8A-A9A63A29773A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

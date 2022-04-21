@@ -26,9 +26,9 @@ namespace ReservationSystem.DataAccess.Entities
 
             return new Result<Dormitory>(new Dormitory
             {
-                Name = nameResult.Value.Value,
-                Address = addressResult.Value.Value,
-                City = cityResult.Value.Value,
+                Name = nameResult!.Value.Value,
+                Address = addressResult!.Value.Value,
+                City = cityResult!.Value.Value,
                 ManagerId = managerId,
             });
         }
@@ -45,9 +45,9 @@ namespace ReservationSystem.DataAccess.Entities
                 return result;
             }
 
-            Name = nameResult.Value.Value;
-            Address = addressResult.Value.Value;
-            City = cityResult.Value.Value;
+            Name = nameResult!.Value.Value;
+            Address = addressResult!.Value.Value;
+            City = cityResult!.Value.Value;
             ManagerId = managerId;
 
             return result;
@@ -64,13 +64,13 @@ namespace ReservationSystem.DataAccess.Entities
                     return result;
                 }
 
-                if (roomsList.Exists(x => x.RoomName == createRoomResult.Value.RoomName))
+                if (roomsList.Exists(x => x.RoomName == createRoomResult!.Value.RoomName))
                 {
                     result.AddError("rooms", "Rooms must be unique.");
                     return result;
                 }
 
-                roomsList.Add(createRoomResult.Value);
+                roomsList.Add(createRoomResult!.Value);
             }
 
             return result;
@@ -96,7 +96,7 @@ namespace ReservationSystem.DataAccess.Entities
                         return result;
                     }
 
-                    roomsList.Add(createRoomResult.Value);
+                    roomsList.Add(createRoomResult!.Value);
                 }
             }
 

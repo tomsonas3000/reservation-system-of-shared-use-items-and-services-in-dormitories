@@ -11,12 +11,12 @@ namespace ReservationSystem.Shared.ValueObjects
             Value = value;
         }
 
-        public static Result<RequiredString> Create(Result result, string? value, string propertyName, int length = 100)
+        public static Result<RequiredString>? Create(Result result, string? value, string propertyName, int length = 100)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
                 result.AddError(propertyName, $"The {propertyName} can not be empty.");
-                return (Result<RequiredString>)result;
+                return result as Result<RequiredString>;
             }
 
             var trimmedValue = value.Trim();
@@ -24,7 +24,7 @@ namespace ReservationSystem.Shared.ValueObjects
             if (trimmedValue.Length > length)
             {
                 result.AddError(propertyName, $"The {propertyName} can not be longer than {length} characters.");
-                return (Result<RequiredString>)result;
+                return result as Result<RequiredString>;
             }
 
             return new Result<RequiredString>(new RequiredString(trimmedValue));
