@@ -77,7 +77,7 @@ const ManageStudents = () => {
                       <TableCell>{student.name}</TableCell>
                       <TableCell>{student.surname}</TableCell>
                       <TableCell>{student.telephoneNumber}</TableCell>
-                      <TableCell>{student.emailAddress}</TableCell>
+                      <TableCell>{student.email}</TableCell>
                       <TableCell>
                         <Button
                           size="large"

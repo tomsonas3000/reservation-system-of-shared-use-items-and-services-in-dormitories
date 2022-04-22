@@ -137,11 +137,12 @@ const UsersTable = (props: {
                         user.role === Role.Student
                           ? '#fff176'
                           : '#e1f5fe',
+                      height: 70,
                     }}>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.surname}</TableCell>
                     <TableCell>{user.telephoneNumber}</TableCell>
-                    <TableCell>{user.emailAddress}</TableCell>
+                    <TableCell>{user.email}</TableCell>
                     <TableCell>{user.role}</TableCell>
                     <TableCell>
                       {user.role === Role.Student && (
