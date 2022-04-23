@@ -10,7 +10,7 @@ namespace ReservationSystem.DataAccess.Entities
     {
         private List<Reservation> reservationsList = new();
 
-        private User()
+        public User()
         {
         }
         public override Guid Id { get; set; }

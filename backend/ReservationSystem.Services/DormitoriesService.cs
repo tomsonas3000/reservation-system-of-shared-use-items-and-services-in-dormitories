@@ -169,7 +169,6 @@ namespace ReservationSystem.Services
                 };
             }
             
-            dormitoriesRepository.UpdateDormitory(dormitory);
             await dormitoriesRepository.SaveChanges();
 
             return new ObjectResult(null)

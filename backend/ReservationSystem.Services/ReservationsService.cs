@@ -60,7 +60,15 @@ namespace ReservationSystem.Services
         public async Task<ObjectResult> GetReservationsDataForCalendar()
         {
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
-            var dormitoryId = user.DormitoryId ?? (await reservationDbContext.Dormitories.FirstOrDefaultAsync(x => x.ManagerId == user.Id))!.Id;
+            var dormitoryId = user.DormitoryId ?? (await reservationDbContext.Dormitories.FirstOrDefaultAsync(x => x.ManagerId == user.Id))?.Id;
+
+            if (dormitoryId is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.NotFound,
+                };
+            }
             
             var services = await reservationDbContext.Services
                 .Include(x => x.ReservationsList)

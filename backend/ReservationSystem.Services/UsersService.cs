@@ -64,7 +64,7 @@ namespace ReservationSystem.Services
                 where role.Name == UserRole.Manager.ToString()
                 select new LookupDto
                 {
-                    Name = user.Name,
+                    Name = user.Email,
                     Value = user.Id.ToString(),
                 }).ToListAsync();
 
