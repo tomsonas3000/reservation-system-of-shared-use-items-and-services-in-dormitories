@@ -44,6 +44,7 @@ import { CreateReservation } from './types/CreateReservation';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import Role from '../../utils/enums/role';
+import { UpdateReservation } from './types/UpdateReservation';
 
 const ReservationsCalendar = () => {
   enum View {
@@ -60,9 +61,11 @@ const ReservationsCalendar = () => {
   const [activeService, setActiveService] = useState<ServiceList>();
   const [reservations, setReservations] = useState<ReservationsList[]>([]);
   const [activeView, setActiveView] = useState<View>(View.serviceTypes);
-  const [isEditingAvailable, setIsEditingAvailable] = useState<boolean>(false);
+  const [isEditingDisabled, setIsEditingDisabled] = useState<boolean>(false);
   const [addedAppointment, setAddedAppointment] = useState({});
   const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+  const [openDeleteSuccessSnackbar, setOpenDeleteSuccessSnackbar] =
+    useState(false);
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
   const [errorSnackbarMessage, setErrorSnackbarMessage] = useState('');
   const [helpModalOpen, setHelpModalOpen] = useState(false);
@@ -99,7 +102,7 @@ const ReservationsCalendar = () => {
   };
 
   const onCommitChanges = useCallback(
-    ({ added }) => {
+    ({ added, changed, deleted }) => {
       if (added) {
         const request: CreateReservation = {
           serviceId: activeService?.id,
@@ -126,6 +129,51 @@ const ReservationsCalendar = () => {
             );
             setOpenErrorSnackbar(true);
           });
+      } else if (changed) {
+        const request: UpdateReservation = {
+          startDate: changed[Object.keys(changed)[0]]?.startDate,
+          endDate: changed[Object.keys(changed)[0]]?.endDate,
+        };
+
+        ReservationsService.updateReservation(request, Object.keys(changed)[0])
+          .then(() => {
+            ReservationsService.getReservationsCalendar().then((res) => {
+              setOpenSuccessSnackbar(true);
+              res.data.forEach((type: ServiceType) => {
+                type.serviceList.forEach((service) => {
+                  if (service.id === activeService?.id) {
+                    setReservations(service.reservationsList);
+                  }
+                });
+              });
+            });
+          })
+          .catch((err) => {
+            setErrorSnackbarMessage(
+              err.response.data[Object.keys(err.response.data)[0]]
+            );
+            setOpenErrorSnackbar(true);
+          });
+      } else if (deleted) {
+        ReservationsService.deleteReservation(deleted)
+          .then(() => {
+            ReservationsService.getReservationsCalendar().then((res) => {
+              setOpenDeleteSuccessSnackbar(true);
+              res.data.forEach((type: ServiceType) => {
+                type.serviceList.forEach((service) => {
+                  if (service.id === activeService?.id) {
+                    setReservations(service.reservationsList);
+                  }
+                });
+              });
+            });
+          })
+          .catch((err) => {
+            setErrorSnackbarMessage(
+              err.response.data[Object.keys(err.response.data)[0]]
+            );
+            setOpenErrorSnackbar(true);
+          });
       }
     },
     [setData, reservations]
@@ -133,12 +181,6 @@ const ReservationsCalendar = () => {
 
   const onAddedAppointmentChange = useCallback((appointment) => {
     setAddedAppointment(appointment);
-  }, []);
-
-  const CommandLayout = useCallback(({ ...restProps }) => {
-    return (
-      <AppointmentForm.CommandLayout hideDeleteButton={true} {...restProps} />
-    );
   }, []);
 
   const TextEditor = useCallback(({ type, ...props }) => {
@@ -175,6 +217,13 @@ const ReservationsCalendar = () => {
         onClose={() => setOpenSuccessSnackbar(false)}
         autoHideDuration={6000}>
         <Alert severity="success">Reservation was added successfully!</Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openDeleteSuccessSnackbar}
+        onClose={() => setOpenDeleteSuccessSnackbar(false)}
+        autoHideDuration={6000}>
+        <Alert severity="success">Reservation was deleted successfully!</Alert>
       </Snackbar>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -284,10 +333,14 @@ const ReservationsCalendar = () => {
                 addedAppointment={addedAppointment}
                 onAddedAppointmentChange={onAddedAppointmentChange}
                 onEditingAppointmentChange={(reservation) => {
-                  if (reservation) {
-                    setIsEditingAvailable(true);
+                  if (
+                    reservation &&
+                    !reservation?.isBookedByUser &&
+                    authState.role !== Role.Manager
+                  ) {
+                    setIsEditingDisabled(true);
                   } else {
-                    setIsEditingAvailable(false);
+                    setIsEditingDisabled(false);
                   }
                 }}
               />
@@ -301,8 +354,7 @@ const ReservationsCalendar = () => {
               <Appointments />
 
               <AppointmentForm
-                readOnly={isEditingAvailable}
-                commandLayoutComponent={CommandLayout}
+                readOnly={isEditingDisabled}
                 textEditorComponent={TextEditor}
                 booleanEditorComponent={BooleanEditor}
                 labelComponent={Label}

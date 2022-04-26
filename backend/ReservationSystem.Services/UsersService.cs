@@ -39,7 +39,7 @@ namespace ReservationSystem.Services
                     Name = user.Name,
                     Surname = user.Surname,
                     TelephoneNumber = user.PhoneNumber,
-                    Email = user.Email,
+                    EmailAddress = user.Email,
                     Role = role.Name,
                     HasMoreThanTenReservations = user.Reservations.Count(x => x.EndTime > DateTime.Now) > 5,
                     IsBannedFromReserving = user.IsBannedFromReserving,

@@ -78,6 +78,12 @@ namespace ReservationSystem.DataAccess.Entities
 
         public Result<Service> AddReservation(Reservation reservation)
         {
+            var existingReservation = reservationsList.FirstOrDefault(x => x.Id == reservation.Id);
+            if (existingReservation is not null)
+            {
+                reservationsList.Remove(existingReservation);
+            }
+            
             var result = new Result<Service>();
 
             if (reservationsList.OrderBy(x => x.BeginTime).Any(x => x.BeginTime < reservation.EndTime && x.EndTime > reservation.BeginTime))

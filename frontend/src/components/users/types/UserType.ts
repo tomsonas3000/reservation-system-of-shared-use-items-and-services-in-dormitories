@@ -3,7 +3,7 @@ export interface UserType {
   name: string;
   surname: string;
   telephoneNumber: string;
-  email: string;
+  emailAddress: string;
   role: string;
   dormitoryId?: string;
   password?: string;

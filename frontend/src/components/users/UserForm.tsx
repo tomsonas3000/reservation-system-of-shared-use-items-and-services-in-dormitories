@@ -37,7 +37,7 @@ const UserForm = () => {
       UsersService.createUser({
         name: formik.values.name,
         surname: formik.values.surname,
-        email: formik.values.emailAddress,
+        emailAddress: formik.values.emailAddress,
         telephoneNumber: formik.values.telephoneNumber,
         password: formik.values.password,
         role: formik.values.role,

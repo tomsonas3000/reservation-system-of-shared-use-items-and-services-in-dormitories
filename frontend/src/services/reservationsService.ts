@@ -1,4 +1,5 @@
 import { CreateReservation } from '../components/reservations/types/CreateReservation';
+import { UpdateReservation } from '../components/reservations/types/UpdateReservation';
 import { DOTNET_API } from './api';
 
 export class ReservationsService {
@@ -21,6 +22,13 @@ export class ReservationsService {
 
   static async createReservation(request: CreateReservation) {
     return await DOTNET_API().post('reservations', request);
+  }
+
+  static async updateReservation(
+    request: UpdateReservation,
+    reservationId: string
+  ) {
+    return await DOTNET_API().put(`/reservations/${reservationId}`, request);
   }
 
   static async deleteReservation(reservationId: string) {

@@ -48,6 +48,46 @@ namespace ReservationSystem.DataAccess.Entities
             });
         }
         
+        public Result<Reservation> Update(string? beginTime, string? endTime)
+        {
+            var result = new Result<Reservation>();
+            var beginTimeResult = RequiredDate.Create(result, beginTime ?? BeginTime.ToString());
+            var endTimeResult = RequiredDate.Create(result, endTime ?? EndTime.ToString());
+
+            if (beginTimeResult!.IsSuccess && endTimeResult!.IsSuccess)
+            {
+                if (endTimeResult.Value.Value.Subtract(beginTimeResult.Value.Value) > Service.MaxTimeOfUse)
+                {
+                    result.AddError("MaxTimeOfUse", "The selected time span is too big for this service.");
+                }
+
+                if (endTimeResult.Value.Value < DateTime.Now)
+                {
+                    result.AddError(nameof(EndTime), "Reservation can not be made for a past time.");
+                }
+
+                if (endTimeResult.Value.Value < beginTimeResult.Value.Value)
+                {
+                    result.AddError(nameof(BeginTime), "Reservation start time can not be later that end time.");
+                }
+            }
+
+            if (User.IsBannedFromReserving)
+            {
+                result.AddError(nameof(User.IsBannedFromReserving), "Administrator has disabled ability to update reservations.");
+            }
+
+            if (!result.IsSuccess)
+            {
+                return result;
+            }
+            
+            BeginTime = beginTimeResult.Value.Value;
+            EndTime = endTimeResult!.Value.Value;
+
+            return new Result<Reservation>(this);
+        }
+        
         public DateTime BeginTime { get; protected set; }
         
         public DateTime EndTime { get; protected set; }

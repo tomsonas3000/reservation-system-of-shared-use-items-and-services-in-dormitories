@@ -14,9 +14,9 @@ export interface ServiceList {
 }
 
 export interface ReservationsList {
-  event_id: string;
+  id: string;
   startDate: Date;
   endDate: Date;
-  isBooked: boolean;
+  isBookedByUser: boolean;
   title: string;
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.DataAccess;
 using ReservationSystem.DataAccess.Entities;
+using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.DataAccess.Repositories;
 using ReservationSystem.Services.Helpers;
 using ReservationSystem.Shared.Contracts.Dtos;
@@ -92,10 +93,11 @@ namespace ReservationSystem.Services
                         Name = service.Name,
                         ReservationsList = service.ReservationsList.Select(reservation => new ReservationsListDto
                         {
-                            Event_id = reservation.Id,
+                            Id = reservation.Id,
                             StartDate = reservation.BeginTime,
                             EndDate = reservation.EndTime,
                             Title = service.Room.RoomName,
+                            IsBookedByUser = reservation.UserId == user.Id,
                         }).ToList()
                     }).ToList()
                 }).ToList();
@@ -166,12 +168,88 @@ namespace ReservationSystem.Services
                 StatusCode = (int) HttpStatusCode.OK,
             };
         }
+        
+        public async Task<ObjectResult> UpdateReservation(UpdateReservationDto request, Guid reservationId)
+        {
+            var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
+            var isStudent = await userManager.IsInRoleAsync(user, UserRole.Student.ToString());
+            var reservation = await reservationDbContext.ReservationDates
+                .Include(x => x.Service)
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == reservationId);
+
+            if (reservation is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.NotFound,
+                };
+            }
+            
+            var userEntity = await usersService.GetUserById(reservation.UserId);
+
+            if (user.Id != userEntity.Id && isStudent)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest,
+                };
+            }
+            
+            var reservationUpdateResult = reservation.Update(request.StartDate, request.EndDate);
+            
+            if (!reservationUpdateResult.IsSuccess)
+            {
+                return new ObjectResult(reservationUpdateResult.Errors)
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest,
+                };
+            }
+            
+            var addToServiceResult = reservation.Service.AddReservation(reservationUpdateResult.Value);
+
+            if (!addToServiceResult.IsSuccess)
+            {
+                return new ObjectResult(addToServiceResult.Errors)
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest,
+                };
+            }
+            userEntity.AddReservation(reservationUpdateResult.Value);
+
+            if (userEntity.Reservations.Count(x => x.ServiceId == reservation.Service.Id && x.EndTime > DateTime.Now) >= 4)
+            {
+                return new ObjectResult(new Dictionary<string, string>
+                    { { "Reservations", "Maximum of 3 active or incoming reservations can be created." } })
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                };
+            }
+
+            if (userEntity.Reservations.Count(x => x.EndTime > DateTime.Now) > 5)
+            {
+                return new ObjectResult(new Dictionary<string, string>
+                    { { "reservations", "Maximum of 5 active or upcoming reservations can be selected in total." } })
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                };
+            }
+            
+            await servicesRepository.SaveChanges();
+
+            return new ObjectResult(null)
+            {
+                StatusCode = (int) HttpStatusCode.OK,
+            };
+        }
 
         public async Task<ObjectResult> DeleteReservation(Guid reservationId)
         {
             var reservation = await reservationDbContext.ReservationDates.FindAsync(reservationId);
+            var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
+            var isStudent = await userManager.IsInRoleAsync(user, UserRole.Student.ToString());
 
-            if (reservation is null)
+            if (reservation is null || (reservation.UserId != user.Id && isStudent))
             {
                 return new ObjectResult(null)
                 {

@@ -142,7 +142,7 @@ const UsersTable = (props: {
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.surname}</TableCell>
                     <TableCell>{user.telephoneNumber}</TableCell>
-                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.emailAddress}</TableCell>
                     <TableCell>{user.role}</TableCell>
                     <TableCell>
                       {user.role === Role.Student && (

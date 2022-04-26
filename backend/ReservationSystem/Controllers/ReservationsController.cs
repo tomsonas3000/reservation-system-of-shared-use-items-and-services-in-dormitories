@@ -40,9 +40,17 @@ namespace ReservationSystem.Controllers
             return reservationsService.CreateReservation(request);
         }
 
+        [HttpPut]
+        [Route("{reservationId}")]
+        [Authorize(Roles = "Student, Manager")]
+        public Task<ObjectResult> UpdateReservation([FromBody] UpdateReservationDto request, [FromRoute] Guid reservationId)
+        {
+            return reservationsService.UpdateReservation(request, reservationId);
+        }
+
         [HttpDelete]
         [Route("{reservationId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Student, Manager")]
         public Task<ObjectResult> DeleteReservation([FromRoute] Guid reservationId)
         {
             return reservationsService.DeleteReservation(reservationId);

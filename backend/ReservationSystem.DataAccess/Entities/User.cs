@@ -57,6 +57,11 @@ namespace ReservationSystem.DataAccess.Entities
 
         public void AddReservation(Reservation reservation)
         {
+            if (reservationsList.Contains(reservation))
+            {
+                reservationsList.Remove(reservation);
+            }
+            
             reservationsList.Add(reservation);
         }
 
