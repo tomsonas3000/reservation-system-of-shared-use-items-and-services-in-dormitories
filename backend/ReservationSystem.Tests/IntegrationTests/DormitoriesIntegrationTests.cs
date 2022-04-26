@@ -24,7 +24,7 @@ namespace ReservationSystem.Tests.IntegrationTests
         [Fact]
         public async Task Should_Get_Dormitories_Lookup_List()
         {
-            var httpClient = factory.CreateClient(new WebApplicationFactoryClientOptions { BaseAddress = new Uri("http://localhost:5000")});
+            var httpClient = factory.CreateClient();
             
             httpClient.DefaultRequestHeaders.Authorization = 
                 new AuthenticationHeaderValue("Test");

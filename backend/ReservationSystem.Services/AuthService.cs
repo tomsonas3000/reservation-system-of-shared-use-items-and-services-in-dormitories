@@ -37,7 +37,7 @@ namespace ReservationSystem.Services
 
         public async Task<ObjectResult> CreateUser(CreateUserDto createUserDto)
         {
-            var user = await userManager.FindByEmailAsync(createUserDto.Email);
+            var user = await userManager.FindByEmailAsync(createUserDto.EmailAddress);
 
             if (user is not null)
             {
@@ -48,7 +48,7 @@ namespace ReservationSystem.Services
                 };
             }
 
-            var createResult = User.Create(createUserDto.Name, createUserDto.Surname, createUserDto.Email,
+            var createResult = User.Create(createUserDto.Name, createUserDto.Surname, createUserDto.EmailAddress,
                 createUserDto.TelephoneNumber);
 
             if (!createResult.IsSuccess)

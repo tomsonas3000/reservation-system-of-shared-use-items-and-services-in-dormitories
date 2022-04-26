@@ -88,7 +88,7 @@ namespace ReservationSystem.Services
                     ServiceList = x.Select(service => new ServiceListDto
                     {
                         Id = service.Id,
-                        MaximumTimeOfUse = service.MaxTimeOfUse.Minutes,
+                        MaximumTimeOfUse = (int)service.MaxTimeOfUse.TotalMinutes,
                         Room = service.Room.RoomName,
                         Name = service.Name,
                         ReservationsList = service.ReservationsList.Select(reservation => new ReservationsListDto
