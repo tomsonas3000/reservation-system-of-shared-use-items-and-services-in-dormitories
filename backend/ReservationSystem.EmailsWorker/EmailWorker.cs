@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using MimeKit;
 
 namespace ReservationSystem.EmailsWorker
 {
@@ -35,26 +33,20 @@ namespace ReservationSystem.EmailsWorker
                     var reservationsThatExpireData = await GetReservationsWhichExpireData(connection, stoppingToken);
                     if (reservationsThatExpireData.Any())
                     {
-                        using var smtp = new SmtpClient();
-                        await smtp.ConnectAsync(configuration["EmailSettings:Host"],
-                            Int32.Parse(configuration["EmailSettings:Port"]), SecureSocketOptions.StartTls,
-                            stoppingToken);
-                        await smtp.AuthenticateAsync(configuration["EmailSettings:Email"],
-                            configuration["EmailSettings:Password"], stoppingToken);
+                        using var smtp = new SmtpClient()
+                        {
+                            Host = "localhost",
+                            Port = 2525,
+                        };
 
                         foreach (var reservation in reservationsThatExpireData)
                         {
-                            var email = new MimeMessage();
-                            email.Sender = MailboxAddress.Parse(configuration["EmailSettings:Email"]);
-                            email.To.Add(MailboxAddress.Parse(reservation.RecipientEmail));
-                            email.Subject = $"Reservation of {reservation.ServiceName} on room {reservation.RoomName}";
-                            var builder = new BodyBuilder
-                            {
-                                HtmlBody =
-                                    $"Your reservation of {reservation.ServiceName} on {reservation.RoomName} expires in 15 minutes."
-                            };
-                            email.Body = builder.ToMessageBody();
-                            await smtp.SendAsync(email, stoppingToken);
+                            await smtp.SendMailAsync(
+                                "no-reply-reservations-system@localhost", 
+                                reservation.RecipientEmail, 
+                                $"Reservation of {reservation.ServiceName} on room {reservation.RoomName}",
+                                $"Your reservation of {reservation.ServiceName} on {reservation.RoomName} expires in 15 minutes.", 
+                                stoppingToken);
 
                             await connection.OpenAsync(stoppingToken);
                             var setEmailSentCommand =
@@ -68,8 +60,6 @@ namespace ReservationSystem.EmailsWorker
                             logger.LogInformation("Email sent to {recipient} on {time}", reservation.RecipientEmail,
                                 DateTimeOffset.Now);
                         }
-
-                        await smtp.DisconnectAsync(true, stoppingToken);
                     }
                 }
                 logger.LogInformation("Worked checked for not sent emails on {time}", DateTimeOffset.Now);
