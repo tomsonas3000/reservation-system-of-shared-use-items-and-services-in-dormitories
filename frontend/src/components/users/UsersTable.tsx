@@ -8,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
@@ -32,9 +33,13 @@ const UsersTable = (props: {
 
   const navigate = useNavigate();
 
+  type Order = 'asc' | 'desc';
+
   const [banModalOpen, setBanModalOpen] = useState(false);
   const [removeBanModalOpen, setRemoveBanModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState('');
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<keyof UserType>('name');
 
   const handleUserBanClick = (id: string) => {
     setBanModalOpen(true);
@@ -58,6 +63,11 @@ const UsersTable = (props: {
       setRemoveBanModalOpen(false);
       props.onBanUpdate();
     });
+  };
+
+  const handleSort = (property: keyof UserType) => {
+    setOrder(order === 'asc' ? 'desc' : 'asc');
+    setOrderBy(property);
   };
 
   return (
@@ -116,103 +126,144 @@ const UsersTable = (props: {
         <Table sx={{ my: 4 }}>
           <TableHead>
             <TableRow sx={{ backgroundColor: '#81d4fa' }}>
-              <TableCell>Name</TableCell>
-              <TableCell>Surname</TableCell>
+              <TableCell sortDirection={orderBy === 'name' ? order : false}>
+                <TableSortLabel
+                  active={orderBy === 'name'}
+                  direction={orderBy === 'name' ? order : 'asc'}
+                  onClick={() => handleSort('name')}>
+                  Name
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={orderBy === 'surname' ? order : false}>
+                <TableSortLabel
+                  active={orderBy === 'surname'}
+                  direction={orderBy === 'surname' ? order : 'asc'}
+                  onClick={() => handleSort('surname')}>
+                  Surname
+                </TableSortLabel>
+              </TableCell>
               <TableCell>Telephone number</TableCell>
-              <TableCell>Email address</TableCell>
-              <TableCell>Role</TableCell>
+              <TableCell></TableCell>
+              <TableCell sortDirection={orderBy === 'role' ? order : false}>
+                <TableSortLabel
+                  active={orderBy === 'role'}
+                  direction={orderBy === 'role' ? order : 'asc'}
+                  onClick={() => handleSort('role')}>
+                  Role
+                </TableSortLabel>
+              </TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           {
             <TableBody>
-              {props.data.map((user: UserType, index: number) => {
-                return (
-                  <TableRow
-                    key={index}
-                    sx={{
-                      backgroundColor:
-                        user.hasMoreThanTenReservations &&
-                        user.role === Role.Student
-                          ? '#fff176'
-                          : '#e1f5fe',
-                      height: 70,
-                    }}>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.surname}</TableCell>
-                    <TableCell>{user.telephoneNumber}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        onClick={() =>
-                          navigate(`/users/send-email/${user.emailAddress}`)
-                        }
-                        sx={{
-                          minWidth: 150,
-                          backgroundColor: '#009688',
-                          ':hover': {
-                            backgroundColor: '#00897b',
-                          },
-                        }}>
-                        Send email
-                      </Button>
-                    </TableCell>
-                    <TableCell>{user.role}</TableCell>
-                    <TableCell>
-                      {user.role === Role.Student && (
-                        <Box
+              {props.data
+                .sort((a: UserType, b: UserType) => {
+                  const comparatorValue = (a: UserType, b: UserType) => {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore: Object is possibly 'null'.
+                    if (b[orderBy] < a[orderBy]) {
+                      return -1;
+                    }
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore: Object is possibly 'null'.
+                    if (b[orderBy] > a[orderBy]) {
+                      return 1;
+                    }
+                    return 0;
+                  };
+                  return order === 'desc'
+                    ? comparatorValue(a, b)
+                    : -comparatorValue(a, b);
+                })
+                .map((user: UserType, index: number) => {
+                  return (
+                    <TableRow
+                      key={index}
+                      sx={{
+                        backgroundColor:
+                          user.hasMoreThanTenReservations &&
+                          user.role === Role.Student
+                            ? '#fff176'
+                            : '#e1f5fe',
+                        height: 70,
+                      }}>
+                      <TableCell>{user.name}</TableCell>
+                      <TableCell>{user.surname}</TableCell>
+                      <TableCell>{user.telephoneNumber}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          onClick={() =>
+                            navigate(`/users/send-email/${user.emailAddress}`)
+                          }
                           sx={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            maxWidth: 150,
+                            minWidth: 150,
+                            backgroundColor: '#009688',
+                            ':hover': {
+                              backgroundColor: '#00897b',
+                            },
                           }}>
-                          <Button
-                            variant="outlined"
-                            onClick={() =>
-                              navigate(`/user-reservations/${user.id}`)
-                            }>
-                            Reservations
-                          </Button>
+                          Send email
+                        </Button>
+                      </TableCell>
+                      <TableCell>{user.role}</TableCell>
+                      <TableCell>
+                        {user.role === Role.Student && (
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                              maxWidth: 150,
+                            }}>
+                            <Button
+                              variant="outlined"
+                              onClick={() =>
+                                navigate(`/user-reservations/${user.id}`)
+                              }>
+                              Reservations
+                            </Button>
+                          </Box>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          {user.role === Role.Student &&
+                            !user.isBannedFromReserving && (
+                              <Button
+                                variant="contained"
+                                sx={{ minWidth: 230 }}
+                                color="error"
+                                onClick={() =>
+                                  handleUserBanClick(user.id as string)
+                                }>
+                                Ban from reservating
+                              </Button>
+                            )}
+                          {user.role === Role.Student &&
+                            user.isBannedFromReserving && (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  minWidth: 230,
+                                  backgroundColor: '#ff9800',
+                                  ':hover': {
+                                    backgroundColor: '#fb8c00',
+                                  },
+                                }}
+                                onClick={() =>
+                                  handleRemoveUserBanClick(user.id as string)
+                                }>
+                                Remove reservation ban
+                              </Button>
+                            )}
                         </Box>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        {user.role === Role.Student &&
-                          !user.isBannedFromReserving && (
-                            <Button
-                              variant="contained"
-                              sx={{ minWidth: 230 }}
-                              color="error"
-                              onClick={() =>
-                                handleUserBanClick(user.id as string)
-                              }>
-                              Ban from reservating
-                            </Button>
-                          )}
-                        {user.role === Role.Student &&
-                          user.isBannedFromReserving && (
-                            <Button
-                              variant="contained"
-                              sx={{
-                                minWidth: 230,
-                                backgroundColor: '#ff9800',
-                                ':hover': {
-                                  backgroundColor: '#fb8c00',
-                                },
-                              }}
-                              onClick={() =>
-                                handleRemoveUserBanClick(user.id as string)
-                              }>
-                              Remove reservation ban
-                            </Button>
-                          )}
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           }
         </Table>

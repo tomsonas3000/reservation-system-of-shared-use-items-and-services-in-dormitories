@@ -50,7 +50,9 @@ namespace ReservationSystem.Services
                     Role = role.Name,
                     HasMoreThanTenReservations = user.Reservations.Count(x => x.EndTime > DateTime.Now) > 5,
                     IsBannedFromReserving = user.IsBannedFromReserving,
-                }).ToListAsync();
+                })
+                .OrderBy(x => x.Name)
+                .ToListAsync();
             
             return new ObjectResult(users)
             {
