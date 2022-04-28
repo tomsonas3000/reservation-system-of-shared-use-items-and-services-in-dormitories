@@ -64,7 +64,7 @@ const DormitoriesTable = (props: { data: DormitoryType[] }): JSX.Element => {
                           justifyContent: 'flex-end',
                         }}>
                         <Button
-                          variant="contained"
+                          variant="outlined"
                           onClick={() =>
                             navigate(`/dormitory-reservations/${dormitory.id}`)
                           }>

@@ -66,7 +66,7 @@ const ServicesTable = (props: { data: ServiceType[] }): JSX.Element => {
                           justifyContent: 'flex-end',
                         }}>
                         <Button
-                          variant="contained"
+                          variant="outlined"
                           onClick={() => {
                             navigate(`/service-reservations/${service.id}`);
                           }}>

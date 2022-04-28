@@ -153,7 +153,7 @@ const UsersTable = (props: {
                             maxWidth: 150,
                           }}>
                           <Button
-                            variant="contained"
+                            variant="outlined"
                             onClick={() =>
                               navigate(`/user-reservations/${user.id}`)
                             }>
@@ -168,8 +168,8 @@ const UsersTable = (props: {
                           !user.isBannedFromReserving && (
                             <Button
                               variant="contained"
-                              color="error"
                               sx={{ minWidth: 230 }}
+                              color="error"
                               onClick={() =>
                                 handleUserBanClick(user.id as string)
                               }>
@@ -180,8 +180,13 @@ const UsersTable = (props: {
                           user.isBannedFromReserving && (
                             <Button
                               variant="contained"
-                              color="error"
-                              sx={{ minWidth: 230 }}
+                              sx={{
+                                minWidth: 230,
+                                backgroundColor: '#ff9800',
+                                ':hover': {
+                                  backgroundColor: '#fb8c00',
+                                },
+                              }}
                               onClick={() =>
                                 handleRemoveUserBanClick(user.id as string)
                               }>
