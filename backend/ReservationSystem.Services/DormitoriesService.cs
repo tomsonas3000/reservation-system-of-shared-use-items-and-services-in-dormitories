@@ -92,7 +92,9 @@ namespace ReservationSystem.Services
 
         public async Task<ObjectResult> CreateDormitory(CreateUpdateDormitoryDto request)
         {
-            var validateManagerResult = await ValidateManager(request.Manager);
+            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(request.Manager));
+
+            var validateManagerResult = await ValidateManager(manager);
 
             if (validateManagerResult is not null)
             {
@@ -121,6 +123,7 @@ namespace ReservationSystem.Services
             }
             
             dormitoriesRepository.AddDormitory(dormitory);
+            manager!.SetDormitory(dormitory);
             await dormitoriesRepository.SaveChanges();
 
             return new ObjectResult(null)
@@ -130,7 +133,9 @@ namespace ReservationSystem.Services
         }
         public async Task<ObjectResult> UpdateDormitory(Guid dormitoryId, CreateUpdateDormitoryDto request)
         {
-            var validateManagerResult = await ValidateManager(request.Manager);
+            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(request.Manager));
+
+            var validateManagerResult = await ValidateManager(manager, dormitoryId);
 
             if (validateManagerResult is not null)
             {
@@ -168,6 +173,8 @@ namespace ReservationSystem.Services
                     StatusCode = (int)HttpStatusCode.BadRequest
                 };
             }
+
+            manager!.SetDormitory(dormitory);
             
             await dormitoriesRepository.SaveChanges();
 
@@ -233,14 +240,21 @@ namespace ReservationSystem.Services
             };
         }
         
-        private async Task<ObjectResult?> ValidateManager(string managerId)
+        private async Task<ObjectResult?> ValidateManager(User? manager, Guid? dormitoryId = null)
         {
-            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(managerId));
-
             if (manager is null)
             {
                 return new ObjectResult(
-                    new Dictionary<string, string> { { "Manager", "The provided manager does not exist." } })
+                    new Dictionary<string, string> { { "manager", "The provided manager does not exist." } })
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
+            }
+
+            if (manager.DormitoryId is not null && manager.DormitoryId != dormitoryId)
+            {
+                return new ObjectResult(
+                    new Dictionary<string, string> { { "manager", "Manager can only have one dormitory assigned." } })
                 {
                     StatusCode = (int)HttpStatusCode.BadRequest
                 };
@@ -251,7 +265,7 @@ namespace ReservationSystem.Services
             if (!isManager)
             {
                 return new ObjectResult(
-                    new Dictionary<string, string> { { "Manager", "The provided manager is not a manager." } })
+                    new Dictionary<string, string> { { "manager", "The provided manager is not a manager." } })
                 {
                     StatusCode = (int)HttpStatusCode.BadRequest
                 };

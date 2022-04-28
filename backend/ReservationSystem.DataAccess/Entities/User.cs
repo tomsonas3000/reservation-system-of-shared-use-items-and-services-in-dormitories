@@ -65,5 +65,10 @@ namespace ReservationSystem.DataAccess.Entities
             reservationsList.Add(reservation);
         }
 
+        public void SetDormitory(Dormitory dormitory)
+        {
+            Dormitory = dormitory;
+        }
+
     }
 }
