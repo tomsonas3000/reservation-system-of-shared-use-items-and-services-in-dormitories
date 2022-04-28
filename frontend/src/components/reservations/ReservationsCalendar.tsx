@@ -346,13 +346,12 @@ const ReservationsCalendar = () => {
               />
               <IntegratedEditing />
               <DayView startDayHour={8} endDayHour={23} />
-              <WeekView />
+              <WeekView startDayHour={8} endDayHour={23} />
               <Toolbar />
               <DateNavigator />
               <TodayButton />
               <ViewSwitcher />
               <Appointments />
-
               <AppointmentForm
                 readOnly={isEditingDisabled}
                 textEditorComponent={TextEditor}
