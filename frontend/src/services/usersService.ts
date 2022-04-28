@@ -1,3 +1,4 @@
+import { EmailType } from '../components/users/types/EmailType';
 import { UserType } from '../components/users/types/UserType';
 import { DOTNET_API } from './api';
 
@@ -36,5 +37,9 @@ export class UsersService {
 
   static async removeReservationBan(userId: string | undefined) {
     return await DOTNET_API().post(`/users/${userId}/remove-ban`);
+  }
+
+  static async sendEmailToUser(request: EmailType) {
+    return await DOTNET_API().post(`/users/send-email`, request);
   }
 }

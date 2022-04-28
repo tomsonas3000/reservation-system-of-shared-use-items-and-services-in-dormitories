@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +14,8 @@ using ReservationSystem.DataAccess.Entities;
 using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.DataAccess.Repositories;
 using ReservationSystem.Shared.Contracts.Dtos;
+using ReservationSystem.Shared.Utilities;
+using ReservationSystem.Shared.ValueObjects;
 
 namespace ReservationSystem.Services
 {
@@ -19,12 +24,14 @@ namespace ReservationSystem.Services
         private readonly ReservationDbContext reservationDbContext;
         private readonly UserManager<User> userManager;
         private readonly UsersRepository usersRepository;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public UsersService(ReservationDbContext reservationDbContext, UserManager<User> userManager, UsersRepository usersRepository)
+        public UsersService(ReservationDbContext reservationDbContext, UserManager<User> userManager, UsersRepository usersRepository, IHttpContextAccessor httpContextAccessor)
         {
             this.reservationDbContext = reservationDbContext;
             this.userManager = userManager;
             this.usersRepository = usersRepository;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ObjectResult> GetUsers()
@@ -145,6 +152,51 @@ namespace ReservationSystem.Services
             user.SetIsBannedFromReserving(false);
 
             await usersRepository.SaveChanges();
+
+            return new ObjectResult(null)
+            {
+                StatusCode = (int) HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ObjectResult> SendEmail(EmailDto request)
+        {
+            var recipient = await userManager.FindByEmailAsync(request.Recipient);
+
+            if (recipient is null)
+            {
+                return new ObjectResult(new Dictionary<string, string> {{"recipient", "Recipient is invalid."}})
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest,
+                };
+            }
+
+            var validationResult = new Result();
+
+            var subjectResult = RequiredString.Create(validationResult, request.Subject, "subject", 200);
+            var bodyResult = RequiredString.Create(validationResult, request.Body, "content", 2000);
+
+            if (!validationResult.IsSuccess)
+            {
+                return new ObjectResult(validationResult.Errors)
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest,
+                };
+            }
+            
+            var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
+
+            using var smtp = new SmtpClient
+            {
+                Host = "localhost",
+                Port = 2525,
+            };
+            
+            await smtp.SendMailAsync(
+                user.Email, 
+                recipient.Email, 
+                subjectResult!.Value.Value,
+                bodyResult!.Value.Value);
 
             return new ObjectResult(null)
             {

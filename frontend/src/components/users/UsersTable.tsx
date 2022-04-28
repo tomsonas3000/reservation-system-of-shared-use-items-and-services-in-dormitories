@@ -142,7 +142,22 @@ const UsersTable = (props: {
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.surname}</TableCell>
                     <TableCell>{user.telephoneNumber}</TableCell>
-                    <TableCell>{user.emailAddress}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        onClick={() =>
+                          navigate(`/users/send-email/${user.emailAddress}`)
+                        }
+                        sx={{
+                          minWidth: 150,
+                          backgroundColor: '#009688',
+                          ':hover': {
+                            backgroundColor: '#00897b',
+                          },
+                        }}>
+                        Send email
+                      </Button>
+                    </TableCell>
                     <TableCell>{user.role}</TableCell>
                     <TableCell>
                       {user.role === Role.Student && (

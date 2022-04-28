@@ -17,6 +17,7 @@ import UserForm from './components/users/UserForm';
 import DormitoryReservations from './components/reservations/DormitoryReservations';
 import ServiceReservations from './components/reservations/ServiceReservations';
 import UserReservations from './components/reservations/UserReservations';
+import EmailForm from './components/users/EmailForm';
 
 const theme = createTheme();
 
@@ -123,6 +124,12 @@ const App = () => {
                 outlet={<ReservationsCalendar />}
                 roles={[role.Student, role.Manager]}
               />
+            }
+          />
+          <Route
+            path="users/send-email/:recipient"
+            element={
+              <ProtectedRoute outlet={<EmailForm />} roles={[role.Admin]} />
             }
           />
           <Route element={<h1 style={{ marginTop: '5rem' }}>Not Found</h1>} />

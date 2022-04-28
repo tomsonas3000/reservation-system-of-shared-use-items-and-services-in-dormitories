@@ -33,7 +33,7 @@ namespace ReservationSystem.EmailsWorker
                     var reservationsThatExpireData = await GetReservationsWhichExpireData(connection, stoppingToken);
                     if (reservationsThatExpireData.Any())
                     {
-                        using var smtp = new SmtpClient()
+                        using var smtp = new SmtpClient
                         {
                             Host = "localhost",
                             Port = 2525,

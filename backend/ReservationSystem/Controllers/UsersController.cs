@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Services;
+using ReservationSystem.Shared.Contracts.Dtos;
 
 namespace ReservationSystem.Controllers
 {
@@ -42,6 +43,7 @@ namespace ReservationSystem.Controllers
 
         [HttpPost]
         [Route("{userId}/ban")]
+        [Authorize(Roles = "Admin")]
         public Task<ObjectResult> BanUserFromReserving([FromRoute] Guid userId)
         {
             return usersService.BanFromReserving(userId);
@@ -49,9 +51,18 @@ namespace ReservationSystem.Controllers
 
         [HttpPost]
         [Route("{userId}/remove-ban")]
+        [Authorize(Roles = "Admin")]
         public Task<ObjectResult> RemoveReservationBan([FromRoute] Guid userId)
         {
             return usersService.RemoveReservationBan(userId);
+        }
+
+        [HttpPost]
+        [Route("send-email")]
+        [Authorize(Roles = "Admin")]
+        public Task<ObjectResult> SendEmail([FromBody] EmailDto request)
+        {
+            return usersService.SendEmail(request);
         }
     }
 }
