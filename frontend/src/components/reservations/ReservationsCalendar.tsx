@@ -243,7 +243,7 @@ const ReservationsCalendar = () => {
             selected.
           </Typography>
           <Typography variant="body2">
-            At most, 5 active or upcoming reservations can be selected in total
+            At most, 10 active or upcoming reservations can be selected in total
           </Typography>
           <Typography variant="body2">
             Maximum reservation time for {activeService?.name} {` is `}

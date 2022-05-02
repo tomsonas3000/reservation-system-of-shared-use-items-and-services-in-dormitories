@@ -228,7 +228,7 @@ namespace ReservationSystem.Services
                 };
             }
 
-            if (userEntity.Reservations.Count(x => x.EndTime > DateTime.Now) > 5)
+            if (userEntity.Reservations.Count(x => x.EndTime > DateTime.Now) > 10)
             {
                 return new ObjectResult(new Dictionary<string, string>
                     { { "reservations", "Maximum of 5 active or upcoming reservations can be selected in total." } })
