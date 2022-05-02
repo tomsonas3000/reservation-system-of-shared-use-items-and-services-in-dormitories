@@ -17,7 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ReservationSystem.DataAccess\ReservationSystem.DataAccess.csproj" />
       <ProjectReference Include="..\ReservationSystem.Services\ReservationSystem.Services.csproj" />
       <ProjectReference Include="..\ReservationSystem.Shared\ReservationSystem.Shared.csproj" />
     </ItemGroup>
