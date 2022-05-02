@@ -24,7 +24,7 @@ const theme = createTheme();
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router basename="/">
         <Header />
         <Routes>
           <Route path="" element={<SignIn />} />
