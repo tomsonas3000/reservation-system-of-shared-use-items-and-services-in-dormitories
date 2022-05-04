@@ -134,6 +134,27 @@ namespace ReservationSystem.Tests.UnitTests
         }
 
         [Fact]
+        public void Should_Not_Add_Invalid_Rooms()
+        {
+            var dormitory = CreateDormitory();
+            var rooms = new List<string> { FixedLengthStrings.Length101String, "2" };
+            
+            var addRoomsResult = dormitory.AddRooms(rooms);
+            addRoomsResult.IsSuccess.Should().BeFalse();
+        }
+
+        [Fact]
+        public void Should_Not_Update_Invalid_Rooms()
+        {
+            var dormitory = CreateDormitory();
+            var updatedRooms = new List<string> { "1", "2", FixedLengthStrings.Length101String };
+            dormitory.AddRooms(new List<string> {"1", "2"});
+
+            var updateRoomsResult = dormitory.UpdateRooms(updatedRooms);
+            updateRoomsResult.IsSuccess.Should().BeFalse();
+        }
+
+        [Fact]
         public void Should_Update_Rooms()
         {
             var dormitory = CreateDormitory();

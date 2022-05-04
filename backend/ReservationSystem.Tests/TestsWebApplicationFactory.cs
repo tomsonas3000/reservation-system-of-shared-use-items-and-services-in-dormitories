@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,15 +29,7 @@ namespace ReservationSystem.Tests
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
-
-                services.AddControllers(o =>
-                {
-                    o.Filters.Add(new AllowAnonymousFilter());
-                });
                 
-                services.AddAuthentication("Test")
-                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
-
                 var sp = services.BuildServiceProvider();
 
                 using (var scope = sp.CreateScope())
@@ -58,6 +51,13 @@ namespace ReservationSystem.Tests
                                             "database with test messages. Error: {Message}", ex.Message);
                     }
                 }
+            });
+                
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddAuthentication("Test")
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                        "Test", options => {});
             });
         }
     }

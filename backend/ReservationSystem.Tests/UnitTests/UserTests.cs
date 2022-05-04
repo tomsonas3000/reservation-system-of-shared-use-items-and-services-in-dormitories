@@ -92,16 +92,38 @@ namespace ReservationSystem.Tests.UnitTests
         [Fact]
         public void Should_Add_Reservation()
         {
-            var service = CreateService();
+            var user = CreateUser();
             var beginDate = DateTime.Now.AddMinutes(5);
             var endDate = DateTime.Now.AddMinutes(15);
 
             var reservation = CreateReservation(beginDate, endDate);
 
-            var addReservationResult = service.AddReservation(reservation);
-            addReservationResult.IsSuccess.Should().BeTrue();
-            service.ReservationsList.Should().BeEquivalentTo(new List<object> {reservation});
+            user.AddReservation(reservation);
+            user.Reservations.Should().BeEquivalentTo(new List<object> {reservation});
+        }
 
+        [Fact]
+        public void Should_Override_Reservation()
+        {
+            var user = CreateUser();
+            var beginDate = DateTime.Now.AddMinutes(5);
+            var endDate = DateTime.Now.AddMinutes(15);
+
+            var reservation = CreateReservation(beginDate, endDate);
+
+            user.AddReservation(reservation);
+            user.AddReservation(reservation);
+            user.Reservations.Should().BeEquivalentTo(new List<object> {reservation});
+        }
+
+        [Fact]
+        public void Should_Set_Dormitory()
+        {
+            var user = CreateUser();
+            var dormitory = CreateDormitory();
+            
+            user.SetDormitory(dormitory);
+            user.Dormitory.Should().Be(dormitory);
         }
 
         private static Service CreateService()
@@ -112,6 +134,11 @@ namespace ReservationSystem.Tests.UnitTests
         private static User CreateUser()
         {
             return User.Create("name", "surname", "test@email.com", "+37061111111").Value;
+        }
+        
+        private static Dormitory CreateDormitory()
+        {
+            return Dormitory.Create("name", "city", "address", Guid.NewGuid()).Value;
         }
 
         private static Reservation CreateReservation(DateTime beginDate, DateTime endDate)

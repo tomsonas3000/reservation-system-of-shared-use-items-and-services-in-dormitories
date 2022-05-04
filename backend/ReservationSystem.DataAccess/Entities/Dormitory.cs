@@ -59,7 +59,7 @@ namespace ReservationSystem.DataAccess.Entities
             foreach (var room in rooms)
             {
                 var createRoomResult = Room.Create(result, room);
-                if (createRoomResult is not null && !createRoomResult.IsSuccess)
+                if (createRoomResult is null || !createRoomResult.IsSuccess)
                 {
                     return result;
                 }
@@ -91,7 +91,7 @@ namespace ReservationSystem.DataAccess.Entities
                 if (!roomsList.Select(x => x.RoomName).Contains(room))
                 {
                     var createRoomResult = Room.Create(result, room);
-                    if (createRoomResult is not null && !createRoomResult.IsSuccess)
+                    if (createRoomResult is null || !createRoomResult.IsSuccess)
                     {
                         return result;
                     }

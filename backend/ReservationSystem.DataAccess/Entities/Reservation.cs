@@ -44,7 +44,7 @@ namespace ReservationSystem.DataAccess.Entities
                 Service = service,
                 BeginTime = beginTimeResult.Value.Value,
                 EndTime = endTimeResult!.Value.Value,
-                UserId = user.Id,
+                User = user,
             });
         }
         

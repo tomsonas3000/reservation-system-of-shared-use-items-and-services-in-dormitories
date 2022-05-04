@@ -35,8 +35,8 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/dormitories-lookup")]
         [Authorize(Roles = "Admin")]
+        [Route("/dormitories-lookup")]
         public Task<ObjectResult> GetDormitoriesLookupList()
         {
             return dormitoriesService.GetDormitoriesLookupList();
