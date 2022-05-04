@@ -13,7 +13,6 @@ namespace ReservationSystem.DataAccess.Entities
         public User()
         {
         }
-        public override Guid Id { get; set; }
 
         public ICollection<Reservation> Reservations => reservationsList;
 

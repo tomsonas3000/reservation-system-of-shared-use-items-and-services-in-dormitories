@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -9,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ReservationSystem.DataAccess;
+using ReservationSystem.DataAccess.Entities;
+using ReservationSystem.Tests.Constants;
 using ReservationSystem.Tests.Helpers;
 
 namespace ReservationSystem.Tests
@@ -40,16 +44,6 @@ namespace ReservationSystem.Tests
                         .GetRequiredService<ILogger<TestsWebApplicationFactory<Startup>>>();
 
                     db.Database.EnsureCreated();
-
-                    try
-                    {
-                        Utilities.InitializeDbForTests(db);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, "An error occurred seeding the " +
-                                            "database with test messages. Error: {Message}", ex.Message);
-                    }
                 }
             });
                 

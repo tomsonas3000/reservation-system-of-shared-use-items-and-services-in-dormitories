@@ -24,10 +24,10 @@ namespace ReservationSystem.Tests.Helpers
         {
             var authClaims = new List<Claim>
             {
-                new(ClaimTypes.Email, AuthConstants.defaultUserEmail),
+                new(ClaimTypes.Email, AuthConstants.DefaultAdminUserEmail),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new(ClaimTypes.Role, UserRole.Admin.ToString()),
-                new(ClaimTypes.NameIdentifier, AuthConstants.defaultUserId.ToString()),
+                new(ClaimTypes.NameIdentifier, AuthConstants.DefaultManagerUserId.ToString()),
             };
             var identity = new ClaimsIdentity(authClaims, "Test");
             var principal = new ClaimsPrincipal(identity);

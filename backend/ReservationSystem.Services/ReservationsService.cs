@@ -61,6 +61,13 @@ namespace ReservationSystem.Services
         public async Task<ObjectResult> GetReservationsDataForCalendar()
         {
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
+            if (user is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.NotFound,
+                };
+            }
             var isManager = await userManager.IsInRoleAsync(user, UserRole.Manager.ToString());
             var dormitoryId = user.DormitoryId ?? (await reservationDbContext.Dormitories.FirstOrDefaultAsync(x => x.ManagerId == user.Id))?.Id;
 
@@ -114,6 +121,13 @@ namespace ReservationSystem.Services
         {
             var service = await reservationDbContext.Services.Include(x => x.ReservationsList).FirstOrDefaultAsync(x => x.Id == request.ServiceId);
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
+            if (user is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.NotFound,
+                };
+            }
             var userEntity = await usersService.GetUserById(user.Id);
 
             if (service is null)
@@ -174,6 +188,13 @@ namespace ReservationSystem.Services
         public async Task<ObjectResult> UpdateReservation(UpdateReservationDto request, Guid reservationId)
         {
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
+            if (user is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.NotFound,
+                };
+            }
             var isStudent = await userManager.IsInRoleAsync(user, UserRole.Student.ToString());
             var reservation = await reservationDbContext.ReservationDates
                 .Include(x => x.Service)
@@ -249,6 +270,13 @@ namespace ReservationSystem.Services
         {
             var reservation = await reservationDbContext.ReservationDates.FindAsync(reservationId);
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext?.User);
+            if (user is null)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int) HttpStatusCode.NotFound,
+                };
+            }
             var isStudent = await userManager.IsInRoleAsync(user, UserRole.Student.ToString());
 
             if (reservation is null || (reservation.UserId != user.Id && isStudent))
