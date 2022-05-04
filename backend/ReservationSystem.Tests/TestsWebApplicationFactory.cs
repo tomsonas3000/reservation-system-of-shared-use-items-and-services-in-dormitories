@@ -27,7 +27,7 @@ namespace ReservationSystem.Tests
                     d => d.ServiceType ==
                          typeof(DbContextOptions<ReservationDbContext>));
 
-                services.Remove(descriptor);
+                if (descriptor != null) services.Remove(descriptor);
 
                 services.AddDbContext<ReservationDbContext>(options =>
                 {

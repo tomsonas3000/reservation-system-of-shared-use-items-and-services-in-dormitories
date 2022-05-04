@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ReservationSystem.DataAccess.Entities;
+#pragma warning disable 8634, 8621, 8622
 
 namespace ReservationSystem.DataAccess.TypeConfigurations
 {
@@ -22,7 +23,7 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
                 .HasMaxLength(100);
 
             builder.HasMany(x => x.Residents)
-                .WithOne(x => x.Dormitory);
+                .WithOne(x => x!.Dormitory);
 
             builder.HasMany(x => x.Services)
                 .WithOne(x => x.Dormitory);

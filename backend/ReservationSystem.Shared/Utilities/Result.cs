@@ -12,7 +12,9 @@ namespace ReservationSystem.Shared.Utilities
             Value = value;
         }
 
+#pragma warning disable 8618
         public Result()
+#pragma warning restore 8618
         {
             
         }

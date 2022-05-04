@@ -16,9 +16,9 @@ namespace ReservationSystem.Tests.IntegrationTests
 
         public RoomsIntegrationTests(TestsWebApplicationFactory<Startup> factory)
         {
-            var scope = factory.Services.GetService<IServiceScopeFactory>().CreateScope();
+            var scope = factory.Services.GetService<IServiceScopeFactory>()!.CreateScope();
             var context = scope.ServiceProvider.GetService<ReservationDbContext>();
-            Utilities.InitializeDbForTests(context);
+            Utilities.InitializeDbForTests(context!);
             httpClient = factory.CreateClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
         }

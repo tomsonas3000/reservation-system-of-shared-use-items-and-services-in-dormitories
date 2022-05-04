@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +15,7 @@ using ReservationSystem.DataAccess.Repositories;
 using ReservationSystem.Shared.Contracts.Dtos;
 using ReservationSystem.Shared.Utilities;
 using ReservationSystem.Shared.ValueObjects;
+#pragma warning disable 8601, 8622
 
 namespace ReservationSystem.Services
 {
@@ -62,7 +62,7 @@ namespace ReservationSystem.Services
 
         public async Task<User> GetUserById(Guid userId)
         {
-            return await reservationDbContext.Users.Include(x => x.Reservations).FirstOrDefaultAsync(x => x.Id == userId);
+            return (await reservationDbContext.Users.Include(x => x!.Reservations).FirstOrDefaultAsync(x => x!.Id == userId))!;
         }
 
         public async Task<ObjectResult> GetManagersLookupList()

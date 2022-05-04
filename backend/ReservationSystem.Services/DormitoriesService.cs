@@ -11,6 +11,7 @@ using ReservationSystem.DataAccess.Entities;
 using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.DataAccess.Repositories;
 using ReservationSystem.Shared.Contracts.Dtos;
+#pragma warning disable 8601
 
 namespace ReservationSystem.Services
 {
@@ -92,7 +93,7 @@ namespace ReservationSystem.Services
 
         public async Task<ObjectResult> CreateDormitory(CreateUpdateDormitoryDto request)
         {
-            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(request.Manager));
+            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x!.Id == Guid.Parse(request.Manager));
 
             var validateManagerResult = await ValidateManager(manager);
 
@@ -133,7 +134,7 @@ namespace ReservationSystem.Services
         }
         public async Task<ObjectResult> UpdateDormitory(Guid dormitoryId, CreateUpdateDormitoryDto request)
         {
-            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(request.Manager));
+            var manager = await reservationDbContext.Users.FirstOrDefaultAsync(x => x!.Id == Guid.Parse(request.Manager));
 
             var validateManagerResult = await ValidateManager(manager, dormitoryId);
 
@@ -219,7 +220,7 @@ namespace ReservationSystem.Services
                 };
             }
 
-            var students = await reservationDbContext.Users.Where(x => studentsIds.Contains(x.Id)).ToListAsync();
+            var students = await reservationDbContext.Users.Where(x => studentsIds.Contains(x!.Id)).ToListAsync();
 
             var addResidentsResult = dormitory.UpdateResidents(students);
 
