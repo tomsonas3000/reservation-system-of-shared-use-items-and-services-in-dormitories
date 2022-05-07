@@ -14,10 +14,6 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
                 .WithMany(x => x.Services)
                 .HasForeignKey(x => x.RoomId);
 
-            builder.HasOne(x => x.Dormitory)
-                .WithMany(x => x.Services)
-                .HasForeignKey(x => x.DormitoryId);
-
             builder.Property(x => x.Name).HasMaxLength(200);
 
             builder.HasMany(x => x.ReservationsList)

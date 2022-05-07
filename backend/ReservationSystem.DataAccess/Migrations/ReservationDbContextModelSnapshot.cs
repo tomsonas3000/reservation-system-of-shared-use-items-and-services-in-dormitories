@@ -15,7 +15,6 @@ namespace ReservationSystem.DataAccess.Migrations
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
-#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
@@ -519,7 +518,6 @@ namespace ReservationSystem.DataAccess.Migrations
                 {
                     b.Navigation("Reservations");
                 });
-#pragma warning restore 612, 618
         }
     }
 }

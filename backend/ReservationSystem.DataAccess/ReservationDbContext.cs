@@ -18,9 +18,7 @@ namespace ReservationSystem.DataAccess
 
         public DbSet<Service> Services { get; set; } = null!;
 
-#pragma warning disable 8634
         public override DbSet<User?> Users { get; set; } = null!;
-#pragma warning restore 8634
 
         public DbSet<Room> Rooms { get; set; } = null!;
 

@@ -81,9 +81,7 @@ namespace ReservationSystem.Tests.UnitTests
         [InlineData(401, false)]
         [InlineData(10, true)]
         [InlineData(0, false)]
-#pragma warning disable xUnit1012
         [InlineData(null, false)]
-#pragma warning restore xUnit1012
         public void Should_Validate_MaxTimeOfUse_When_Creating(int maxTimeOfUse, bool expected)
         {
             var createResult = Service.Create("name", "volleyball", maxTimeOfUse, Guid.NewGuid(), Guid.NewGuid());
@@ -122,9 +120,7 @@ namespace ReservationSystem.Tests.UnitTests
         [InlineData(401, false)]
         [InlineData(10, true)]
         [InlineData(0, false)]
-#pragma warning disable xUnit1012
         [InlineData(null, false)]
-#pragma warning restore xUnit1012
         public void Should_Validate_MaxTimeOfUse_When_Updating(int updatedMaxTimeOfUse, bool expected)
         {
             var service = CreateService();

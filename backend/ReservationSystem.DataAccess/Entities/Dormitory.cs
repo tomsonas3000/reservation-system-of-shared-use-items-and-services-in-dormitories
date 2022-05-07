@@ -9,7 +9,6 @@ namespace ReservationSystem.DataAccess.Entities
     public class Dormitory : EntityBase
     {
         private List<User?> residentsList = new();
-        private readonly List<Service> servicesList = new();
         private readonly List<Room> roomsList = new();
 
         public static Result<Dormitory> Create(string name, string city, string address, Guid managerId)
@@ -123,9 +122,7 @@ namespace ReservationSystem.DataAccess.Entities
         public Guid ManagerId { get; protected set; }
 
         public ICollection<User?> Residents => residentsList;
-
-        public ICollection<Service> Services => servicesList;
-
+        
         public ICollection<Room> Rooms => roomsList;
     }
 }

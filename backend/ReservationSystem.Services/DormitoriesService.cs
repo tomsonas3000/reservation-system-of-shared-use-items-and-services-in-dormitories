@@ -11,7 +11,6 @@ using ReservationSystem.DataAccess.Entities;
 using ReservationSystem.DataAccess.Enums;
 using ReservationSystem.DataAccess.Repositories;
 using ReservationSystem.Shared.Contracts.Dtos;
-#pragma warning disable 8601
 
 namespace ReservationSystem.Services
 {
