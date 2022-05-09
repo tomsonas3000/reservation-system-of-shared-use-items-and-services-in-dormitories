@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ReservationSystem.DataAccess.Entities;
 
@@ -38,6 +40,24 @@ namespace ReservationSystem.DataAccess.TypeConfigurations
                 .WithOne(x => x.User);
 
             builder.HasOne(x => x.Dormitory);
+            
+            var hasher = new PasswordHasher<User>();
+            var adminId = Guid.Parse("D774AF34-077A-4EC9-9A8F-0784A6E76DDE");
+            
+            builder.HasData(new User
+            {
+                Id = adminId,
+                Name = "Admin",
+                Surname = "Admin",
+                PhoneNumber = "",
+                UserName = "Admin",
+                NormalizedUserName = "ADMIN",
+                Email = "admin@reservations.com",
+                NormalizedEmail = "ADMIN@RESERVATIONS.com",
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "Admin123"),
+                SecurityStamp = string.Empty
+            });
         }
     }
 }

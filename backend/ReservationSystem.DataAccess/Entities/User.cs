@@ -16,9 +16,9 @@ namespace ReservationSystem.DataAccess.Entities
 
         public ICollection<Reservation> Reservations => reservationsList;
 
-        public string? Name { get; private set; }
+        public string? Name { get; internal set; }
         
-        public string? Surname { get; private set; }
+        public string? Surname { get; internal set; }
         
         public Guid? DormitoryId { get; private set; }
 
